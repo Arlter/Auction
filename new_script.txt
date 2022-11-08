@@ -1,0 +1,102 @@
+drop database auction;
+create database auction;
+SET time_zone='+00:00';
+
+CREATE TABLE IF NOT EXISTS Account (
+	accountID INT NOT NULL AUTO_INCREMENT, 
+	accountUsername VARCHAR(20) NOT NULL,
+	accountPassword VARCHAR(20) NOT NULL,
+	accountType VARCHAR(10) NOT NULL,
+	firstName VARCHAR(20) NOT NULL,
+	lastName  VARCHAR(20) NOT NULL, 
+	emailAddress VARCHAR(50) NOT NULL,
+	phoneNumber VARCHAR(20) NOT NULL,
+	PRIMARY KEY(accountID)
+);
+ALTER TABLE Account AUTO_INCREMENT=10000000;
+
+
+CREATE TABLE IF NOT EXISTS Category (
+	categoryName VARCHAR(40),
+   	PRIMARY KEY(categoryName)
+);
+
+CREATE TABLE IF NOT EXISTS Auction (
+	auctionID INT NOT NULL AUTO_INCREMENT,
+	itemName VARCHAR(40) NOT NULL,
+	itemDescription VARCHAR(2000) NOT NULL,
+	categoryName VARCHAR(40) NOT NULL,
+	seller_accountID INT NOT NULL,
+	startingPrice DECIMAL(10,2) NOT NULL,
+	reservePrice DECIMAL(10,2) DEFAULT 0 NOT NULL,
+	endDate TIMESTAMP NOT NULL, 
+	currentPrice DECIMAL(10,2) DEFAULT 0 NOT NULL,
+	currentBidder VARCHAR(20), 
+	auctionStatus BOOLEAN NOT NULL DEFAULT TRUE,	
+	PRIMARY KEY(auctionID),
+	FOREIGN KEY(seller_accountID) REFERENCES Account(accountID) ON UPDATE CASCADE,
+	FOREIGN KEY(categoryName) REFERENCES Category(categoryName) ON UPDATE CASCADE
+);
+
+ALTER TABLE Auction AUTO_INCREMENT=100000000;
+
+CREATE TABLE IF NOT EXISTS Bid (
+	auction_auctionID INT NOT NULL,
+	bidID INT NOT NULL CHECK (bidID between 00000000 and 99999999),
+	bidPrice DECIMAL(10,2) NOT NULL,
+	buyer_accountID INT NOT NULL,
+	bidTime TIMESTAMP NOT NULL,
+	PRIMARY KEY(bidID),
+	FOREIGN KEY(auction_auctionID) REFERENCES Auction(auctionID) ON UPDATE CASCADE,
+	FOREIGN KEY(buyer_accountID) REFERENCES Account(accountID) ON UPDATE CASCADE
+   );
+
+CREATE TABLE IF NOT EXISTS BuyerWatchAuction (
+	auction_auctionID INT NOT NULL,
+	buyer_accountID INT NOT NULL,
+	PRIMARY KEY(auction_auctionID, buyer_accountID),
+	FOREIGN KEY(auction_auctionID) REFERENCES Auction(auctionID) ON UPDATE CASCADE,
+	FOREIGN KEY(buyer_accountID) REFERENCES Account(accountID) ON UPDATE CASCADE
+   
+);
+
+delimiter $$
+CREATE TRIGGER  Auction_bid_audit AFTER INSERT ON Bid 
+	FOR EACH ROW
+	BEGIN
+		UPDATE Auction SET currentPrice = new.bidPrice, currentBidder= new.buyer_accountID WHERE auctionID= new.auction_auctionID;
+	END $$
+delimiter ;
+
+delimiter $$
+CREATE TRIGGER  Auction_default_setup BEFORE INSERT ON Auction 
+	FOR EACH ROW
+	BEGIN
+		SET new.currentPrice = new.startingPrice, new.reservePrice = new.startingPrice;
+	END $$
+delimiter ;
+
+
+
+INSERT INTO Account VALUES
+(null,'acc1','111','buyer','erte','wang','artwangspare@gmail.com','+44123456'),
+(null,'acc2','111','seller','kien','han','abc@com','+44123456'),
+(null,'acc3','111','buyer','angel','lam','abc@com','+44123456'),
+(null,'acc4','111','seller','tim','chen','abc@com','+44123456')
+;
+
+
+
+INSERT INTO Category VALUES
+("electronic device"),
+("beauty makeup"),
+("food"),
+("toy")
+;
+
+
+INSERT INTO Auction VALUES
+(DEFAULT,'water gun','purchased two months ago and used twice. Very new','toy',10000000,52,DEFAULT,TIMESTAMP("2022-11-20", "13:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'iphone','purchased two months ago and used twice. Very new','electronic device',10000001,700,DEFAULT,TIMESTAMP("2022-11-30", "14:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'milk','purchased one day ago. Very new','food',10000002,3,DEFAULT,TIMESTAMP("2022-11-9", "9:00:00"),DEFAULT,null,TRUE)
+;
