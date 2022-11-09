@@ -4,9 +4,9 @@
 // an account. Notify user of success/failure and redirect/give navigation 
 // options.
 
-include "connection.php";
+include "connection.php"; // using local db for now
 
-//Input extraction
+// Variable extraction
 if (isset($_POST["submit"])) {
     $accountType = $_POST["accountType"];
     $username = mysqli_real_escape_string ($conn, $_POST["username"]);
@@ -39,7 +39,6 @@ echo "<br>";
 
 
 
-
 // Input validiation
 // what is the best structure/hierarchy?
 
@@ -56,11 +55,12 @@ ctype_space($lastName) || ctype_space($email) || ctype_space($phoneNumber)) {
     // separate checks for each input, or group them into one statement?
     // also can the form save valid values so users don't have to type all of them in again?
         
-    exit();  // is this necessary?
+    exit();
 }
 
 
-//username validation - VARCHAR(20), no whitespace, does not exist in database
+// username validation - VARCHAR(20), no whitespace, does not exist in database
+// specific characters required?
 
 $query = "SELECT accountUsername FROM Account WHERE accountUsername = '$username'";
 $result = mysqli_query($conn, $query);
@@ -68,26 +68,40 @@ $result = mysqli_query($conn, $query);
 if (mb_strlen($username) > 20 || mb_strlen($username) < 4 || $username != trim($username)) {
     $error = "Invalid input, username must be 4 to 20 characters long with no space, please try again.";
     header("Location: register.php?error =" . urlencode ($error));
+    // add a closable alert message box
     exit();
 } elseif (mysqli_num_rows($result) > 0) {
     $error = "Username already exists, please try again.";
     header("Location: register.php?error =" . urlencode ($error));
+    // add a closable alert message box
     exit();
 } else {
-    printf("valid!");
-    exit();
+    printf("valid!"); // test; also no need to exit if script works
 }
 
+// password validation - must be 8 to 20 characters long, no space
+// specific characters required?
+if (mb_strlen($password) > 20 || mb_strlen($password) < 8 || $password != trim($password)) {
+    $error = "Invalid input, password must be 8 to 20 characters long with no space, please try again.";
+    header("Location: register.php?error =" . urlencode ($error));
+    // add a closable alert message box
+    exit();
+}
 
 // password confirmation - password == retyped-password
 if ($password != $passwordConfirmation) {
     $error = "Your re-typed password is different";
     header("Location: register.php?error =" . urlencode ($error));
-
     // add a closable alert message box
-        
     exit();  
 }
+
+// tested till here, 221108
+
+
+// email address validation -- must be string@string.com?
+
+
 
 
 
