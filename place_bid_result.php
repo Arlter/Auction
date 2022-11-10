@@ -1,5 +1,6 @@
 <?php include_once("header.php")?>
 <?php require_once("connection.php")?>
+<?php require_once("mail.php")?>
 <div class="container my-5">
 
 <?php
@@ -8,19 +9,9 @@
 
 $auctionId=$_POST['auctionId'];
 $bidPrice=$_POST['bidPrice'];
-
-$end_time
-$now = new DateTime();
-if ($now > $end_time) {
-  $time_remaining = 'This auction has ended';
-}
-
-
-// $accountId=$_SESSION['accountID'];
-// $_SESSION['firstName'] = "erte";
-// $_SESSION['lastName'] = "wang";
-// $_SESSION['emailAddress'] = "artwangspare@gmail.com";
-
+$email_address=$_SESSION['emailAddress'];
+$email_subject = "Successful bid on the auction : ".$auctionId;
+$email_content = " Congratulation! You have placed a bid of ".chr(163). $bidPrice." on the auction ".$auctionId;
 /* TODO #2: Extract form data into variables. Because the form was a 'post'
             form, its data can be accessed via $POST['auctionTitle'], 
             $POST['auctionDetails'], etc. Perform checking on the data to
@@ -36,11 +27,12 @@ $res = mysqli_query($conn, $query);
 if (mysqli_affected_rows($conn) ==1 && !mysqli_error($conn))
 {
     echo('<div class="text-center">Your bid is successful! <a href="mybids.php">View your new bids.</a></div>');
-    }
+    send_email($email_address,$email_subject,$email_content);
+}
 else
 {
     echo '<div class="text-center">'. mysqli_error($conn);
-    echo('<div class="text-center"> Unsucessful Bid.       <a href="place_bid.php">Try it again.</a></div>');
+    echo('<div class="text-center"> Unsucessful Bid.       <a href="place_bid.php">Try bidding on another auction.</a></div>');
     header("refresh:5;url=browse.php");    
 }
 

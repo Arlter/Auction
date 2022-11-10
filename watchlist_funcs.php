@@ -1,5 +1,5 @@
- <?php include_once ("connection.php") ?>
- <?php if (!isset($_POST['functionname']) || !isset($_POST['arguments'])) {
+<?php require_once("connection.php")?>
+<?php if (!isset($_POST['functionname']) || !isset($_POST['arguments'])) {
   return "error";
 }
 session_start();

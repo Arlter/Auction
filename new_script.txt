@@ -92,6 +92,16 @@ CREATE TRIGGER  Auto_Watchlist After INSERT ON Bid
 delimiter ;
 
 
+delimiter $$
+CREATE TRIGGER  prevent_bids_on_end_auction Before INSERT ON Bid 
+	FOR EACH ROW
+	BEGIN
+		IF EXISTS (SELECT * FROM Auction WHERE auctionID=new.auction_auctionID and auctionStatus=FALSE) THEN
+			SIGNAL SQLSTATE '45OO0' SET MESSAGE_TEXT = 'The auction is over. Your bid is invalid.';
+		END IF;
+	END $$
+delimiter ;
+
 INSERT INTO Account VALUES
 (null,'acc1','111','buyer','erte','wang','1419121502@qq.com','+44123456'),
 (null,'acc2','111','seller','kien','han','abc@com','+44123456'),

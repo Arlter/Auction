@@ -12,7 +12,7 @@ $_SESSION['account_type'] = "buyer";
 $_SESSION['accountID'] = 10000000;
 $_SESSION['firstName'] = "erte";
 $_SESSION['lastName'] = "wang";
-$_SESSION['emailAddress'] = "artwangspare@gmail.com";
+$_SESSION['emailAddress'] = "1419121502@qq.com";
 
 
 
