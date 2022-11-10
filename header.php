@@ -5,7 +5,7 @@
   // database query.
   session_start();
   $_SESSION['logged_in'] = false;
-  $_SESSION['account_type'] = 'seller';
+  $_SESSION['account_type'] = 'buyer';
 ?>
 
 
@@ -30,7 +30,7 @@
 
 <!-- Navbars -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light mx-2">
-  <a class="navbar-brand" href="#">Site Name <!--CHANGEME!--></a>
+  <a class="navbar-brand" href="#">ɔ:kʃn <! --CHANGEME!--></a>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
     
@@ -56,6 +56,9 @@
 <?php
   if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'buyer') {
   echo('
+  <li class="nav-item mx-1">
+      <a class="nav-link" href="place_bid.php">Create Bids</a>
+    </li>
 	<li class="nav-item mx-1">
       <a class="nav-link" href="mybids.php">My Bids</a>
     </li>

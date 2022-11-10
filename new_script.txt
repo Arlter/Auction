@@ -1,5 +1,3 @@
-drop database auction;
-create database auction;
 SET time_zone='+00:00';
 
 CREATE TABLE IF NOT EXISTS Account (
@@ -29,6 +27,7 @@ CREATE TABLE IF NOT EXISTS Auction (
 	seller_accountID INT NOT NULL,
 	startingPrice DECIMAL(10,2) NOT NULL,
 	reservePrice DECIMAL(10,2) DEFAULT 0 NOT NULL,
+	createdDate TIMESTAMP NOT NULL,
 	endDate TIMESTAMP NOT NULL, 
 	currentPrice DECIMAL(10,2) DEFAULT 0 NOT NULL,
 	currentBidder VARCHAR(20), 
@@ -41,8 +40,8 @@ CREATE TABLE IF NOT EXISTS Auction (
 ALTER TABLE Auction AUTO_INCREMENT=100000000;
 
 CREATE TABLE IF NOT EXISTS Bid (
+	bidID INT NOT NULL AUTO_INCREMENT,
 	auction_auctionID INT NOT NULL,
-	bidID INT NOT NULL CHECK (bidID between 00000000 and 99999999),
 	bidPrice DECIMAL(10,2) NOT NULL,
 	buyer_accountID INT NOT NULL,
 	bidTime TIMESTAMP NOT NULL,
@@ -50,6 +49,7 @@ CREATE TABLE IF NOT EXISTS Bid (
 	FOREIGN KEY(auction_auctionID) REFERENCES Auction(auctionID) ON UPDATE CASCADE,
 	FOREIGN KEY(buyer_accountID) REFERENCES Account(accountID) ON UPDATE CASCADE
    );
+ALTER TABLE Bid AUTO_INCREMENT=0;
 
 CREATE TABLE IF NOT EXISTS BuyerWatchAuction (
 	auction_auctionID INT NOT NULL,
@@ -61,10 +61,14 @@ CREATE TABLE IF NOT EXISTS BuyerWatchAuction (
 );
 
 delimiter $$
-CREATE TRIGGER  Auction_bid_audit AFTER INSERT ON Bid 
+CREATE TRIGGER  Auction_bid_audit Before INSERT ON Bid 
 	FOR EACH ROW
 	BEGIN
-		UPDATE Auction SET currentPrice = new.bidPrice, currentBidder= new.buyer_accountID WHERE auctionID= new.auction_auctionID;
+		IF EXISTS (SELECT * FROM Auction WHERE auctionID=new.auction_auctionID and currentPrice<new.bidPrice) OR EXISTS (SELECT * FROM Auction WHERE auctionID=new.auction_auctionID and (new.bidPrice-currentPrice)<0.001 and startingPrice=currentPrice )  THEN
+			UPDATE Auction SET currentPrice = new.bidPrice, currentBidder= new.buyer_accountID WHERE auctionID= new.auction_auctionID;
+		ELSE
+			SIGNAL SQLSTATE '45OO0' SET MESSAGE_TEXT = 'The submitted bid price is lower than the current bid price. Please try another';
+		END IF;
 	END $$
 delimiter ;
 
@@ -77,9 +81,19 @@ CREATE TRIGGER  Auction_default_setup BEFORE INSERT ON Auction
 delimiter ;
 
 
+delimiter $$
+CREATE TRIGGER  Auto_Watchlist After INSERT ON Bid 
+	FOR EACH ROW
+	BEGIN
+		IF NOT EXISTS (SELECT * FROM BuyerWatchAuction WHERE auction_auctionID = new.auction_auctionID and buyer_accountID=new.buyer_accountID) THEN
+			INSERT INTO BuyerWatchAuction VALUES(new.auction_auctionID,new.buyer_accountID);
+		END IF;
+	END $$
+delimiter ;
+
 
 INSERT INTO Account VALUES
-(null,'acc1','111','buyer','erte','wang','artwangspare@gmail.com','+44123456'),
+(null,'acc1','111','buyer','erte','wang','1419121502@qq.com','+44123456'),
 (null,'acc2','111','seller','kien','han','abc@com','+44123456'),
 (null,'acc3','111','buyer','angel','lam','abc@com','+44123456'),
 (null,'acc4','111','seller','tim','chen','abc@com','+44123456')
@@ -96,7 +110,16 @@ INSERT INTO Category VALUES
 
 
 INSERT INTO Auction VALUES
-(DEFAULT,'water gun','purchased two months ago and used twice. Very new','toy',10000000,52,DEFAULT,TIMESTAMP("2022-11-20", "13:00:00"),DEFAULT,null,TRUE),
-(DEFAULT,'iphone','purchased two months ago and used twice. Very new','electronic device',10000001,700,DEFAULT,TIMESTAMP("2022-11-30", "14:00:00"),DEFAULT,null,TRUE),
-(DEFAULT,'milk','purchased one day ago. Very new','food',10000002,3,DEFAULT,TIMESTAMP("2022-11-9", "9:00:00"),DEFAULT,null,TRUE)
+(DEFAULT,'water gun','purchased two months ago and used twice. Very new','toy',10000001,52,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-20", "13:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'iphone','purchased two months ago and used twice. Very new','electronic device',10000001,700,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-30", "14:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'milk','purchased one day ago. Very new','food',10000001,3,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-9", "9:00:00"),DEFAULT,null,TRUE)
+;
+
+INSERT INTO Bid VALUES
+(DEFAULT,100000000,70.00,10000000,'2022-11-08 23:57:37'),
+(DEFAULT,100000000,80.00,10000000,'2022-11-09 00:02:01'),
+(DEFAULT,100000000,99.00,10000000,'2022-11-09 00:19:20'),
+(DEFAULT,100000001,900.00,10000000,'2022-11-09 00:30:20'),
+(DEFAULT,100000002,4.00,10000000,'2022-11-09 02:30:20'),
+(DEFAULT,100000000,101.00,10000000,'2022-11-09 02:30:20')
 ;
