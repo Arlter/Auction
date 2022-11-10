@@ -1,7 +1,29 @@
 <?php include_once("header.php")?>
 
+<?php
+
+// one problem: inputs are not saved when redirected so info has to be inputted every time
+// the user gets something wrong
+
+if(isset($_SESSION["alert"])) {
+  $alert = $_SESSION["alert"];
+  echo
+
+  "<div class='alert' style='background-color:pink; color:black'>
+  <button type='button' class='close' data-dismiss='alert'>&times;</button>
+  <h5><i class='icon fa fa-close'></i> Invalid input</h5>$alert
+  </div>";
+  
+unset($_SESSION["alert"]);  // alert disappears after refreshing
+}
+?>
+
+
 <div class="container">
 <h2 class="my-3">Register new account</h2>
+
+
+<!-- Note: this form is modified, as a lot of the inputs did not have a name -->
 
 <!-- Create auction form -->
 <form method="POST" action="process_registration.php">
@@ -62,16 +84,16 @@
   <div class="form-group row">
     <label for="email" class="col-sm-2 col-form-label text-right">Email</label>
 	<div class="col-sm-10">
-      <input type="text" class="form-control" name="email" id="email" placeholder="Email">
+      <input type="email" class="form-control" name="email" id="email" placeholder="Email">
       <small id="emailHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
 	</div>
   </div>
   
   <div class="form-group row">
-    <label for="phoneNumber" class="col-sm-2 col-form-label text-right">Phone number</label>
+    <label for="phoneNumber" class="col-sm-2 col-form-label text-right">International phone number</label>
 	<div class="col-sm-10">
-      <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="Phone number">
-      <small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Required. Please include + sign and country code.</span></small>
+      <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="International phone number">
+      <small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Required. Start with + sign (not 00) and country code.</span></small>
 	</div>
   </div>
 

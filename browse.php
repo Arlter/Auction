@@ -1,6 +1,22 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
 
+<!-- move this to login page if login page is created separately-->
+<?php
+
+if(isset($_SESSION["reg_success"])) {
+  $success = $_SESSION["reg_success"];
+  echo
+
+  "<div class='alert' style='background-color:lightgreen; color:black'>
+  <button type='button' class='close' data-dismiss='alert'>&times;</button>
+  <h5><i class='icon fa fa-check'></i> $success</h5>
+  </div>";
+  
+unset($_SESSION["reg_success"]);  // DELETE THIS to save this session to be used later on; might have to rename it?
+}
+?>
+
 <div class="container">
 
 <h2 class="my-3">Browse listings</h2>
