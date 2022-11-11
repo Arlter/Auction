@@ -89,9 +89,7 @@ $_SESSION["phoneNumber"] = $phoneNumber;
 
 // check for empty input
 if (empty($username) || empty($password) || empty($passwordConfirmation) || empty($firstName) ||
-empty($lastName) || empty($email) || empty($phoneNumber)
-|| ctype_space($username) || ctype_space($password) || ctype_space($passwordConfirmation) || ctype_space($firstName) ||
-ctype_space($lastName) || ctype_space($email) || ctype_space($phoneNumber)) {
+empty($lastName) || empty($email) || empty($phoneNumber) || ctype_space($firstName) || ctype_space($lastName)) {
     $error = "Please fill in all the required details.";
     function_alert_register($error);
     exit();
@@ -105,7 +103,7 @@ ctype_space($lastName) || ctype_space($email) || ctype_space($phoneNumber)) {
 $result = mysqli_query($conn, "SELECT accountUsername FROM Account WHERE accountUsername = '$username'");
 
 if (mb_strlen($username) > 20 || mb_strlen($username) < 4 || 
-strpos($username, ' ') != false || !ctype_alnum($username)) {
+strpos($username, ' ') != false || !ctype_alnum($username) || ctype_space($username)) {
     unset($_SESSION["username"]); 
     $error = "Invalid username format, please try again.";
 
