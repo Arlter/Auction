@@ -22,7 +22,7 @@ $email_content = " Congratulation! You have placed a bid of ".chr(163). $bidPric
 /* TODO #3: If everything looks good, make the appropriate call to insert
             data into the database. */
 
-$query = "INSERT INTO Bid(auction_auctionID,bidPrice,buyer_accountID,bidTime) VALUES($auctionId,CAST($bidPrice AS DECIMAL(10,2)),$_SESSION[accountID], CURRENT_TIME())";
+$query = "INSERT INTO Bid(auction_auctionID,bidPrice,buyer_accountID,bidTime) VALUES($auctionId,CAST($bidPrice AS DECIMAL(10,2)),$auctionId, CURRENT_TIME())";
 $res = mysqli_query($conn, $query);
 if (mysqli_affected_rows($conn) ==1 && !mysqli_error($conn))
 {
@@ -32,7 +32,7 @@ if (mysqli_affected_rows($conn) ==1 && !mysqli_error($conn))
 else
 {
     echo '<div class="text-center">'. mysqli_error($conn);
-    echo('<div class="text-center"> Unsucessful Bid.       <a href="place_bid.php">Try bidding on another auction.</a></div>');
+    echo('<div class="text-center"> Unsucessful Bid.       <a href="browse.php">Try bidding on another auction.</a></div>');
     header("refresh:5;url=browse.php");    
 }
 

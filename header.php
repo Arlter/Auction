@@ -56,9 +56,6 @@
 <?php
   if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'buyer') {
   echo('
-  <li class="nav-item mx-1">
-      <a class="nav-link" href="place_bid.php">Create Bids</a>
-    </li>
 	<li class="nav-item mx-1">
       <a class="nav-link" href="mybids.php">My Bids</a>
     </li>

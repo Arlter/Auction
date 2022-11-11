@@ -5,13 +5,12 @@
 
 // For now, I will just set session variables and redirect.
 
+// assign post to 
 session_start();
 $_SESSION['logged_in'] = True;
-$_SESSION['username'] = "acc1";
-$_SESSION['account_type'] = "buyer";
-$_SESSION['accountID'] = 10000000;
-$_SESSION['firstName'] = "erte";
-$_SESSION['lastName'] = "wang";
+$_SESSION['username'] = "acc1"; 
+$_SESSION['account_type'] = "seller";
+$_SESSION['accountID'] = 10000000; // get from post form 
 $_SESSION['emailAddress'] = "1419121502@qq.com";
 
 
