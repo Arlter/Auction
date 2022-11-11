@@ -8,7 +8,7 @@
 session_start();
 $_SESSION['logged_in'] = true;
 $_SESSION['username'] = "test";
-$_SESSION['account_type'] = "buyer";
+$_SESSION['account_type'] = "buyer";  // i used lower camel but here uses underline, change later
 
 echo('<div class="text-center">You are now logged in! You will be redirected shortly.</div>');
 

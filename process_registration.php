@@ -11,16 +11,16 @@ include "connection.php";  // using local db for testing for now
 
 // Utility functions (move somewhere else later?)
 
-// redirects to register page and give a closeable red alert box with relevant error message
-// see code in browse.php (for now)
-function function_alert($error) {
+// redirects to register page and shows a closeable red alert box with relevant error message
+// see code in browse.php (put there for now)
+function function_alert_register($error) {
     $_SESSION["alert"] = $error;
     header("Location: register.php?error =" . urlencode ($error));  // redirection to register.php
 }
 
 // redirects to login page after successful registration with green alert box indicating success
 // see code in register.php
-function function_reg_success($success_message) {
+function function_success_register($success_message) {
     $_SESSION["reg_success"] = $success_message;
 // to prevent inputs appearing again when going to register.php again
     unset($_SESSION["username"]);  // what if I wanna save username for login? hmmmm...
@@ -31,6 +31,13 @@ function function_reg_success($success_message) {
     header("Location: browse.php?success =" . urlencode ($success_message));  // redirection to browse.php
 }  // might change redirection to the login page if a separate login page is created 
 
+
+// Test connection
+if (!$conn) {
+    $error = "Connection error, please try again later.";
+    function_alert_register($error);
+    exit();
+}
 
 
 // Variable extraction
@@ -43,7 +50,7 @@ if (isset($_POST["submit"])) {
     $lastName = mysqli_real_escape_string ($conn, $_POST["lastName"]);
     $email = mysqli_real_escape_string ($conn, $_POST["email"]);
     $phoneNumber = mysqli_real_escape_string ($conn, $_POST["phoneNumber"]);
-}
+} 
 // alternative data cleaning: trim() then stripslashes() then htmlspecialchars()
 
 
@@ -85,8 +92,8 @@ if (empty($username) || empty($password) || empty($passwordConfirmation) || empt
 empty($lastName) || empty($email) || empty($phoneNumber)
 || ctype_space($username) || ctype_space($password) || ctype_space($passwordConfirmation) || ctype_space($firstName) ||
 ctype_space($lastName) || ctype_space($email) || ctype_space($phoneNumber)) {
-    $error = "Please fill in all the required information.";
-    function_alert($error);
+    $error = "Please fill in all the required details.";
+    function_alert_register($error);
     exit();
 }
 // Question: separate checks for each input, or group them into one statement?
@@ -97,41 +104,41 @@ ctype_space($lastName) || ctype_space($email) || ctype_space($phoneNumber)) {
 
 $result = mysqli_query($conn, "SELECT accountUsername FROM Account WHERE accountUsername = '$username'");
 
-if (mb_strlen($username) > 20 || mb_strlen($username) < 4 || strpos($username, ' ') != false) {
+if (mb_strlen($username) > 20 || mb_strlen($username) < 4 || 
+strpos($username, ' ') != false || !ctype_alnum($username)) {
     unset($_SESSION["username"]); 
-    $error = "Username must be 4 to 20 characters long with no space, please try again.";
+    $error = "Invalid username format, please try again.";
 
     // error message ver1: javascript alert pop up --> redirect to register.php
     // echo "<script type='text/javascript'>alert('$error');</script>";  // popup box
     // how to change "localhost says"?
 
-    // error message ver1.1: function with javascript, same as above
-    // function_alert($error);
-
     // error message ver2: HTML alert message box and sessions
     // see code in register.php
-    function_alert($error);
+    function_alert_register($error);
     exit();
 } elseif (mysqli_num_rows($result) > 0) {  // query finds same username in database
     unset($_SESSION["username"]); 
     $error = "Username already exists, please try again.";
-    function_alert($error);
+    function_alert_register($error);
     exit(); 
-} //no need to exit if input is valid 
+} 
+// no need to exit if input is valid 
 
 
 // Password validation - must be 8 to 20 characters long, no space
 // Question: other extra validation? legal characters?
-if (mb_strlen($password) > 20 || mb_strlen($password) < 8 || strpos($password, ' ') != false) {
-    $error = "Password must be 8 to 20 characters long with no space, please try again.";
-    function_alert($error);
+if (mb_strlen($password) > 20 || mb_strlen($password) < 8 || 
+strpos($password, ' ') != false || !preg_match("/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{8,20}$/", $password)) {
+    $error = "Invalid password format, please try again.";
+    function_alert_register($error);
     exit();
 }
 
 // Password confirmation - password == retyped-password
 if ($password != $passwordConfirmation) {
     $error = "The password confirmation does not match, please try again.";
-    function_alert($error);
+    function_alert_register($error);
     exit();  
 }
 
@@ -149,7 +156,7 @@ $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     unset($_SESSION["email"]); 
     $error = "Invalid email format, please try again.";
-    function_alert($error);
+    function_alert_register($error);
     exit();   
 }
 // Question: extra: email confirmation? lol
@@ -160,7 +167,7 @@ $phoneNumber = str_replace([" ", ".", "-", "(", ")"], "", $phoneNumber);
 if (!preg_match("/[+][0-9]{7,15}/", $phoneNumber)) {
     unset($_SESSION["phoneNumber"]); 
     $error = "Invalid phone format, please try again.";
-    function_alert($error);
+    function_alert_register($error);
     exit(); 
 }
 
@@ -179,13 +186,13 @@ if (!preg_match("/[+][0-9]{7,15}/", $phoneNumber)) {
 $query = "INSERT INTO Account (accountUsername, accountPassword, accountType, firstName,lastName, emailAddress, phoneNumber)
 VALUES ('$username', '$hash', '$accountType', '$firstName', '$lastName', '$email', '$phoneNumber')";
 if (mysqli_query($conn, $query)) {
-    mysqli_close($conn);  // put this here? no idea
+    mysqli_close($conn);  // put this here?
     $success_message = "Account created successfully.";
-    function_reg_success($success_message);
+    function_success_register($success_message);
 } else {
-    echo "Error: " . $query . "<br>" . mysqli_error($conn);  // what kind of error here?
-    // $error = "Connection error, please try again later.";
-    // function_alert($error);
+   // echo "Error: " . $query . "<br>" . mysqli_error($conn);  // what kind of error here?
+    $error = "Connection error, please try again later.";
+    function_alert_register($error);
 }
     
 ?>

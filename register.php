@@ -10,7 +10,7 @@ if(isset($_SESSION["alert"])) {
 
   "<div class='alert' style='background-color:pink; color:black'>
   <button type='button' class='close' data-dismiss='alert'>&times;</button>
-  <h5><i class='icon fa fa-close'></i> Invalid input</h5>$alert
+  <h5><i class='icon fa fa-close'></i> Error</h5>$alert
   </div>";
   
 unset($_SESSION["alert"]);  // alert disappears after refreshing
@@ -20,6 +20,7 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
 
 <div class="container">
 <h2 class="my-3">Register new account</h2>
+<h6 id="AccountRegHelp" class="form-text-inline text-muted" style="line-height:20px"><span class="text-danger">* All details are required.</span></h6>
 
 
 <!-- Note: this form is modified:
@@ -40,7 +41,7 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
         <input class="form-check-input" type="radio" name="accountType" id="accountSeller" value="seller">
         <label class="form-check-label" for="accountSeller">Seller</label>
       </div>
-      <small id="accountTypeHelp" class="form-text-inline text-muted"><span class="text-danger">* Required.</span></small>
+      <small id="accountTypeHelp" class="form-text-inline text-muted"><span class="text-danger">* Choose one only.</span></small>
 	</div>
   </div>
 
@@ -48,7 +49,8 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
     <label for="username" class="col-sm-2 col-form-label text-right">Username</label>
 	<div class="col-sm-10">
       <input type="text" class="form-control" name="username" id="username" value="<?php echo $_SESSION["username"];?>" placeholder="Username">
-      <small id="usernameHelp" class="form-text text-muted"><span class="text-danger">* Required. Must be 4 to 20 characters long with no space.</span></small>
+      <small id="usernameHelp" class="form-text text-muted"><span class="text-danger">* Must be 4 to 20 characters long, consists of only 
+    alphanumeric characters (A-Z, a-z, and 0-9), and has no space.</span></small>
 	</div>
   </div>
 
@@ -56,14 +58,14 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
     <label for="password" class="col-sm-2 col-form-label text-right">Password</label>
     <div class="col-sm-10">
       <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-      <small id="passwordHelp" class="form-text text-muted"><span class="text-danger">* Required. Must be 8 to 20 characters long with no space.</span></small>
+      <small id="passwordHelp" class="form-text text-muted"><span class="text-danger">* Must be 8 to 20 characters long, must contain at least 1 letter and 1 number, may contain any of these characters: !@#$%</span></small>
     </div>
   </div>
   <div class="form-group row">
     <label for="passwordConfirmation" class="col-sm-2 col-form-label text-right">Confirm password</label>
     <div class="col-sm-10">
       <input type="password" class="form-control"name="passwordConfirmation" id="passwordConfirmation" placeholder="Enter password again">
-      <small id="passwordConfirmationHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+      <small id="passwordConfirmationHelp" class="form-text text-muted"><span class="text-danger"></span></small> <!-- keep here for now -->
     </div>
   </div>
 
@@ -71,7 +73,7 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
     <label for="fisrtName" class="col-sm-2 col-form-label text-right">First name</label>
 	<div class="col-sm-10">
       <input type="text" class="form-control" name="firstName" id="firstName"value="<?php echo $_SESSION["firstName"];?>" placeholder="First name">
-      <small id="firstnameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+      <small id="firstnameHelp" class="form-text text-muted"><span class="text-danger"></span></small> <!-- keep here for now -->
 	</div>
   </div>
 
@@ -79,7 +81,7 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
     <label for="lastName" class="col-sm-2 col-form-label text-right">Last name</label>
 	<div class="col-sm-10">
       <input type="text" class="form-control" name="lastName" id="lastName" value="<?php echo $_SESSION["lastName"];?>" placeholder="Last name">
-      <small id="lastnameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+      <small id="lastnameHelp" class="form-text text-muted"><span class="text-danger"></span></small> <!-- keep here for now -->
 	</div>
   </div>
 
@@ -87,7 +89,7 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
     <label for="email" class="col-sm-2 col-form-label text-right">Email</label>
 	<div class="col-sm-10">
       <input type="email" class="form-control" name="email" id="email" value="<?php echo $_SESSION["email"];?>" placeholder="Email">
-      <small id="emailHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+      <small id="emailHelp" class="form-text text-muted"><span class="text-danger"></span></small> <!-- keep here for now -->
 	</div>
   </div>
   
@@ -95,7 +97,7 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
     <label for="phoneNumber" class="col-sm-2 col-form-label text-right">International phone number</label>
 	<div class="col-sm-10">
       <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" value="<?php echo $_SESSION["phoneNumber"];?>" placeholder="International phone number">
-      <small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Required. Start with + sign (not 00) and country code.</span></small>
+      <small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Please start with + sign (not 00) and country code.</span></small>
 	</div>
   </div>
 
