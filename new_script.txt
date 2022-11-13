@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS Auction (
 	createdDate TIMESTAMP NOT NULL,
 	endDate TIMESTAMP NOT NULL, 
 	currentPrice DECIMAL(10,2) DEFAULT 0 NOT NULL,
-	currentBidder VARCHAR(20), 
+	currentBidder INT, 
 	auctionStatus BOOLEAN NOT NULL DEFAULT TRUE,	
 	PRIMARY KEY(auctionID),
 	FOREIGN KEY(seller_accountID) REFERENCES Account(accountID) ON UPDATE CASCADE,
@@ -92,20 +92,10 @@ CREATE TRIGGER  Auto_Watchlist After INSERT ON Bid
 delimiter ;
 
 
-delimiter $$
-CREATE TRIGGER  prevent_bids_on_end_auction Before INSERT ON Bid 
-	FOR EACH ROW
-	BEGIN
-		IF EXISTS (SELECT * FROM Auction WHERE auctionID=new.auction_auctionID and auctionStatus=FALSE) THEN
-			SIGNAL SQLSTATE '45OO0' SET MESSAGE_TEXT = 'The auction is over. Your bid is invalid.';
-		END IF;
-	END $$
-delimiter ;
-
 INSERT INTO Account VALUES
 (null,'acc1','111','buyer','erte','wang','1419121502@qq.com','+44123456'),
-(null,'acc2','111','seller','kien','han','abc@com','+44123456'),
-(null,'acc3','111','buyer','angel','lam','abc@com','+44123456'),
+(null,'acc2','111','seller','kien','han','648906549@qq.com','+44123456'),
+(null,'acc3','111','buyer','angel','lam','wangertee@126.com','+44123456'),
 (null,'acc4','111','seller','tim','chen','abc@com','+44123456')
 ;
 
@@ -120,7 +110,7 @@ INSERT INTO Category VALUES
 
 
 INSERT INTO Auction VALUES
-(DEFAULT,'water gun','purchased two months ago and used twice. Very new','toy',10000001,52,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-20", "13:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'water gun','purchased two months ago and used twice. Very new','toy',10000001,52,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-20", "11:54:00"),DEFAULT,null,TRUE),
 (DEFAULT,'iphone','purchased two months ago and used twice. Very new','electronic device',10000001,700,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-30", "14:00:00"),DEFAULT,null,TRUE),
 (DEFAULT,'milk','purchased one day ago. Very new','food',10000001,3,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-9", "9:00:00"),DEFAULT,null,TRUE)
 ;

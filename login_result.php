@@ -1,5 +1,4 @@
 <?php
-
 // TODO: Extract $_POST variables, check they're OK, and attempt to login.
 // Notify user of success/failure and redirect/give navigation options.
 

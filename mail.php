@@ -47,8 +47,6 @@ function send_email($email_adress,$mail_subject,$mail_content){
     // Send email 
     if(!$mail->send()) { 
         echo 'Message could not be sent. Mailer Error: '.$mail->ErrorInfo; 
-    } else { 
-        echo('<div class="text-center">A confirmation email has been sent to your email.</div>');
-    }
+    } 
 
 }
