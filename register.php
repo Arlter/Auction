@@ -60,10 +60,6 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
   <div class="form-group row">
     <label for="password" class="col-sm-2 col-form-label text-right">Password</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-      <small id="passwordHelp" class="form-text text-muted"><span class="text-danger">
-        * Required. Must be 8 to 20 characters long, and must contain at least 1 letter and 1 number. 
-        May contain any of these characters: !@#$%</span></small>
       <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
       <small id="passwordHelp" class="form-text text-muted"><span class="text-danger">
         * Required. Must be 8 to 20 characters long, and must contain at least 1 letter and 1 number. 
@@ -73,9 +69,6 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
   <div class="form-group row">
     <label for="passwordConfirmation" class="col-sm-2 col-form-label text-right">Confirm password</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control"name="passwordConfirmation" id="passwordConfirmation" placeholder="Enter password again">
-      <small id="passwordConfirmationHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
-        </div>
       <input type="password" class="form-control"name="passwordConfirmation" id="passwordConfirmation" placeholder="Enter password again" required>
       <small id="passwordConfirmationHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
         </div>
@@ -123,56 +116,6 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
       <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" value="<?php echo $_SESSION["phoneNumber"];?>" placeholder="International phone number" required>
       <?php 
       if (!isset($_SESSION["phoneNumber"]) || ctype_space($_SESSION["phoneNumber"])) {
-        echo '<small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Please start with + sign (not 00) and country code.</span></small>';
-      }
-      ?>
-        </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="fisrtName" class="col-sm-2 col-form-label text-right">First name</label>
-	<div class="col-sm-10">
-      <input type="text" class="form-control" name="firstName" id="firstName"value="<?php echo $_SESSION["firstName"];?>" placeholder="First name">
-      <?php 
-      if(empty($_SESSION["firstName"]) || ctype_space($_SESSION["firstName"])) {
-        echo '<small id="firstnameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>';
-      }
-      ?>
-        </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="lastName" class="col-sm-2 col-form-label text-right">Last name</label>
-	<div class="col-sm-10">
-      <input type="text" class="form-control" name="lastName" id="lastName" value="<?php echo $_SESSION["lastName"];?>" placeholder="Last name">
-      <?php 
-      if(empty($_SESSION["lastName"]) || ctype_space($_SESSION["lastName"])) {
-        echo '<small id="lastnameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>';
-      }
-      ?>
-        </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="email" class="col-sm-2 col-form-label text-right">Email</label>
-	<div class="col-sm-10">
-      <input type="email" class="form-control" name="email" id="email" value="<?php echo $_SESSION["email"];?>" placeholder="Email">
-      <?php 
-      if(empty($_SESSION["email"]) || ctype_space($_SESSION["email"])) {
-        echo '<small id="emailHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>';
-      }
-      ?>
-	</div>
-  </div>
-  
-  <div class="form-group row">
-    <label for="phoneNumber" class="col-sm-2 col-form-label text-right">International phone number</label>
-	<div class="col-sm-10">
-      <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" value="<?php echo $_SESSION["phoneNumber"];?>" placeholder="International phone number">
-      <?php 
-      if(empty($_SESSION["phoneNumber"])) {
-        echo '<small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Required. Please start with + sign (not 00) and country code.</span></small>';
-      } elseif (!isset($_SESSION["phoneNumber"]) || ctype_space($_SESSION["phoneNumber"])) {
         echo '<small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Please start with + sign (not 00) and country code.</span></small>';
       }
       ?>
