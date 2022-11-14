@@ -11,7 +11,7 @@ $pass = $_POST["password"];
 $accountType = $_POST["account_type"];   
 
 $query = mysqli_query($conn, "SELECT * FROM account WHERE emailAddress = $email and accountPassword = $pass");
-$result = mysqli_query($con, $query)
+$result = mysqli_query($con, $query);
   
 if($rows == 1){ 
         $account = mysqli_fetch_assoc($results);
