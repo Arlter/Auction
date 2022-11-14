@@ -1,18 +1,22 @@
 <?php
+//Go on to header.php. Under Login should send request to login_result.php
 
-// TODO: Extract $_POST variables, check they're OK, and attempt to login.
-// Notify user of success/failure and redirect/give navigation options.
-
-// For now, I will just set session variables and redirect.
-
+require_once "connection.php";
 session_start();
-$_SESSION['logged_in'] = true;
-$_SESSION['username'] = "test";
-$_SESSION['account_type'] = "buyer";  // i used lower camel but here uses underline, change later
 
-echo('<div class="text-center">You are now logged in! You will be redirected shortly.</div>');
+$email = $_POST["email"];
+$pass = $_POST["password"];
 
-// Redirect to index after 5 seconds
-header("refresh:5;url=index.php");
+//Check if user is in the database
+$query = mysqli_query($conn, "SELECT * FROM account WHERE emailAddress = $email and accountPassword = $pass");
+$result = mysqli_query($con, $query)
 
+if($rows == 1){ 
+    $account = mysqli_fetch_assoc($results);
+    header("refresh:5;url=index.php");
+    echo('<div class="text-center">You are now logged in! You will be redirected shortly.</div>') 
+} else {
+    echo "Invalid Username or Password"
+    //Redirect to where? 
+    }
 ?>
