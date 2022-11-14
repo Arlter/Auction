@@ -1,31 +1,110 @@
 <?php include_once("header.php")?>
+<<<<<<< Updated upstream
 <?php require("utilities.php")?>
+=======
+<<<<<<< Updated upstream
+<?php require_once("utilities.php")?>
+<?php require_once("connection.php")?>
+>>>>>>> Stashed changes
 
 <?php
   // Get info from the URL:
   $item_id = $_GET['item_id'];
+<<<<<<< Updated upstream
 
+=======
+  $accountID = $_SESSION['accountID'];
+  $created_date = (mysqli_query($conn, "SELECT createdDate  FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+  $current_bidder = (mysqli_query($conn, "SELECT currentBidder FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+  $auction_status = (mysqli_query($conn, "SELECT auctionStatus FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+=======
+<?php require("utilities.php")?>
+<?php include "connection.php"?>
+
+<div class="container my-5">
+
+<?php
+
+// see error messages
+// error_reporting(E_ALL); ini_set('display_errors', '1');
+
+  // Get info from the URL:
+  $item_id = $_GET['itemID'];
+  $accountID = $_SESSION["accountID"];
+
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   // TODO: Use item_id to make a query to the database.
 
+  $itemQuery = "SELECT itemName, itemDescription, currentPrice, endDate FROM Auction WHERE auctionID = '$item_id'";
+
+  $result = mysqli_query($conn, $itemQuery);
+  $row = mysqli_fetch_array($result);
+
+  $title = $row['itemName'];
+  $description = $row['itemDescription'];
+  $current_price = $row['currentPrice'];
   // DELETEME: For now, using placeholder data.
+<<<<<<< Updated upstream
   $title = "Placeholder title";
   $description = "Description blah blah blah";
   $current_price = 30.50;
   $num_bids = 1;
   $end_time = new DateTime('2020-11-02T00:00:00');
+=======
+<<<<<<< Updated upstream
+  $title = (mysqli_query($conn, "SELECT itemName FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+  $description = (mysqli_query($conn, "SELECT itemDescription FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+  $current_price = (mysqli_query($conn, "SELECT currentPrice FROM Auction WHERE auctionID =$item_id ") -> fetch_array(MYSQLI_NUM))[0];
+  $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$item_id") -> fetch_array(MYSQLI_NUM))[0];
+  $end_time = (mysqli_query($conn, "SELECT endDate FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+  $history = (mysqli_query($conn, "SELECT bidTime,buyer_accountID,bidPrice FROM Bid WHERE auction_auctionID =$item_id ORDER BY bidTime desc"));    
+=======
+  $num_bids = 1;  // need count query here?
+  $end_time = $row['endDate'];
+
+  // test
+  // printf($item_id);
+  // echo "<br>";
+  // printf($title);
+  // echo "<br>";
+  // printf($description);
+  // echo "<br>";
+  // printf($current_price);
+  // echo "<br>";
+  // printf($num_bids);
+  // echo "<br>";
+  // printf($end_time);
+  // echo "<br>";
+>>>>>>> Stashed changes
+  
+>>>>>>> Stashed changes
 
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
   //       to lack of high-enough bids. Or maybe not.
   
+
   // Calculate time to auction end:
+
   $now = new DateTime();
+<<<<<<< Updated upstream
+=======
+  $end_time = new DateTime($end_time);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
   
   if ($now < $end_time) {
+=======
+
+  if ($now < $end_time) { 
+>>>>>>> Stashed changes
     $time_to_end = date_diff($now, $end_time);
     $time_remaining = ' (in ' . display_time_remaining($time_to_end) . ')';
+    echo($time_remaining);
   }
   
+
   // TODO: If the user has a session, use it to make a query to the database
   //       to determine if the user is already watching this item.
   //       For now, this is hardcoded.
