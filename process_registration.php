@@ -4,40 +4,24 @@
 // an account. Notify user of success/failure and redirect/give navigation 
 // options.
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
 session_start();
 
 include "connection.php";  // using local db for testing for now
 
 
-<<<<<<< Updated upstream
-// Utility functions (move somewhere else later?)
-
-// redirects to register page and shows a closeable red alert box with relevant error message
-// see code in browse.php (put there for now)
-=======
 /////////////////////////////////////////////////////
 
 // Utility functions (move somewhere else later?)
 
 // redirects to register page and shows a closeable red alert box with relevant error message
 // see code in register.php
->>>>>>> Stashed changes
 function function_alert_register($error) {
     $_SESSION["alert"] = $error;
     header("Location: register.php?error =" . urlencode ($error));  // redirection to register.php
 }
 
 // redirects to login page after successful registration with green alert box indicating success
-<<<<<<< Updated upstream
-// see code in register.php
-=======
 // see code in browse.php (put there for now)
->>>>>>> Stashed changes
 function function_success_register($success_message) {
     $_SESSION["reg_success"] = $success_message;
 // to prevent inputs appearing again when going to register.php again
@@ -49,11 +33,8 @@ function function_success_register($success_message) {
     header("Location: browse.php?success =" . urlencode ($success_message));  // redirection to browse.php
 }  // might change redirection to the login page if a separate login page is created 
 
-<<<<<<< Updated upstream
-=======
 /////////////////////////////////////////////////////
 
->>>>>>> Stashed changes
 
 // Test connection
 if (!$conn) {
@@ -80,11 +61,7 @@ if (isset($_POST["submit"])) {
 // temporarily saves data in form input field so users don't have to enter all over again
 // password and confirmation are never saved
 // see changes to code in form in register.php
-<<<<<<< Updated upstream
-$_SESSION["accountType"] = $accountType;
-=======
 $_SESSION["account_type"] = $accountType;  // sorry for confusing naming styles, this is to match header.php
->>>>>>> Stashed changes
 $_SESSION["username"] = $username;
 $_SESSION["firstName"] = $firstName;
 $_SESSION["lastName"] = $lastName;
@@ -215,17 +192,9 @@ if (mysqli_query($conn, $query)) {
     $success_message = "Account created successfully.";
     function_success_register($success_message);
 } else {
-<<<<<<< Updated upstream
-   // echo "Error: " . $query . "<br>" . mysqli_error($conn);  // what kind of error here?
-=======
    // echo "Error: " . $query . "<br>" . mysqli_error($conn);
->>>>>>> Stashed changes
     $error = "Connection error, please try again later.";
     function_alert_register($error);
 }
-    
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+
 ?>
