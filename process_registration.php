@@ -6,7 +6,7 @@
 
 session_start();
 
-include "connection.php";  // using local db for testing for now
+require_once "connection.php";  // using local db for testing for now
 
 
 /////////////////////////////////////////////////////
@@ -151,6 +151,9 @@ $hash = password_hash($password, PASSWORD_DEFAULT);  // requires VARCHAR(60) in 
 
 
 // Question: First name and last name validations necessary? Requirements?
+
+// FIXME: add length validation for firstname, lastname, email, phone
+
 
 
 // Email validation -- can only validate format for now

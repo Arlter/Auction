@@ -9,7 +9,7 @@
 /* TODO #1: Connect to MySQL database (perhaps by requiring a file that
             already does this). */
 
-include "connection.php";
+require_once "connection.php";
 
 /* TODO #2: Extract form data into variables. Because the form was a 'post'
             form, its data can be accessed via $POST['auctionTitle'], 
@@ -30,6 +30,13 @@ if (isset($_POST["submit"])) {
     $auctionReservePrice = mysqli_real_escape_string ($conn, $_POST["auctionReservePrice"]);
     $auctionEndDate = mysqli_real_escape_string ($conn, $_POST["auctionEndDate"]);
 }             
+
+// FIXME: Data validation
+// this time can try use $_GET["error"]?
+
+// set sessions
+
+// FIXME: add length validation for all data
 
 
 /* TODO #3: If everything looks good, make the appropriate call to insert
@@ -52,8 +59,8 @@ if (mysqli_query($conn, $query)) {
     // echo('<div class="text-center">Auction successfully created! <a href="listing.php">View your new listing.</a></div>');
 
     //not working, format super ugly??
-    echo('<div class="text-center">Auction successfully created! <a href="listing.php?item_id='.$auctionIDquery.'">View your new listing.</a></div>');
-    // directed to e.g. listing.php/?item_id=100000000
+    echo('<div class="text-center">Auction successfully created! <a href="listing.php">View all your listings. </a><a href="listing.php?item_id='.$auctionIDquery.'">View your new listing.</a></div>');
+    // "view your listing" link directs user to the new item listing page, e.g. listing.php/?item_id=100000000
     
 
     // $success_message = "Auction created successfully.";
