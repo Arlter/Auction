@@ -1,6 +1,5 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
-<?php require_once "connection.php"?>
 
 <!-- move this to login page if login page is created separately-->
 <?php
@@ -65,6 +64,18 @@ unset($_SESSION["reg_success"]);  // DELETE THIS to save this session to be used
     </div>
     <div class="col-md-3 pr-0">
       <div class="form-group">
+        <label for="cat" class="sr-only">Search within:</label>
+        <?php
+        // Select category 
+        $query = "SELECT * FROM category";
+        $result = mysqli_query($conn, $query);
+        echo '<select name ="cat" class="form-control" id="cat">';
+        echo '<option value="All">All categories</option>';
+        while ($row=mysqli_fetch_array($result)){
+          echo '<option value="' . $row['categoryName'] . '">' . $row['categoryName'] . '</option>';
+        }
+        echo '</select>';
+        ?> 
       </div>
     </div>
     <div class="col-md-3 pr-0">
