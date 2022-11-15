@@ -169,7 +169,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
 // Phone format validation - start with + sign, 7-15 numbers (not including + sign) (I set the length arbituarily)
 $phoneNumber = str_replace([" ", ".", "-", "(", ")"], "", $phoneNumber);
-if (!preg_match("/[+][0-9]{7,15}/", $phoneNumber)) {
+if (!preg_match("/[+][0-9]{0,19}/", $phoneNumber)) {
     unset($_SESSION["phoneNumber"]); 
     $error = "Invalid phone format, please try again.";
     function_alert_register($error);

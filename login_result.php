@@ -34,7 +34,7 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
 
         if ($account["accountType"] == "buyer") {
             $_SESSION["account_type"] = "buyer";
-        } else{
+        } else {
             $_SESSION["account_type"] = "seller";
         }
             

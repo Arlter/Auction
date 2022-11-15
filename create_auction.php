@@ -4,13 +4,12 @@ include_once("header.php")
 ?>
 
 <?php
-/* (Uncomment this block to redirect people without selling privileges away from this page)
-  // If user is not logged in or not a seller, they should not be able to
-  // use this page.
+// (Uncomment this block to redirect people without selling privileges away from this page)
+  // If user is not logged in or not a seller, they should not be able to use this page.
   if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] != 'seller') {
     header('Location: browse.php');
   }
-*/
+
 ?>
 
 <?php
@@ -42,14 +41,14 @@ if($_GET["error"]) {
         <div class="form-group row">
           <label for="auctionTitle" class="col-sm-2 col-form-label text-right">Title of auction</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" name="auctionTitle" id="auctionTitle" placeholder="e.g. Black mountain bike">
+            <input type="text" class="form-control" name="auctionTitle" id="auctionTitle" maxlength="40" placeholder="e.g. Black mountain bike">
             <small id="titleHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> A short description of the item you're selling, which will display in listings.</small>
           </div>
         </div>
         <div class="form-group row">
           <label for="auctionDetails" class="col-sm-2 col-form-label text-right">Details</label>
           <div class="col-sm-10">
-            <textarea class="form-control" name="auctionDetails" id="auctionDetails" rows="4"></textarea>
+            <textarea class="form-control" name="auctionDetails" id="auctionDetails" maxlength="2000" rows="4"></textarea>
             <small id="detailsHelp" class="form-text text-muted">Full details of the listing to help bidders decide if it's what they're looking for.</small>
           </div>
         </div>

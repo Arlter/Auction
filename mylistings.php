@@ -39,7 +39,7 @@ require_once("utilities.php");
         print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
       }
     } else {
-      echo('<div class="text-center"> No listings have been made yet.</div>');
+      echo('<div class="text-center"> No listings have been made yet.</div>');  // FIXME: fancy
     }
 
   } else {

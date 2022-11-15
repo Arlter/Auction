@@ -12,7 +12,7 @@ include_once("header.php")?>
 /* TODO #1: Connect to MySQL database (perhaps by requiring a file that
             already does this). */
 
-require_once "connection.php";
+require_once("connection.php");
 
 /* TODO #2: Extract form data into variables. Because the form was a 'post'
             form, its data can be accessed via $POST['auctionTitle'], 
@@ -21,9 +21,8 @@ require_once "connection.php";
             issue, give some semi-helpful feedback to user. */
 
 // have to set $_SESSION['accountID'] when logging in
-// $accountID = $_SESSION["accountID"];
+$accountID = $_SESSION["accountID"];
 // hardcoded for now for testing
-$accountID = "10000001"; // DELETE LATER
 
 if (isset($_POST["submit"])) {
     $auctionTitle = mysqli_real_escape_string ($conn, $_POST["auctionTitle"]);
@@ -59,7 +58,7 @@ if (mysqli_query($conn, $query)) {
 
     //echo "New record created successfully. Last inserted ID is: " . $auctionIDquery;
 
-    echo('<div class="text-center">Auction successfully created! <a href="listing.php">View all your listings. </a><a href="listing.php?item_id='.$auctionIDquery.'">View your new listing.</a></div>');
+    echo('<div class="text-center">Auction successfully created! <a href="mylistings.php">View all your listings. </a><a href="listing.php?item_id='.$auctionIDquery.'">View your new listing.</a></div>');
     // "view your listing" link directs user to the new item listing page, e.g. listing.php/?item_id=100000000
     
     // $success_message = "Auction created successfully.";
