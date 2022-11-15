@@ -121,13 +121,12 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
       ?>
         </div>
   </div>
-
-  <div class="form-group row">
-    <button type="submit" name="submit" class="btn btn-primary form-control">Register</button>
+  <div style="text-align: center">
+    <button type="submit" name="submit" class="btn btn-primary form-control" style="margin-bottom: 20px; width:200px">Register</button>
   </div>
 </form>
 
-<div class="text-center">Already have an account? <a href="" data-toggle="modal" data-target="#loginModal">Login</a>
+<div class="text-center" style="margin-bottom:30px">Already have an account? <a href="login.php">Login</a>
 
 </div>
 

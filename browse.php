@@ -1,21 +1,9 @@
-<?php include_once("header.php")?>
+<?php 
+session_start();
+
+include_once("header.php")?>
 <?php require("utilities.php")?>
 
-<!-- move this to login page if login page is created separately-->
-<?php
-
-if(isset($_SESSION["reg_success"])) {
-  $success = $_SESSION["reg_success"];
-  echo
-
-  "<div class='alert' style='background-color:lightgreen; color:black'>
-  <button type='button' class='close' data-dismiss='alert'>&times;</button>
-  <h5><i class='icon fa fa-check'></i> $success</h5>
-  </div>";
-  
-unset($_SESSION["reg_success"]);
-}
-?>
 
 <?php
 
@@ -25,7 +13,7 @@ if(isset($_SESSION["logged_in_message"])) {
 
   "<div class='alert' style='background-color:lightgreen; color:black'>
   <button type='button' class='close' data-dismiss='alert'>&times;</button>
-  <h5><i class='icon fa fa-check'></i> $logged_in_message</h5>
+  <h5>$logged_in_message</h5>
   </div>";
   
 unset($_SESSION["logged_in_message"]);

@@ -1,9 +1,14 @@
 <?php
 //Go on to header.php. Under Login should send request to login_result.php
-
-require_once "connection.php";
 session_start();
 
+include_once("header.php");
+require_once("connection.php");
+?>
+
+<div class="container">
+
+<?php
 if (isset($_POST["submit"])) {
     $username = $_POST["username"];
     $pass = $_POST["password"];
@@ -38,11 +43,11 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
         // account_type? 
     }
     
-    header("refresh:3;url=index.php");
-    echo('<div class="text-center">You are now logged in! You will be redirected shortly.</div>');  // FIXME: can be fancier
+    header("refresh:2;url=index.php");
+    echo('<div class="text-center" style="margin-top:50px">You are now logged in! You will be redirected shortly.</div>');
 } else {
-    echo "Invalid Username or Password";  
-    header("refresh:3;url=login.php");
+    header("refresh:2;url=login.php");
+    echo('<div class="text-center" style="margin-top:50px">Invalid username or password, redirecting in 2 seconds</div>');  
 }
 
 

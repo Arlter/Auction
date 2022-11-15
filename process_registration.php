@@ -30,8 +30,8 @@ function function_success_register($success_message) {
     unset($_SESSION["lastName"]); 
     unset($_SESSION["email"]); 
     unset($_SESSION["phoneNumber"]); 
-    header("Location: browse.php?success =" . urlencode ($success_message));  // redirection to browse.php
-}  // might change redirection to the login page if a separate login page is created 
+    header("Location: login.php?success =" . urlencode ($success_message));  // redirection to login.php
+}
 
 /////////////////////////////////////////////////////
 
@@ -192,7 +192,7 @@ $query = "INSERT INTO Account (accountUsername, accountPassword, accountType, fi
 VALUES ('$username', '$hash', '$accountType', '$firstName', '$lastName', '$email', '$phoneNumber')";
 if (mysqli_query($conn, $query)) {
     mysqli_close($conn);  // put this here?
-    $success_message = "Account created successfully.";
+    $success_message = "Account created successfully. You may now log in.";
     function_success_register($success_message);
 } else {
    // echo "Error: " . $query . "<br>" . mysqli_error($conn);

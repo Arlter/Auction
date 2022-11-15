@@ -1,4 +1,7 @@
-<?php include_once("header.php")?>
+<?php 
+session_start();
+include_once("header.php")
+?>
 
 <?php
 /* (Uncomment this block to redirect people without selling privileges away from this page)
@@ -8,6 +11,17 @@
     header('Location: browse.php');
   }
 */
+?>
+
+<?php
+if($_GET["error"]) {
+  $error = $GET["error"];
+  echo
+  "<div class='alert' style='background-color:pink; color:black'>
+  <button type='button' class='close' data-dismiss='alert'>&times;</button>
+  <h5><i class='icon fa fa-close'></i> Error</h5>$error
+  </div>";
+}
 ?>
 
 <div class="container">
