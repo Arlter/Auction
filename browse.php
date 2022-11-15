@@ -17,28 +17,6 @@ unset($_SESSION["reg_success"]);  // DELETE THIS to save this session to be used
 }
 ?>
 
-<?php
-//Browse functionality 
-  // $Free text searching = y 
-  // Select from $categoryNames = x 
-  // query  
-  //   search database for items that includes free text y and where categoryName = x 
-
-
-  
-
-  // Category searching 
-
-
-  
-
-
-
-  
-
-?>
-
-
 <div class="container">
 
 <h2 class="my-3">Browse listings</h2>
@@ -52,13 +30,34 @@ unset($_SESSION["reg_success"]);  // DELETE THIS to save this session to be used
     <div class="col-md-5 pr-0">
       <div class="form-group">
         <label for="keyword" class="sr-only">Search keyword:</label>
+        
+        <?php
+        // $search = ($conn, $_POST['keyword'])
+        // $query = "SELECT * FROM auction WHERE itemName LIKE '%$search%'";
+        // $result = mysqli_query($conn, $search);
+
+        // if(mysqli_num_rows($result)>0) { 
+        //   while($row = mysqli_fetch_assoc($result)){
+            
+        //   }
+          
+        // } else{
+        //   echo "There are no results that match your search";
+        // }
+        ?> 
+
+
+
 	    <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text bg-transparent pr-0 text-muted">
               <i class="fa fa-search"></i>
             </span>
           </div>
-          <input type="text" class="form-control border-left-0" id="keyword" placeholder="Search for anything">
+          <input name=keyword type="text" class="form-control border-left-0" id="keyword" placeholder="Search for anything">
+
+
+
         </div>
       </div>
     </div>
@@ -66,7 +65,7 @@ unset($_SESSION["reg_success"]);  // DELETE THIS to save this session to be used
       <div class="form-group">
         <label for="cat" class="sr-only">Search within:</label>
         <?php
-        // Select category 
+        // Select category from database
         $query = "SELECT * FROM category";
         $result = mysqli_query($conn, $query);
         echo '<select name ="cat" class="form-control" id="cat">';
