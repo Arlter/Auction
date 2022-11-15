@@ -38,7 +38,7 @@ require_once("utilities.php");
         $title = $row["itemName"];
         $desc = $row["itemDescription"];
         $price = $row["currentPrice"];
-        $num_bids = mysqli_fetch_array(mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$item_id"));
+        $num_bids = mysqli_fetch_array(mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$item_id"))[0];
         $end_time = new DateTime($row["endDate"]);
 
         print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
