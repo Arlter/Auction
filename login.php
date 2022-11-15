@@ -34,13 +34,13 @@ unset($_SESSION["reg_success"]);
           <div class="form-group row">
             <label for="username" class="col-sm-2 col-form-label text-right">Username</label>
             <div class="col-sm-10" style="text-align: center">
-            <input type="text" class="form-control" name="username" id="username" placeholder="Username">
+            <input type="text" class="form-control" name="username" id="username" maxlength="20" placeholder="Username">
           </div>
           </div>
           <div class="form-group row">
             <label for="password" class="col-sm-2 col-form-label text-right">Password</label>
             <div class="col-sm-10">
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            <input type="password" class="form-control" name="password" id="password" maxlength="20" placeholder="Password">
           </div>
           </div>
           <div style="text-align: center">
