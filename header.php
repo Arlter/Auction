@@ -6,28 +6,28 @@ session_start();
 // ONLY after the user's login credentials have been verified via a 
 // database query  
 
-// $email = $_POST["email"];
-// $pass = $_POST["password"];
-// $accountType = $_POST["account_type"];   
+$email = $_POST["email"];
+$pass = $_POST["password"];
+$accountType = $_POST["account_type"];   
 
-// $query = mysqli_query($conn, "SELECT * FROM account WHERE emailAddress = $email and accountPassword = $pass");
-// $result = mysqli_query($con, $query);
+$query = mysqli_query($conn, "SELECT * FROM account WHERE emailAddress = $email and accountPassword = $pass");
+$result = mysqli_query($con, $query);
   
-// if($rows == 1){ 
-//         $account = mysqli_fetch_assoc($results);
+if($rows == 1){ 
+        $account = mysqli_fetch_assoc($results);
         
-//         if ($account["account_type"] == "buyer") {
-//             $_SESSION["accountType"] = "buyer";
-//             $_SESSION['logged_in'] = true;
-//         } else{
-//             $_SESSION["account_type"] = "seller";
-//             $_SESSION['logged_in'] = true;
-//         }
+        if ($account["account_type"] == "buyer") {
+            $_SESSION["accountType"] = "buyer";
+            $_SESSION['logged_in'] = true;
+        } else{
+            $_SESSION["account_type"] = "seller";
+            $_SESSION['logged_in'] = true;
+        }
         
-//     } else {
-//       $_SESSION['logged_in'] = false;
-//       // account_type? 
-//     }
+    } else {
+      $_SESSION['logged_in'] = false;
+      // account_type? 
+    }
 ?>
 
 
@@ -64,7 +64,12 @@ session_start();
   }
   else {
     echo '<button type="button" class="btn nav-link" data-toggle="modal" data-target="#loginModal">Login</button>';
+    
+
+  
   }
+  
+  if(isset())
 ?>
 
     </li>
@@ -97,33 +102,4 @@ session_start();
 ?>
   </ul>
 </nav>
-
-<!-- Login modal -->
-<div class="modal fade" id="loginModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Login</h4>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body">
-        <form method="POST" action="login_result.php">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" name="username" id="username" placeholder="Username">
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-          </div>
-          <button type="submit" name="submit" class="btn btn-primary form-control">Sign in</button>
-        </form>
-        <div class="text-center">or <a href="register.php">create an account</a></div>
-      </div>
-
-    </div>
-  </div>
 </div> <!-- End modal -->

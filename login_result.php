@@ -39,7 +39,8 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
     header("refresh:3;url=index.php");
     echo('<div class="text-center">You are now logged in! You will be redirected shortly.</div>');  // FIXME: can be fancier
 } else {
-    echo "Invalid Username or Password";  // FIXME: redirect to where?
+    echo "Invalid Username or Password";  
+    header("refresh:3;url=login.php");
 }
 
 
