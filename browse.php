@@ -1,5 +1,6 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
+<?php require_once "connection.php"?>
 
 <!-- move this to login page if login page is created separately-->
 <?php
@@ -16,6 +17,28 @@ if(isset($_SESSION["reg_success"])) {
 unset($_SESSION["reg_success"]);  // DELETE THIS to save this session to be used later on; might have to rename it?
 }
 ?>
+
+<?php
+//Browse functionality 
+  // $Free text searching = y 
+  // Select from $categoryNames = x 
+  // query  
+  //   search database for items that includes free text y and where categoryName = x 
+
+
+  
+
+  // Category searching 
+
+
+  
+
+
+
+  
+
+?>
+
 
 <div class="container">
 
@@ -42,13 +65,6 @@ unset($_SESSION["reg_success"]);  // DELETE THIS to save this session to be used
     </div>
     <div class="col-md-3 pr-0">
       <div class="form-group">
-        <label for="cat" class="sr-only">Search within:</label>
-        <select class="form-control" id="cat">
-          <option selected value="all">All categories</option>
-          <option value="fill">Fill me in</option>
-          <option value="with">with options</option>
-          <option value="populated">populated from a database?</option>
-        </select>
       </div>
     </div>
     <div class="col-md-3 pr-0">
