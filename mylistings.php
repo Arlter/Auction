@@ -16,14 +16,19 @@ require_once("utilities.php");
   // This can be started after browse.php is working with a database.
   // Feel free to extract out useful functions from browse.php and put them in
   // the shared "utilities.php" where they can be shared by multiple files.
-  
-  
+
+  // $accountID = 10000001;  // test
+  // $_SESSION["account_type"] = "seller";  // test
+
+  $accountID = $_SESSION["accountID"];
+  // account type session should have been set after successful login
+
   // TODO: Check user's credentials (cookie/session).
 
   // TODO: Perform a query to pull up their auctions.
 
   if (isset($_SESSION["account_type"]) && $_SESSION["account_type"] == "seller") {
-    $auctionquery = "SELECT * FROM Auction WHERE accountID = $accountID ORDER BY createdDate DESC";
+    $auctionquery = "SELECT * FROM Auction WHERE seller_accountID = $accountID";  // ORDER BY createdDate DESC, missing from local database for now
     $result = mysqli_query($conn, $auctionquery);
 
     if (mysqli_num_rows($result) > 0) {
@@ -34,7 +39,7 @@ require_once("utilities.php");
         $desc = $row["itemDescription"];
         $price = $row["currentPrice"];
         $num_bids = mysqli_fetch_array(mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$item_id"));
-        $end_time = $row["endDate"];
+        $end_time = new DateTime($row["endDate"]);
 
         print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
       }

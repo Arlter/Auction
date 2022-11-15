@@ -53,12 +53,12 @@ $query = "INSERT INTO Auction (itemName, itemDescription, categoryName, seller_a
 VALUES ('$auctionTitle', '$auctionDetails', '$auctionCategory', '$accountID', '$auctionStartPrice', '$auctionReservePrice', '$auctionEndDate')";
 if (mysqli_query($conn, $query)) {
 
-    $auctionIDquery = mysqli_insert_id($conn);  // get the primary key (auctionID) of the last insert
-    $_SESSION["auctionID"] = $auctionIDquery;
+    $item_id = mysqli_insert_id($conn);  // get the primary key (auctionID) of the last insert
+    $_SESSION["auctionID"] = $item_id;
 
     //echo "New record created successfully. Last inserted ID is: " . $auctionIDquery;
 
-    echo('<div class="text-center">Auction successfully created! <a href="mylistings.php">View all your listings. </a><a href="listing.php?item_id='.$auctionIDquery.'">View your new listing.</a></div>');
+    echo('<div class="text-center">Auction successfully created! <a href="mylistings.php">View all your listings. </a><a href="listing.php?item_id=' . $item_id . '">View your new listing.</a></div>');
     // "view your listing" link directs user to the new item listing page, e.g. listing.php/?item_id=100000000
     
     // $success_message = "Auction created successfully.";
