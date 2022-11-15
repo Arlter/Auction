@@ -13,7 +13,22 @@ if(isset($_SESSION["reg_success"])) {
   <h5><i class='icon fa fa-check'></i> $success</h5>
   </div>";
   
-unset($_SESSION["reg_success"]);  // DELETE THIS to save this session to be used later on; might have to rename it?
+unset($_SESSION["reg_success"]);
+}
+?>
+
+<?php
+
+if(isset($_SESSION["logged_in_message"])) {
+  $logged_in_message = $_SESSION["logged_in_message"];
+  echo
+
+  "<div class='alert' style='background-color:lightgreen; color:black'>
+  <button type='button' class='close' data-dismiss='alert'>&times;</button>
+  <h5><i class='icon fa fa-check'></i> $logged_in_message</h5>
+  </div>";
+  
+unset($_SESSION["logged_in_message"]);
 }
 ?>
 

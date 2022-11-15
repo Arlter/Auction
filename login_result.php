@@ -18,20 +18,22 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
     
     $query = "SELECT * FROM account WHERE accountUsername = '$username'";
     $result = mysqli_query($conn, $query);
+    $account = mysqli_fetch_array($result);
   
     if(mysqli_num_rows($result) == 1) { 
 
-        $account = mysqli_fetch_array($result);
-        
+        $_SESSION['logged_in'] = true;
+
+        $_SESSION["accountID"] = $account["accountID"];
+        $_SESSION["logged_in_message"] = "Welcome, " . $account["accountUsername"] . ".";  // can also use firstName or lastName
+
         if ($account["accountType"] == "buyer") {
             $_SESSION["account_type"] = "buyer";
-            $_SESSION['logged_in'] = true;
         } else{
             $_SESSION["account_type"] = "seller";
-            $_SESSION['logged_in'] = true;
         }
             
-        } else {
+    } else {
         $_SESSION['logged_in'] = false;
         // account_type? 
     }

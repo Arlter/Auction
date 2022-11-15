@@ -23,7 +23,7 @@ require_once "connection.php";
 $accountID = "10000001"; // DELETE LATER
 
 if (isset($_POST["submit"])) {
-    $auctionTitle = $_POST["auctionTitle"];
+    $auctionTitle = mysqli_real_escape_string ($conn, $_POST["auctionTitle"]);
     $auctionDetails = mysqli_real_escape_string ($conn, $_POST["auctionDetails"]);  // or htmlspecialchars?
     $auctionCategory = mysqli_real_escape_string ($conn, $_POST["auctionCategory"]);
     $auctionStartPrice = mysqli_real_escape_string ($conn, $_POST["auctionStartPrice"]);
@@ -54,11 +54,7 @@ if (mysqli_query($conn, $query)) {
 
     //echo "New record created successfully. Last inserted ID is: " . $auctionIDquery;
 
-    
-    // can't store info in url? how to $_GET in listing.php then???
-    // echo('<div class="text-center">Auction successfully created! <a href="listing.php">View your new listing.</a></div>');
 
-    //not working, format super ugly??
     echo('<div class="text-center">Auction successfully created! <a href="listing.php">View all your listings. </a><a href="listing.php?item_id='.$auctionIDquery.'">View your new listing.</a></div>');
     // "view your listing" link directs user to the new item listing page, e.g. listing.php/?item_id=100000000
     
