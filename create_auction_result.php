@@ -1,6 +1,7 @@
 <?php 
 session_start();
 include_once("header.php")?>
+<?php include_once("utilities.php")?>
 
 <div class="container my-5">
 
@@ -26,12 +27,20 @@ $accountID = $_SESSION["accountID"];
 
 if (isset($_POST["submit"])) {
     $auctionTitle = mysqli_real_escape_string ($conn, $_POST["auctionTitle"]);
-    $auctionDetails = mysqli_real_escape_string ($conn, $_POST["auctionDetails"]);  // or htmlspecialchars?
+    $auctionDetails = htmlspecialchars($_POST["auctionDetails"]); // FIXME: how to preserve line breaks in listing page?
     $auctionCategory = mysqli_real_escape_string ($conn, $_POST["auctionCategory"]);
     $auctionStartPrice = mysqli_real_escape_string ($conn, $_POST["auctionStartPrice"]);
     $auctionReservePrice = mysqli_real_escape_string ($conn, $_POST["auctionReservePrice"]);
     $auctionEndDate = mysqli_real_escape_string ($conn, $_POST["auctionEndDate"]);
 }             
+
+// saves entered inputs so user doesn't have to enter again when invalid input is detected
+$_SESSION["auction_title"] = $auctionTitle;
+$_SESSION["auction_details"] = $auctionDetails;
+$_SESSION["auction_category"] = $auctionCategory;
+$_SESSION["auction_start_price"] = $auctionStartPrice;
+$_SESSION["auction_reserve_price"] = $auctionReservePrice;
+$_SESSION["auction_end_date"] = $auctionEndDate;
 
 // FIXME: Data validation
 // this time can try use $_GET["error"]?
@@ -39,18 +48,62 @@ if (isset($_POST["submit"])) {
 // $error = "error_message";
 // header("Location: create_auction.php?error=" . urlencode ($error)); 
 
-// set sessions
 
-// FIXME: add length validation for all data
+// client side check should stop the data inputs, but just in case?
+if (mb_strlen($auctionTitle) > 40) {
+    function_alert_create_auction("Title is too long, please try again.");
+    exit();
+} elseif (empty($auctionTitle) || ctype_space($auctionTitle)) {
+    function_alert_create_auction("Title is required, please try again.");
+    exit();
+}
+
+if (mb_strlen($auctionDetails) > 2000) {
+    function_alert_create_auction("Description is too long, please try again.");
+    exit();
+}
+
+if ($auctionCategory == "") {
+    function_alert_create_auction("Please choose a category.");
+    exit();
+} 
+
+if (empty($auctionStartPrice) || ctype_space($auctionStartPrice)) {
+    function_alert_create_auction("Starting price is required, please try again.");
+    exit();
+} elseif ($auctionStartPrice < 0) {
+    unset($_SESSION["auction_start_price"]);
+    function_alert_create_auction("Starting price cannot be negative, please try again.");
+    exit();
+}
+
+if (!empty($auctionReservePrice) && $auctionReservePrice < 0) {
+    unset($_SESSION["auction_reserve_price"]);
+    function_alert_create_auction("Reserve price cannot be negative, please try again.");
+    exit();
+}
+
+$now = New DateTime();
+if (empty($auctionEndDate) || ctype_space($auctionEndDate)) {
+    function_alert_create_auction("End date is required, please try again.");
+    exit();
+} elseif ((New DateTime($auctionEndDate)) < $now) {
+    unset($_SESSION["auction_end_date"]);
+    function_alert_create_auction("End date cannot be earlier than the current time, please try again.");
+    exit();
+}
 
 
 /* TODO #3: If everything looks good, make the appropriate call to insert
             data into the database. */
 
-
-// have to set $_SESSION['accountID'] when logging in
+if ($auctionReservePrice != "") {
 $query = "INSERT INTO Auction (itemName, itemDescription, categoryName, seller_accountID, startingPrice, reservePrice, endDate)
 VALUES ('$auctionTitle', '$auctionDetails', '$auctionCategory', '$accountID', '$auctionStartPrice', '$auctionReservePrice', '$auctionEndDate')";
+} else {
+$query = "INSERT INTO Auction (itemName, itemDescription, categoryName, seller_accountID, startingPrice, endDate)
+VALUES ('$auctionTitle', '$auctionDetails', '$auctionCategory', '$accountID', '$auctionStartPrice', '$auctionEndDate')"; 
+}
 if (mysqli_query($conn, $query)) {
 
     $item_id = mysqli_insert_id($conn);  // get the primary key (auctionID) of the last insert
@@ -58,17 +111,20 @@ if (mysqli_query($conn, $query)) {
 
     //echo "New record created successfully. Last inserted ID is: " . $auctionIDquery;
 
-    echo('<div class="text-center">Auction successfully created! <a href="mylistings.php">View all your listings. </a><a href="listing.php?item_id=' . $item_id . '">View your new listing.</a></div>');
+    echo('<div class="text-center">Auction successfully created! <a href="mylistings.php">View all your listings</a> or <a href="listing.php?item_id=' . $item_id . '">view your new listing.</a></div>');
     // "view your listing" link directs user to the new item listing page, e.g. listing.php/?item_id=100000000
+    unset($_SESSION["auction_title"]);
+    unset($_SESSION["auction_details"]);
+    unset($_SESSION["auction_category"]);
+    unset($_SESSION["auction_start_price"]);
+    unset($_SESSION["auction_reserve_price"]);
+    unset($_SESSION["auction_end_date"]);
     
-    // $success_message = "Auction created successfully.";
-    // function_success_register($success_message);
 } else {
-    echo "Error: " . $query . "<br>" . mysqli_error($conn);
-    // $error = "Connection error, please try again later.";
-    // function_alert_register($error);
+    // echo "Error: " . $query . "<br>" . mysqli_error($conn);
+    $error = "Connection error, please try again later.";
+    function_alert_create_auction($error);
 }
-
 
 // If all is successful, let user know.
 // echo('<div class="text-center">Auction successfully created! <a href="FIXME">View your new listing.</a></div>');

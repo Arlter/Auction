@@ -7,31 +7,31 @@
 session_start();
 
 require_once "connection.php";  // using local db for testing for now
-
+require_once "utilities.php";
 
 /////////////////////////////////////////////////////
 
-// Utility functions (move somewhere else later?)
+// // Utility functions (already in utilities.php, DELETE LATER)
 
-// redirects to register page and shows a closeable red alert box with relevant error message
-// see code in register.php
-function function_alert_register($error) {
-    $_SESSION["alert"] = $error;
-    header("Location: register.php?error =" . urlencode ($error));  // redirection to register.php
-}
+// // redirects to register page and shows a closeable red alert box with relevant error message
+// // see code in register.php
+// function function_alert_register($error) {
+//     $_SESSION["alert"] = $error;
+//     header("Location: register.php?error =" . urlencode ($error));  // redirection to register.php
+// }
 
-// redirects to login page after successful registration with green alert box indicating success
-// see code in browse.php (put there for now)
-function function_success_register($success_message) {
-    $_SESSION["reg_success"] = $success_message;
-// to prevent inputs appearing again when going to register.php again
-    unset($_SESSION["username"]);  // what if I wanna save username for login? hmmmm...
-    unset($_SESSION["firstName"]); 
-    unset($_SESSION["lastName"]); 
-    unset($_SESSION["email"]); 
-    unset($_SESSION["phoneNumber"]); 
-    header("Location: login.php?success =" . urlencode ($success_message));  // redirection to login.php
-}
+// // redirects to login page after successful registration with green alert box indicating success
+// // see code in browse.php (put there for now)
+// function function_success_register($success_message) {
+//     $_SESSION["reg_success"] = $success_message;
+// // to prevent inputs appearing again when going to register.php again
+//     unset($_SESSION["username"]);  // what if I wanna save username for login? hmmmm...
+//     unset($_SESSION["firstName"]); 
+//     unset($_SESSION["lastName"]); 
+//     unset($_SESSION["email"]); 
+//     unset($_SESSION["phoneNumber"]); 
+//     header("Location: login.php?success =" . urlencode ($success_message));  // redirection to login.php
+// }
 
 /////////////////////////////////////////////////////
 
