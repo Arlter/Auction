@@ -27,6 +27,8 @@ require_once("utilities.php");
 
   // TODO: Perform a query to pull up their auctions.
 
+  // TODO: Loop through results and print them out as list items.
+
   if (isset($_SESSION["account_type"]) && $_SESSION["account_type"] == "seller") {
     $auctionquery = "SELECT * FROM Auction WHERE seller_accountID = $accountID";  // ORDER BY createdDate DESC, missing from local database for now
     $result = mysqli_query($conn, $auctionquery);
@@ -51,12 +53,6 @@ require_once("utilities.php");
     header("refresh:3;url=browse.php");
     echo "Seller-only function, redirecting in 3 seconds";  
   }
-    
-
-
-
-  
-  // TODO: Loop through results and print them out as list items.
   
 ?>
 
