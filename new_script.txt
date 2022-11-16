@@ -1,9 +1,11 @@
+DROP database auction;
+CREATE database auction;
 SET time_zone='+00:00';
 
 CREATE TABLE IF NOT EXISTS Account (
 	accountID INT NOT NULL AUTO_INCREMENT, 
 	accountUsername VARCHAR(20) NOT NULL,
-	accountPassword VARCHAR(20) NOT NULL,
+	accountPassword VARCHAR(60) NOT NULL,  // REMEMBER TO CHANGE TO VARCHAR(60) FOR HASHED PASSWORDS
 	accountType VARCHAR(10) NOT NULL,
 	firstName VARCHAR(20) NOT NULL,
 	lastName  VARCHAR(20) NOT NULL, 
@@ -91,6 +93,7 @@ CREATE TRIGGER  Auto_Watchlist After INSERT ON Bid
 	END $$
 delimiter ;
 
+USE auction;
 
 INSERT INTO Account VALUES
 (null,'acc1','111','buyer','erte','wang','1419121502@qq.com','+44123456'),
@@ -99,15 +102,12 @@ INSERT INTO Account VALUES
 (null,'acc4','111','seller','tim','chen','abc@com','+44123456')
 ;
 
-
-
 INSERT INTO Category VALUES
 ("electronic device"),
 ("beauty makeup"),
 ("food"),
 ("toy")
 ;
-
 
 INSERT INTO Auction VALUES
 (DEFAULT,'water gun','purchased two months ago and used twice. Very new','toy',10000001,52,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-20", "11:54:00"),DEFAULT,null,TRUE),
