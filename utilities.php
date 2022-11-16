@@ -61,4 +61,60 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time)
   );
 }
 
+function print_listing_li_bids($item_id, $title, $desc, $price, $end_time,$created_date)
+{
+  // Truncate long descriptions
+  if (strlen($desc) > 250) {
+    $desc_shortened = substr($desc, 0, 250) . '...';
+  }
+  else {
+    $desc_shortened = $desc;
+  }
+  
+  // Fix language of bid vs. bids
+  
+  // Calculate time to auction end
+  $now = new DateTime();
+  $end_time = new DateTime($end_time);
+  if ($now > $end_time) {
+    $time_remaining = 'This auction has ended';
+  }
+  else {
+    // Get interval:
+    $time_to_end = date_diff($now, $end_time);
+    $time_remaining = display_time_remaining($time_to_end) . ' remaining until the end';
+  }
+  
+  // Print HTML
+  echo('
+    <li class="list-group-item d-flex justify-content-between">
+    <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' .$item_id . '">' .' ' . $title. '</a></h5>' .'<h10>'. '   AuctionID: '.$item_id.'</h10>' .'<br>'. 'ItemDescription: '.$desc_shortened . '</div>
+    <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>'  . '<br/>' .$created_date.'<br/>'. $time_remaining . '</div>
+  </li>'
+  );
+}
+
+
+function print_listing_li_history($item_id, $title, $num_bids, $history)
+{
+
+    // Fix language of bid vs. bids
+  if ($num_bids == 1) {
+      $bid = ' bid';
+    }
+  else {
+      $bid = ' bids';
+    }
+  while( $row = $history -> fetch_array(MYSQLI_NUM)){
+    $bid_time = $row[0];
+    $buyer_accountID = $row[1];
+    $bid_price = $row[2];
+    echo('
+    <li class="list-group-item">
+    <div class="p-2 mr-5"> '. $bid_time . ' AccountID: '.$buyer_accountID. ''. '<span style="font-size: 1.2em"> Bid: £' . number_format($bid_price, 2) . '</span><br/>'.'</div>
+  </li>'
+  );
+  }
+
+}
 ?>
