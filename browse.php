@@ -1,12 +1,9 @@
-<?php 
-session_start();
-
+<?php>
 include_once("header.php")?>
 <?php require("utilities.php")?>
 
 
 <?php
-
 if(isset($_SESSION["logged_in_message"])) {
   $logged_in_message = $_SESSION["logged_in_message"];
   echo
@@ -48,8 +45,6 @@ unset($_SESSION["logged_in_message"]);
         //   echo "There are no results that match your search";
         // }
         ?> 
-
-
 
 	    <div class="input-group">
           <div class="input-group-prepend">

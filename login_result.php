@@ -28,10 +28,10 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
     if(mysqli_num_rows($result) == 1) { 
 
         $_SESSION['logged_in'] = true;
-
+        $_SESSION['emailAddress'] = $account['emailAddress'];
         $_SESSION["accountID"] = $account["accountID"];
         $_SESSION["logged_in_message"] = "Welcome, " . $account["accountUsername"] . ".";  // can also use firstName or lastName
-
+        
         if ($account["accountType"] == "buyer") {
             $_SESSION["account_type"] = "buyer";
         } else {
@@ -52,17 +52,4 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
     exit();  
 }
 
-
-
-// $query = mysqli_query($conn, "SELECT * FROM Account WHERE accountUsername = $username and accountPassword = $pass");
-// $result = mysqli_query($con, $query);
-
-// if ($rows == 1){ 
-//     $account = mysqli_fetch_assoc($results);
-//     header("refresh:5;url=index.php");
-//     echo('<div class="text-center">You are now logged in! You will be redirected shortly.</div>');
-// } else {
-//     echo "Invalid Username or Password";
-//     //Redirect to where? 
-//     }
 ?>
