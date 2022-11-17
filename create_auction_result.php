@@ -126,34 +126,6 @@ if (mysqli_query($conn, $query)) {
     function_alert_create_auction($error);
 }
 
-// have to set $_SESSION['accountID'] when logging in
-$query = "INSERT INTO Auction (itemName, itemDescription, categoryName, seller_accountID, startingPrice, reservePrice, endDate)
-VALUES ('$auctionTitle', '$auctionDetails', '$auctionCategory', '$accountID', '$auctionStartPrice', '$auctionReservePrice', '$auctionEndDate')";
-if (mysqli_query($conn, $query)) {
-
-    $auctionIDquery = mysqli_insert_id($conn);  // get the primary key (auctionID) of the last insert
-    $_SESSION["auctionID"] = $auctionIDquery;
-
-
-    //echo "New record created successfully. Last inserted ID is: " . $auctionIDquery;
-
-    
-    // can't store info in url? how to $_GET in listing.php then???
-    // echo('<div class="text-center">Auction successfully created! <a href="listing.php">View your new listing.</a></div>');
-
-    //not working, format super ugly??
-    echo('<div class="text-center">Auction successfully created! <a href="listing.php?item_id='.$auctionIDquery.'">View your new listing.</a></div>');
-    // directed to e.g. listing.php/?item_id=100000000
-    
-
-    // $success_message = "Auction created successfully.";
-    // function_success_register($success_message);
-} else {
-    echo "Error: " . $query . "<br>" . mysqli_error($conn);
-    // $error = "Connection error, please try again later.";
-    // function_alert_register($error);
-}
-
 
 // If all is successful, let user know.
 // echo('<div class="text-center">Auction successfully created! <a href="FIXME">View your new listing.</a></div>');

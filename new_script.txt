@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS Auction (
 	startingPrice DECIMAL(10,2) NOT NULL,
 	reservePrice DECIMAL(10,2) DEFAULT 0 NOT NULL,
 	createdDate TIMESTAMP NOT NULL,
-	endDate TIMESTAMP NOT NULL, 
+	endDate TIMESTAMP NOT NULL,  // phpmyadmin forces a default value though?
 	currentPrice DECIMAL(10,2) DEFAULT 0 NOT NULL,
 	currentBidder INT, 
 	auctionStatus BOOLEAN NOT NULL DEFAULT TRUE,	

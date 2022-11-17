@@ -1,8 +1,4 @@
 <?php
-    $host_address='erte.mysql.database.azure.com';
-    $username='kien';
-    $password='kien!ucl1';
-    $dbname='auction';
 
 // connecting to local database for testing
 // if you use a different database, delete this file
