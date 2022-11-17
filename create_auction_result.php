@@ -75,14 +75,12 @@ if (empty($auctionStartPrice) || ctype_space($auctionStartPrice)) {
     unset($_SESSION["auction_start_price"]);
     function_alert_create_auction("Starting price cannot be negative, please try again.");
     exit();
-} 
+}
 
 if (!empty($auctionReservePrice) && $auctionReservePrice < 0) {
     unset($_SESSION["auction_reserve_price"]);
     function_alert_create_auction("Reserve price cannot be negative, please try again.");
     exit();
-} elseif (empty($auctionReservePrice)) {
-    $auctionReservePrice = 0;
 }
 
 $now = New DateTime();
@@ -99,9 +97,13 @@ if (empty($auctionEndDate) || ctype_space($auctionEndDate)) {
 /* TODO #3: If everything looks good, make the appropriate call to insert
             data into the database. */
 
+if ($auctionReservePrice != "") {
 $query = "INSERT INTO Auction (itemName, itemDescription, categoryName, seller_accountID, startingPrice, reservePrice, endDate)
 VALUES ('$auctionTitle', '$auctionDetails', '$auctionCategory', '$accountID', '$auctionStartPrice', '$auctionReservePrice', '$auctionEndDate')";
-
+} else {
+$query = "INSERT INTO Auction (itemName, itemDescription, categoryName, seller_accountID, startingPrice, endDate)
+VALUES ('$auctionTitle', '$auctionDetails', '$auctionCategory', '$accountID', '$auctionStartPrice', '$auctionEndDate')"; 
+}
 if (mysqli_query($conn, $query)) {
 
     $item_id = mysqli_insert_id($conn);  // get the primary key (auctionID) of the last insert
