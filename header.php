@@ -8,8 +8,7 @@ session_start();
 
 // $email = $_POST["email"];
 // $pass = $_POST["password"];
-// $accountType = $_POST["account_type"];
-// $accountID = $_POST["accountID"];
+// $accountType = $_POST["account_type"];   
 
 // $query = mysqli_query($conn, "SELECT * FROM account WHERE emailAddress = $email and accountPassword = $pass");
 // $result = mysqli_query($con, $query);
@@ -18,17 +17,11 @@ session_start();
 //         $account = mysqli_fetch_assoc($results);
         
 //         if ($account["account_type"] == "buyer") {
-  //             $_SESSION['emailAddress'] = $email;
-  //             $_SESSION['accountID'] = $accountID;
-
-  //             $_SESSION["accountType"] = "buyer";
-  //             $_SESSION['logged_in'] = true;
+//             $_SESSION["accountType"] = "buyer";
+//             $_SESSION['logged_in'] = true;
 //         } else{
-  //             $_SESSION['emailAddress'] = $email;
-  //             $_SESSION['accountID'] = $accountID;
-
-  //             $_SESSION["account_type"] = "seller";
-  //             $_SESSION['logged_in'] = true;
+//             $_SESSION["account_type"] = "seller";
+//             $_SESSION['logged_in'] = true;
 //         }
         
 //     } else {
