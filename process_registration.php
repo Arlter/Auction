@@ -166,10 +166,8 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 // Question: extra: email confirmation? lol
 
-
-// Phone format validation - start with + sign, 7-15 numbers (not including + sign) (I set the length arbituarily)
-$phoneNumber = str_replace([" ", ".", "-", "(", ")"], "", $phoneNumber);
-if (!preg_match("/[+][0-9]{0,19}/", $phoneNumber)) {
+// Phone format validation - start with + sign
+if (!preg_match("/^[+][(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/", $phoneNumber)) {
     unset($_SESSION["phoneNumber"]); 
     $error = "Invalid phone format, please try again.";
     function_alert_register($error);
@@ -192,7 +190,7 @@ $query = "INSERT INTO Account (accountUsername, accountPassword, accountType, fi
 VALUES ('$username', '$hash', '$accountType', '$firstName', '$lastName', '$email', '$phoneNumber')";
 if (mysqli_query($conn, $query)) {
     mysqli_close($conn);  // put this here?
-    $success_message = "Account created successfully. You may now log in.";
+    $success_message = "Account created successfully!";
     function_success_register($success_message);
 } else {
    // echo "Error: " . $query . "<br>" . mysqli_error($conn);

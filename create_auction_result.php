@@ -54,12 +54,12 @@ if (mb_strlen($auctionTitle) > 40) {
     function_alert_create_auction("Title is too long, please try again.");
     exit();
 } elseif (empty($auctionTitle) || ctype_space($auctionTitle)) {
-    function_alert_create_auction("Title is required, please try again.");
+    function_alert_create_auction("Title of auction is required, please try again.");
     exit();
 }
 
 if (mb_strlen($auctionDetails) > 2000) {
-    function_alert_create_auction("Description is too long, please try again.");
+    function_alert_create_auction("Details are too long, please try again.");
     exit();
 }
 

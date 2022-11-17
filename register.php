@@ -50,7 +50,7 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
 	<div class="col-sm-10">
       <input type="text" class="form-control" name="username" id="username" minlength="4" maxlength="20" value="<?php echo $_SESSION["username"];?>" placeholder="Username" required>
       <?php 
-      if(!($_SESSION["username"]) || ctype_space($_SESSION["username"])) {
+      if(empty($_SESSION["username"]) || ctype_space($_SESSION["username"])) {
         echo '<small id="usernameHelp" class="form-text text-muted"><span class="text-danger">* Required. Must be 4 to 20 characters long, consists of only alphanumeric characters (A-Z, a-z, and 0-9), and has no space.</span></small>';
       }
       ?>
@@ -79,7 +79,7 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
 	<div class="col-sm-10">
       <input type="text" class="form-control" name="firstName" id="firstName" maxlength="20" value="<?php echo $_SESSION["firstName"];?>" placeholder="First name" required>
       <?php 
-      if(!($_SESSION["firstName"]) || ctype_space($_SESSION["firstName"])) {
+      if(empty($_SESSION["firstName"]) || ctype_space($_SESSION["firstName"])) {
         echo '<small id="firstnameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>';
       }
       ?>
@@ -91,7 +91,7 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
 	<div class="col-sm-10">
       <input type="text" class="form-control" name="lastName" id="lastName" maxlength="20" value="<?php echo $_SESSION["lastName"];?>" placeholder="Last name" required>
       <?php 
-      if(!($_SESSION["lastName"]) || ctype_space($_SESSION["lastName"])) {
+      if(empty($_SESSION["lastName"]) || ctype_space($_SESSION["lastName"])) {
         echo '<small id="lastnameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>';
       }
       ?>
@@ -103,7 +103,7 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
 	<div class="col-sm-10">
       <input type="email" class="form-control" name="email" id="email" maxlength="50" value="<?php echo $_SESSION["email"];?>" placeholder="Email" required>
       <?php 
-      if(!isset($_SESSION["email"]) || ctype_space($_SESSION["email"])) {
+      if(empty($_SESSION["email"]) || ctype_space($_SESSION["email"])) {
         echo '<small id="emailHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>';
       }
       ?>
@@ -115,8 +115,8 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
 	<div class="col-sm-10">
       <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" maxlength="20" value="<?php echo $_SESSION["phoneNumber"];?>" placeholder="International phone number" required>
       <?php 
-      if (!isset($_SESSION["phoneNumber"]) || ctype_space($_SESSION["phoneNumber"])) {
-        echo '<small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Please start with + sign (not 00) and country code.</span></small>';
+      if (empty($_SESSION["phoneNumber"]) || ctype_space($_SESSION["phoneNumber"])) {
+        echo '<small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Required. Please start with + sign (not 00) and country code.</span></small>';
       }
       ?>
         </div>
