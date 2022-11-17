@@ -7,7 +7,6 @@ include_once("header.php")?>
 
 <?php
 
-
 // This function takes the form data and adds the new auction to the database.
 
 /* TODO #1: Connect to MySQL database (perhaps by requiring a file that
@@ -95,19 +94,19 @@ if (empty($auctionEndDate) || ctype_space($auctionEndDate)) {
     exit();
 }
 
+$auctionCreatedDate = $now -> format("Y-m-d\TH:i");
 
 /* TODO #3: If everything looks good, make the appropriate call to insert
             data into the database. */
 
-$query = "INSERT INTO Auction (itemName, itemDescription, categoryName, seller_accountID, startingPrice, reservePrice, endDate)
-VALUES ('$auctionTitle', '$auctionDetails', '$auctionCategory', '$accountID', '$auctionStartPrice', '$auctionReservePrice', '$auctionEndDate')";
+$query = "INSERT INTO Auction (itemName, itemDescription, categoryName, seller_accountID, startingPrice, reservePrice, createdDate, endDate)
+VALUES ('$auctionTitle', '$auctionDetails', '$auctionCategory', '$accountID', '$auctionStartPrice', '$auctionReservePrice', '$auctionCreatedDate', '$auctionEndDate')";
+$res = mysqli_query($conn, $query);
 
-if (mysqli_query($conn, $query)) {
+if (mysqli_affected_rows($conn) ==1 && !mysqli_error($conn)) {
 
     $item_id = mysqli_insert_id($conn);  // get the primary key (auctionID) of the last insert
     $_SESSION["auctionID"] = $item_id;
-
-    //echo "New record created successfully. Last inserted ID is: " . $auctionIDquery;
 
     echo('<div class="text-center">Auction successfully created! <a href="mylistings.php">View all your listings</a> or <a href="listing.php?item_id=' . $item_id . '">view your new listing.</a></div>');
     // "view your listing" link directs user to the new item listing page, e.g. listing.php/?item_id=100000000
