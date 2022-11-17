@@ -17,7 +17,7 @@ if (isset($data_arr)){
         $end_time = $row[0];
         $auction_id = $row[1];
         mysqli_query($conn, "UPDATE AUCTION SET auctionStatus=FALSE WHERE auctionID=$auction_id");
-        $result = mysqli_query($conn,"SELECT * FROM AUCTION WHERE auctionID=$auction_id and currentBidder IS NOT NULL")-> fetch_array(MYSQLI_NUM);
+        $result = mysqli_query($conn,"SELECT * FROM AUCTION WHERE auctionID=$auction_id and currentBidder IS NOT NULL and currentPrice >= reservePrice")-> fetch_array(MYSQLI_NUM);
         if (isset($result)){
             //echo "here1";
             $final_price = (mysqli_query($conn, "SELECT currentPrice FROM Auction WHERE auctionID =$auction_id") -> fetch_array(MYSQLI_NUM))[0];

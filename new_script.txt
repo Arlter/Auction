@@ -76,7 +76,11 @@ delimiter $$
 CREATE TRIGGER  Auction_default_setup BEFORE INSERT ON Auction 
 	FOR EACH ROW
 	BEGIN
-		SET new.currentPrice = new.startingPrice, new.reservePrice = new.startingPrice;
+		IF new.reservePrice = 0 THEN
+			SET new.currentPrice = new.startingPrice, new.reservePrice = new.startingPrice ;
+		ELSE
+			SET new.currentPrice = new.startingPrice;
+		END IF;
 	END $$
 delimiter ;
 
@@ -111,7 +115,7 @@ INSERT INTO Category VALUES
 
 INSERT INTO Auction VALUES
 (DEFAULT,'water gun','purchased two months ago and used twice. Very new','toy',10000001,52,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-20", "11:54:00"),DEFAULT,null,TRUE),
-(DEFAULT,'iphone','purchased two months ago and used twice. Very new','electronic device',10000001,700,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-30", "14:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'iphone','purchased two months ago and used twice. Very new','electronic device',10000001,700,701,CURRENT_TIME(),TIMESTAMP("2022-11-30", "14:00:00"),DEFAULT,null,TRUE),
 (DEFAULT,'milk','purchased one day ago. Very new','food',10000001,3,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-9", "9:00:00"),DEFAULT,null,TRUE)
 ;
 
