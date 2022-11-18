@@ -81,7 +81,7 @@ if (!empty($auctionReservePrice) && $auctionReservePrice < 0) {
     function_alert_create_auction("Reserve price cannot be negative, please try again.");
     exit();
 } elseif (empty($auctionReservePrice)) {
-    $auctionReservePrice = 0; 
+    $auctionReservePrice = 0;
 }
 
 $now = New DateTime();
