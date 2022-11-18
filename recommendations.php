@@ -168,7 +168,7 @@ CALL get_recommendations();";
 
   // TODO: Loop through results and print them out as list items.
   foreach($array_of_auctions as $row):
-    $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM bid WHERE auction_auctionID=$row['auctionID']") -> fetch_array(MYSQLI_NUM))[0];
+    $num_bids = (mysqli_query($conn, 'SELECT COUNT(*) FROM bid WHERE auction_auctionID=' . $row['auctionID']) -> fetch_array(MYSQLI_NUM))[0];
 
     print_listing_li($row['auctionID'], $row['itemName'], $row['itemDescription'], $row['currentPrice'], $num_bids, $row['endDate']);
     
