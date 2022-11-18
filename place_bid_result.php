@@ -6,7 +6,7 @@
 <?php
 
 // This function takes the form data and adds the new auction to the database.
-
+    
     $auctionId=$_POST['auctionId'];
     $bidPrice=$_POST['bidPrice'];
     $accountId= $_SESSION['accountID'];
@@ -16,7 +16,6 @@
     $res = mysqli_query($conn, $query);
     if (mysqli_affected_rows($conn) ==1 && !mysqli_error($conn))
     {
-        echo $accountId.$email_address.$auctionId.$bidPrice;
         echo('<div class="text-center">Your bid is successful! <a href="mybids.php">View your new bids.</a></div>');
         # Buyer notification 
         $email_subject = "[Buyer Notification] Successful bid on the auction : ".$auctionId;

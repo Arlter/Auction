@@ -21,9 +21,8 @@ function send_email($email_adress,$mail_subject,$mail_content){
     $mail->SMTPAuth = true;                     // Enable SMTP authentication 
     $mail->Username = 'artwangspare@gmail.com';       // SMTP username 
     $mail->Password = 'ByvHP8n2aCYQ5d6z';         // SMTP password 
-    //$mail->SMTPSecure = 'ssl';                  // Enable TLS encryption, `ssl` also accepted 
+    $mail->SMTPSecure = 'tls';                  // Enable TLS encryption, `ssl` also accepted 
     $mail->Port = 587;                          // TCP port to connect to 
-    
     // Sender info 
     $mail->setFrom('artwangspare@gmail.com', 'auto-sender'); 
 

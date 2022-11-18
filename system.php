@@ -15,16 +15,16 @@ if (isset($data_arr)){
             // SEND SELLER EMAIL
             $seller_email_address =  (mysqli_query($conn, "SELECT emailAddress FROM Account, Auction WHERE accountID=seller_accountID and auctionID=$auction_id") -> fetch_array(MYSQLI_NUM))[0];
             $seller_email_subject = "[Seller Notification] Successful Auction";
-            $seller_email_content = "Congratulations! Your auction ".$auction_id. " has ended. The final price of the auction is ".chr(163).$final_price;
+            $seller_email_content = "Congratulations! Your auction ".$auction_id. " has ended. The final bid price of the auction is ".chr(163).$final_price;
             send_email($seller_email_address,$seller_email_subject,$seller_email_content);
             // SEND AWARDED EMAIL
             $award_email_address =  (mysqli_query($conn, "SELECT emailAddress FROM Account, Auction WHERE accountID=currentBidder and auctionID=$auction_id") -> fetch_array(MYSQLI_NUM))[0];
-            $award_email_subject = "[Award Notification] Successful Bidder";
+            $award_email_subject = "[Award Notification] Awarded Bidder";
             $award_email_content = "Congratulations! The auction ".$auction_id. " has ended. You bid it with the price ".chr(163).$final_price;
             send_email($award_email_address,$award_email_subject,$award_email_content);
             // SEND WATCHER EMAIL
             $watcher_email_subject = "[Watcher Notification] The auction ".$auction_id." is over";
-            $watcher_email_content = "The auction ".$auction_id. " has ended. The final price is ".chr(163).$final_price;
+            $watcher_email_content = "The auction ".$auction_id. " has ended. The final bid price is ".chr(163).$final_price;
             $watcher_email_address =  mysqli_query($conn, "SELECT emailAddress FROM Account, BuyerWatchAuction WHERE accountID=buyer_accountID and auction_auctionID=$auction_id"); 
             if (isset($watcher_email_address)) {
                 while( $watcher_email = $watcher_email_address -> fetch_array(MYSQLI_NUM)){
@@ -38,12 +38,12 @@ if (isset($data_arr)){
             // SEND SELLER EMAIL
             $seller_email_address =  (mysqli_query($conn, "SELECT emailAddress FROM Account, Auction WHERE accountID=seller_accountID and auctionID=$auction_id") -> fetch_array(MYSQLI_NUM))[0];
             $seller_email_subject = "[Seller Notification] Unsuccessful Auction";
-            $seller_email_content = "Sorry that your auction ".$auction_id. " is not successful ";
+            $seller_email_content = "Sorry that your auction ".$auction_id. " is abortive.";
             send_email($seller_email_address,$seller_email_subject,$seller_email_content);
             echo $seller_email_address;
             // SEND WATCHER EMAIL
             $watcher_email_subject = "[Watcher Notification] The auction ".$auction_id." is over";
-            $watcher_email_content = "The auction ".$auction_id. " has ended. It is not successfully bid";
+            $watcher_email_content = "The auction ".$auction_id. " has ended. The auction is abortive. ";
             $watcher_email_address =  mysqli_query($conn, "SELECT emailAddress FROM Account, BuyerWatchAuction WHERE accountID=buyer_accountID and auction_auctionID=$auction_id"); 
             if (isset($watcher_email_address)) {
                 while( $watcher_email = $watcher_email_address -> fetch_array(MYSQLI_NUM)){

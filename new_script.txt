@@ -97,7 +97,7 @@ delimiter ;
 
 
 INSERT INTO Account VALUES
-(null,'acc1','111','buyer','erte','wang','1419121502@qq.com','+44123456'),
+(null,'acc1','111','buyer','erte','wang','178auction@gmail.com','+44123456'),
 (null,'acc2','111','seller','kien','han','648906549@qq.com','+44123456'),
 (null,'acc3','111','buyer','angel','lam','wangertee@126.com','+44123456'),
 (null,'acc4','111','seller','tim','chen','abc@com','+44123456')
