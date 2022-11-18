@@ -1,3 +1,4 @@
+<?php require_once("connection.php")?>
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
 
@@ -14,12 +15,9 @@
 
   // TODO: Check user's credentials (cookie/session).
   // connection
-  require_once("connection.php");
   session_start();
-  $email = $_POST["email"];
-  $pass = $_POST["password"];
 
-  $accountID = mysqli_query($conn, "SELECT accountID FROM account WHERE emailAddress = '$email' and accountPassword = '$pass' ")-> fetch_array(MYSQLI_NUM);
+  $accountID = $_SESSION['accountID'];
 
   if(!$conn){
 		echo 'Connection error: ' . mysqli_connect_error();
