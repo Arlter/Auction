@@ -7,44 +7,43 @@
   // item_id is also the auction id.
   $item_id = $_GET['item_id'];
   $accountID = $_SESSION['accountID'];
-  $created_date = (mysqli_query($conn, "SELECT createdDate  FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-  $current_bidder = (mysqli_query($conn, "SELECT currentBidder FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-  $auction_status = (mysqli_query($conn, "SELECT auctionStatus FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-  // TODO: Use item_id to make a query to the database.
 
-  // DELETEME: For now, using placeholder data.
-  $title = (mysqli_query($conn, "SELECT itemName FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-  $description = (mysqli_query($conn, "SELECT itemDescription FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-  $current_price = (mysqli_query($conn, "SELECT currentPrice FROM Auction WHERE auctionID =$item_id ") -> fetch_array(MYSQLI_NUM))[0];
-  $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$item_id") -> fetch_array(MYSQLI_NUM))[0];
-  $end_time = (mysqli_query($conn, "SELECT endDate FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-  $history = (mysqli_query($conn, "SELECT bidTime,buyer_accountID,bidPrice FROM Bid WHERE auction_auctionID =$item_id ORDER BY bidTime desc"));    
-  
+  // Check if the auctionID exists.
+  $res = mysqli_query($conn, "SELECT * FROM Auction WHERE auctionID = $item_id");
+  if (mysqli_num_rows($res)>0) {
+      $created_date = (mysqli_query($conn, "SELECT createdDate  FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+      $current_bidder = (mysqli_query($conn, "SELECT currentBidder FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+      $auction_status = (mysqli_query($conn, "SELECT auctionStatus FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+      $title = (mysqli_query($conn, "SELECT itemName FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+      $description = (mysqli_query($conn, "SELECT itemDescription FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+      $current_price = (mysqli_query($conn, "SELECT currentPrice FROM Auction WHERE auctionID =$item_id ") -> fetch_array(MYSQLI_NUM))[0];
+      $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$item_id") -> fetch_array(MYSQLI_NUM))[0];
+      $end_time = (mysqli_query($conn, "SELECT endDate FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
+      $history = (mysqli_query($conn, "SELECT bidTime,buyer_accountID,bidPrice FROM Bid WHERE auction_auctionID =$item_id ORDER BY bidTime desc"));    
+      // Calculate time to auction end:
+      $now = new DateTime();
+      $end_time = new DateTime($end_time);
+      
+      if ($now < $end_time) {
+        $time_to_end = date_diff($now, $end_time);
+        $time_remaining = ' (in ' . display_time_remaining($time_to_end) . ')';
+      }   
+      // $has_session = $_SESSION['logged_in'];
+      $has_session = true;
+      $result = mysqli_query($conn,"SELECT *  FROM BuyerWatchAuction WHERE auction_auctionID =$item_id and buyer_accountID=$accountID");
+      if (mysqli_num_rows($result)>0) {
+        $watching = true;
+      }else{
+        $watching = false;
+      }
 
-  // TODO: Note: Auctions that have ended may pull a different set of data,
-  //       like whether the auction ended in a sale or was cancelled due
-  //       to lack of high-enough bids. Or maybe not.
-  
-  // Calculate time to auction end:
-  $now = new DateTime();
-  $end_time = new DateTime($end_time);
-  
-  if ($now < $end_time) {
-    $time_to_end = date_diff($now, $end_time);
-    $time_remaining = ' (in ' . display_time_remaining($time_to_end) . ')';
-  }
-  
-  // TODO: If the user has a session, use it to make a query to the database
-  //       to determine if the user is already watching this item.
-  //       For now, this is hardcoded.
-  $has_session = true;
-  $result = mysqli_query($conn,"SELECT *  FROM BuyerWatchAuction WHERE auction_auctionID =$item_id and buyer_accountID=$accountID")-> fetch_array(MYSQLI_NUM);
-  if (isset($result))
-  {
-    $watching = true;
-  }else{
+  }else {
+    echo "The auction does not exist, please check the auctionID";
+    $has_session = false;
     $watching = false;
+    header("refresh:3;url=browse.php");
   }
+
 ?>
 
 
@@ -52,13 +51,13 @@
 
 <div class="row"> <!-- Row #1 with auction title + watch button -->
   <div class="col-sm-8"> <!-- Left col -->
-    <h2 class="my-3"><?php echo($title); ?></h2>
+    <h2 class="my-3"><?php if (mysqli_num_rows($res)>0) {echo($title);} ?></h2>
   </div>
   <div class="col-sm-4 align-self-center"> <!-- Right col -->
 <?php
   /* The following watchlist functionality uses JavaScript, but could
      just as easily use PHP as in other places in the code */
-  if ($now < $end_time):
+  if (mysqli_num_rows($res)>0 and $now < $end_time):
 ?>
     <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?> >
       <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to watchlist</button>
@@ -75,11 +74,11 @@
   <div class="col-sm-8"> <!-- Left col with item info -->
 
     <div class="itemDescription">
-    <?php echo($description);?>
+    <?php if (mysqli_num_rows($res)>0) echo($description);?>
     </div>
 
     <div class="history">
-    <?php print_listing_li_history($item_id, $title, $num_bids, $history);?>
+    <?php if (mysqli_num_rows($res)>0) {print_listing_li_history($item_id, $title, $num_bids, $history);}?>
     </div>
     
   </div>
@@ -87,30 +86,32 @@
   <div class="col-sm-4"> <!-- Right col with bidding info -->
 
     <p>
-<?php if ($now > $end_time): ?>
+<?php if (mysqli_num_rows($res)>0 and $now > $end_time): ?>
      This auction ended <?php echo(date_format($end_time, 'j M H:i')) ?>
-     <!-- TODO: Print the result of the auction here? -->
 <?php else: ?>
-     Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
-    <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
+    <?php if (mysqli_num_rows($res)>0 ): ?>
+      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
+      <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
 
-    <!-- Bidding form -->
-    <form method="POST" action="place_bid_result.php">
-    <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">AuctionId</span>
-        </div>
-        <input type="number" class="form-control" id="auctionId" name ="auctionId" value= <?php echo $item_id ?>>
-      </div>
-    
+      <!-- Bidding form -->
+      <form method="POST" action="place_bid_result.php">
       <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">£</span>
+          <div class="input-group-prepend">
+            <span class="input-group-text">AuctionId</span>
+          </div>
+          <input type="number" class="form-control" id="auctionId" name ="auctionId" value= <?php echo $item_id ?> readonly>
         </div>
-	    <input type="number" step="0.01" class="form-control" id="bidPrice" name ="bidPrice">
-      </div>
-      <button type="submit" class="btn btn-primary form-control">Place bid</button>
-    </form>
+      
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">£</span>
+          </div>
+        <input type="number" step="0.01" class="form-control" id="bidPrice" name ="bidPrice">
+        </div>
+        <button type="submit" class="btn btn-primary form-control">Place bid</button>
+      </form>
+    <?php else: ?>
+    <?php endif ?>
 <?php endif ?>
 
   

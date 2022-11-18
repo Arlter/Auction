@@ -96,25 +96,37 @@ function print_listing_li_bids($item_id, $title, $desc, $price, $end_time,$creat
 
 
 function print_listing_li_history($item_id, $title, $num_bids, $history)
-{
-
-    // Fix language of bid vs. bids
-  if ($num_bids == 1) {
-      $bid = ' bid';
-    }
-  else {
-      $bid = ' bids';
-    }
-  while( $row = $history -> fetch_array(MYSQLI_NUM)){
-    $bid_time = $row[0];
-    $buyer_accountID = $row[1];
-    $bid_price = $row[2];
-    echo('
+{ 
+  if (mysqli_num_rows($history)>0) {
+    echo('<br>
     <li class="list-group-item">
-    <div class="p-2 mr-5"> '. $bid_time . ' AccountID: '.$buyer_accountID. ''. '<span style="font-size: 1.2em"> Bid: £' . number_format($bid_price, 2) . '</span><br/>'.'</div>
-  </li>'
-  );
+    <div class="p-2 mr-5"> '. '<center><h4>'.'Bid Hisotry&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" disabled>'.'Total Bids: '. $num_bids.'</button>'. '</h4></center>' .'</div>
+    </li>'
+    );
+  
+      // Fix language of bid vs. bids
+    if ($num_bids == 1) {
+        $bid = ' bid';
+      }
+    else {
+        $bid = ' bids';
+      }
+    while( $row = $history -> fetch_array(MYSQLI_NUM)){
+      $bid_time = $row[0];
+      $buyer_accountID = $row[1];
+      $bid_price = $row[2];
+      echo('
+      <li class="list-group-item">
+      <div class="p-2 mr-5"> '.'<i>'. $bid_time .'</i>&nbsp&nbsp' .' AccountID: ' .'<b>'.$buyer_accountID. '</b>'. '<span style="font-size: 1.0em"> &nbsp&nbspBid Price: £' . '<b>'. number_format($bid_price, 2) .  '</b>'.'</span><br/>'.'</div>
+    </li>'
+    );
+    }
+  }else{
+    echo('<br>
+    <li class="list-group-item">
+    <div class="p-2 mr-5"> '. '<center><h4>No bid History for this auction</h4></center>' .'</div>
+    </li>'
+    );
   }
-
 }
 ?>
