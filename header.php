@@ -1,35 +1,5 @@
 <?php
 require_once "connection.php";
-session_start();
-// FIXME: At the moment, I've allowed these values to be set manually.
-// But eventually, with a database, these should be set automatically
-// ONLY after the user's login credentials have been verified via a 
-// database query  
-
-// $email = $_POST["email"];
-// $pass = $_POST["password"];
-// $accountType = $_POST["account_type"];   
-
-// $query = mysqli_query($conn, "SELECT * FROM account WHERE emailAddress = $email and accountPassword = $pass");
-// $result = mysqli_query($con, $query);
-  
-// if($rows == 1){ 
-//         $account = mysqli_fetch_assoc($results);
-        
-//         if ($account["account_type"] == "buyer") {
-//             $_SESSION["accountType"] = "buyer";
-//             $_SESSION['logged_in'] = true;
-//         } else{
-//             $_SESSION["account_type"] = "seller";
-//             $_SESSION['logged_in'] = true;
-//         }
-        
-//     } else {
-//       $_SESSION['logged_in'] = false;
-//       // account_type? 
-//     }
-// ?>
-
 
 <!doctype html>
 <html lang="en">
