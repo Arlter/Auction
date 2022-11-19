@@ -6,32 +6,32 @@
 
 session_start();
 
-include "connection.php";  // using local db for testing for now
-
+require_once "connection.php";  // using local db for testing for now
+require_once "utilities.php";
 
 /////////////////////////////////////////////////////
 
-// Utility functions (move somewhere else later?)
+// // Utility functions (already in utilities.php, DELETE LATER)
 
-// redirects to register page and shows a closeable red alert box with relevant error message
-// see code in register.php
-function function_alert_register($error) {
-    $_SESSION["alert"] = $error;
-    header("Location: register.php?error =" . urlencode ($error));  // redirection to register.php
-}
+// // redirects to register page and shows a closeable red alert box with relevant error message
+// // see code in register.php
+// function function_alert_register($error) {
+//     $_SESSION["alert"] = $error;
+//     header("Location: register.php?error =" . urlencode ($error));  // redirection to register.php
+// }
 
-// redirects to login page after successful registration with green alert box indicating success
-// see code in browse.php (put there for now)
-function function_success_register($success_message) {
-    $_SESSION["reg_success"] = $success_message;
-// to prevent inputs appearing again when going to register.php again
-    unset($_SESSION["username"]);  // what if I wanna save username for login? hmmmm...
-    unset($_SESSION["firstName"]); 
-    unset($_SESSION["lastName"]); 
-    unset($_SESSION["email"]); 
-    unset($_SESSION["phoneNumber"]); 
-    header("Location: browse.php?success =" . urlencode ($success_message));  // redirection to browse.php
-}  // might change redirection to the login page if a separate login page is created 
+// // redirects to login page after successful registration with green alert box indicating success
+// // see code in browse.php (put there for now)
+// function function_success_register($success_message) {
+//     $_SESSION["reg_success"] = $success_message;
+// // to prevent inputs appearing again when going to register.php again
+//     unset($_SESSION["username"]);  // what if I wanna save username for login? hmmmm...
+//     unset($_SESSION["firstName"]); 
+//     unset($_SESSION["lastName"]); 
+//     unset($_SESSION["email"]); 
+//     unset($_SESSION["phoneNumber"]); 
+//     header("Location: login.php?success =" . urlencode ($success_message));  // redirection to login.php
+// }
 
 /////////////////////////////////////////////////////
 
@@ -61,7 +61,7 @@ if (isset($_POST["submit"])) {
 // temporarily saves data in form input field so users don't have to enter all over again
 // password and confirmation are never saved
 // see changes to code in form in register.php
-$_SESSION["account_type"] = $accountType;  // sorry for confusing naming styles, this is to match header.php
+$_SESSION["accountType"] = $accountType;  // sorry for confusing naming styles, this is to match header.php
 $_SESSION["username"] = $username;
 $_SESSION["firstName"] = $firstName;
 $_SESSION["lastName"] = $lastName;
@@ -152,6 +152,9 @@ $hash = password_hash($password, PASSWORD_DEFAULT);  // requires VARCHAR(60) in 
 
 // Question: First name and last name validations necessary? Requirements?
 
+// FIXME: add length validation for firstname, lastname, email, phone
+
+
 
 // Email validation -- can only validate format for now
 $email = filter_var($email, FILTER_SANITIZE_EMAIL);
@@ -163,10 +166,8 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 // Question: extra: email confirmation? lol
 
-
-// Phone format validation - start with + sign, 7-15 numbers (not including + sign) (I set the length arbituarily)
-$phoneNumber = str_replace([" ", ".", "-", "(", ")"], "", $phoneNumber);
-if (!preg_match("/[+][0-9]{7,15}/", $phoneNumber)) {
+// Phone format validation - start with + sign
+if (!preg_match("/^[+][(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/", $phoneNumber)) {
     unset($_SESSION["phoneNumber"]); 
     $error = "Invalid phone format, please try again.";
     function_alert_register($error);
@@ -189,7 +190,7 @@ $query = "INSERT INTO Account (accountUsername, accountPassword, accountType, fi
 VALUES ('$username', '$hash', '$accountType', '$firstName', '$lastName', '$email', '$phoneNumber')";
 if (mysqli_query($conn, $query)) {
     mysqli_close($conn);  // put this here?
-    $success_message = "Account created successfully.";
+    $success_message = "Account created successfully!";
     function_success_register($success_message);
 } else {
    // echo "Error: " . $query . "<br>" . mysqli_error($conn);

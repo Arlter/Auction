@@ -1,3 +1,5 @@
+DROP database auction;
+CREATE database auction;
 SET time_zone='+00:00';
 
 CREATE TABLE IF NOT EXISTS Account (
@@ -28,7 +30,7 @@ CREATE TABLE IF NOT EXISTS Auction (
 	startingPrice DECIMAL(10,2) NOT NULL,
 	reservePrice DECIMAL(10,2) DEFAULT 0 NOT NULL,
 	createdDate TIMESTAMP NOT NULL,
-	endDate TIMESTAMP NOT NULL, 
+	endDate TIMESTAMP NOT NULL,
 	currentPrice DECIMAL(10,2) DEFAULT 0 NOT NULL,
 	currentBidder INT, 
 	auctionStatus BOOLEAN NOT NULL DEFAULT TRUE,	
@@ -95,6 +97,7 @@ CREATE TRIGGER  Auto_Watchlist After INSERT ON Bid
 	END $$
 delimiter ;
 
+USE auction;
 
 INSERT INTO Account VALUES
 (null,'acc1','111','buyer','erte','wang','178auction@gmail.com','+44123456'),
@@ -103,15 +106,12 @@ INSERT INTO Account VALUES
 (null,'acc4','111','seller','tim','chen','abc@com','+44123456')
 ;
 
-
-
 INSERT INTO Category VALUES
 ("electronic device"),
 ("beauty makeup"),
 ("food"),
 ("toy")
 ;
-
 
 INSERT INTO Auction VALUES
 (DEFAULT,'water gun','purchased two months ago and used twice. Very new','toy',10000001,52,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-20", "11:54:00"),DEFAULT,null,TRUE),
