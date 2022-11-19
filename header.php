@@ -1,5 +1,4 @@
-<?php
-require_once "connection.php";
+<?php require_once "connection.php"?>
 
 <!doctype html>
 <html lang="en">
