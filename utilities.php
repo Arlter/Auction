@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 // display_time_remaining:
 // Helper function to help figure out what time to display
@@ -96,37 +97,52 @@ function print_listing_li_bids($item_id, $title, $desc, $price, $end_time,$creat
 
 
 function print_listing_li_history($item_id, $title, $num_bids, $history)
-{ 
-  if (mysqli_num_rows($history)>0) {
-    echo('<br>
-    <li class="list-group-item">
-    <div class="p-2 mr-5"> '. '<center><h4>'.'Bid Hisotry&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" disabled>'.'Total Bids: '. $num_bids.'</button>'. '</h4></center>' .'</div>
-    </li>'
-    );
-  
-      // Fix language of bid vs. bids
-    if ($num_bids == 1) {
-        $bid = ' bid';
-      }
-    else {
-        $bid = ' bids';
-      }
-    while( $row = $history -> fetch_array(MYSQLI_NUM)){
-      $bid_time = $row[0];
-      $buyer_accountID = $row[1];
-      $bid_price = $row[2];
-      echo('
-      <li class="list-group-item">
-      <div class="p-2 mr-5"> '.'<i>'. $bid_time .'</i>&nbsp&nbsp' .' AccountID: ' .'<b>'.$buyer_accountID. '</b>'. '<span style="font-size: 1.0em"> &nbsp&nbspBid Price: £' . '<b>'. number_format($bid_price, 2) .  '</b>'.'</span><br/>'.'</div>
-    </li>'
-    );
+{
+
+    // Fix language of bid vs. bids
+  if ($num_bids == 1) {
+      $bid = ' bid';
     }
-  }else{
-    echo('<br>
+  else {
+      $bid = ' bids';
+    }
+  while( $row = $history -> fetch_array(MYSQLI_NUM)){
+    $bid_time = $row[0];
+    $buyer_accountID = $row[1];
+    $bid_price = $row[2];
+    echo('
     <li class="list-group-item">
-    <div class="p-2 mr-5"> '. '<center><h4>No bid History for this auction</h4></center>' .'</div>
-    </li>'
-    );
+    <div class="p-2 mr-5"> '. $bid_time . ' AccountID: '.$buyer_accountID. ''. '<span style="font-size: 1.2em"> Bid: £' . number_format($bid_price, 2) . '</span><br/>'.'</div>
+  </li>'
+  );
   }
+
 }
+
+// redirects to register page and shows a closeable red alert box with relevant error message
+// see code in register.php
+function function_alert_register($error) {
+  $_SESSION["alert"] = $error;
+  header("Location: register.php?error=" . urlencode ($error));  // redirection to register.php
+}
+
+// redirects to login page after successful registration with green alert box indicating success
+// see code in browse.php (put there for now)
+function function_success_register($success_message) {
+  $_SESSION["reg_success"] = $success_message;
+// to prevent inputs appearing again when going to register.php again
+  unset($_SESSION["username"]);  // what if I wanna save username for login? hmmmm...
+  unset($_SESSION["firstName"]); 
+  unset($_SESSION["lastName"]); 
+  unset($_SESSION["email"]); 
+  unset($_SESSION["phoneNumber"]); 
+  header("Location: login.php?success =" . urlencode ($success_message));  // redirection to login.php
+}
+
+// redirects to create auction page and shows a closeable red alert box with relevant error message
+// see code in create_auction.php
+function function_alert_create_auction($error_message) {
+  header("Location: create_auction.php?error=" . urlencode ($error_message));  // redirection to create_auction.php
+}
+
 ?>

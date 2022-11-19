@@ -1,5 +1,5 @@
 <?php include_once("header.php")?>
-<?php require_once("utilities.php")?>
+<?php require("utilities.php")?>
 <?php require_once("connection.php")?>
 
 <?php
@@ -15,8 +15,6 @@ if(isset($_SESSION["logged_in_message"])) {
 unset($_SESSION["logged_in_message"]);
 }
 ?>
-
-
 
 <div class="container">
 
@@ -144,7 +142,7 @@ unset($_SESSION["logged_in_message"]);
       $item_id = $row['auctionID'];
       $title = $row['itemName'];
       $description = $row['itemDescription'];
-      $num_bids = 1; // FIXME: change later
+      $num_bids = 1; 
       $current_price = 0;
       $end_date = $row['endDate'];
       print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
