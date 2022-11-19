@@ -1,7 +1,7 @@
 <?php 
 session_start();
 include_once("header.php")?>
-<?php include_once("utilities.php")?>
+<?php require_once("utilities.php")?>
 
 <div class="container my-5">
 

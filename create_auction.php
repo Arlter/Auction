@@ -7,8 +7,7 @@ include_once("header.php")
 // (Uncomment this block to redirect people without selling privileges away from this page)
   // If user is not logged in or not a seller, they should not be able to use this page.
   if ($_SESSION["logged_in"] == false || !isset($_SESSION["accountType"]) || $_SESSION["accountType"] != "seller") {
-    header("refresh:2;url=browse.php");
-    echo('<div class="text-center" style="margin-top:50px">Seller-only function. You will be redirected shortly.</div>');
+    header("Location:browse.php");
 }
 ?>
 
