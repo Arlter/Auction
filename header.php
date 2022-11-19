@@ -14,7 +14,7 @@
   <!-- Custom CSS file -->
   <link rel="stylesheet" href="css/custom.css">
 
-  <title>Site Name<!--CHANGEME!--></title>
+  <title>Auction </title>
 </head>
 
 
