@@ -104,11 +104,11 @@ $res = mysqli_query($conn, $query);
 
 if (mysqli_affected_rows($conn) ==1 && !mysqli_error($conn)) {
 
-    $item_id = mysqli_insert_id($conn);  // get the primary key (auctionID) of the last insert
-    $_SESSION["auctionID"] = $item_id;
+    $auction_id = mysqli_insert_id($conn);  // get the primary key (auctionID) of the last insert
+    $_SESSION["auctionID"] = $auction_id;
 
-    echo('<div class="text-center">Auction successfully created! <a href="mylistings.php">View all your listings</a> or <a href="listing.php?item_id=' . $item_id . '">view your new listing.</a></div>');
-    // "view your listing" link directs user to the new item listing page, e.g. listing.php/?item_id=100000000
+    echo('<div class="text-center">Auction successfully created! <a href="mylistings.php">View all your listings</a> or <a href="listing.php?auctionID=' . $auction_id . '">view your new listing.</a></div>');
+    // "view your listing" link directs user to the new item listing page, e.g. listing.php/?auctionID=100000000
     unset($_SESSION["auction_title"]);
     unset($_SESSION["auction_details"]);
     unset($_SESSION["auction_category"]);
