@@ -1,4 +1,13 @@
-<?php require_once "connection.php"?>
+<?php
+  // FIXME: At the moment, I've allowed these values to be set manually.
+  // But eventually, with a database, these should be set automatically
+  // ONLY after the user's login credentials have been verified via a 
+  // database query.
+  session_start();
+  $_SESSION['logged_in'] = false;
+  $_SESSION['account_type'] = 'buyer';
+?>
+
 
 <!doctype html>
 <html lang="en">
@@ -13,7 +22,7 @@
   <!-- Custom CSS file -->
   <link rel="stylesheet" href="css/custom.css">
 
-  <title>Site Name<!--CHANGEME!--></title>
+  <title>[My Auction Site] <!--CHANGEME!--></title>
 </head>
 
 
@@ -32,11 +41,8 @@
     echo '<a class="nav-link" href="logout.php">Logout</a>';
   }
   else {
-    echo ('
-     <li class="nav-item mx-1">
-        <a class="nav-link" href="login.php">Login</a>
-      </li>');
-    }
+    echo '<button type="button" class="btn nav-link" data-toggle="modal" data-target="#loginModal">Login</button>';
+  }
 ?>
 
     </li>
@@ -48,7 +54,7 @@
       <a class="nav-link" href="browse.php">Browse</a>
     </li>
 <?php
-  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true && isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'buyer') {
+  if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'buyer') {
   echo('
 	<li class="nav-item mx-1">
       <a class="nav-link" href="mybids.php">My Bids</a>
@@ -57,7 +63,7 @@
       <a class="nav-link" href="recommendations.php">Recommended</a>
     </li>');
   }
-  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true && isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'seller') {
+  if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller') {
   echo('
 	<li class="nav-item mx-1">
       <a class="nav-link" href="mylistings.php">My Listings</a>
@@ -69,4 +75,33 @@
 ?>
   </ul>
 </nav>
+
+<!-- Login modal -->
+<div class="modal fade" id="loginModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Login</h4>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form method="POST" action="login_result.php">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+          </div>
+          <button type="submit" class="btn btn-primary form-control">Sign in</button>
+        </form>
+        <div class="text-center">or <a href="register.php">create an account</a></div>
+      </div>
+
+    </div>
+  </div>
 </div> <!-- End modal -->
