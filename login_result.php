@@ -33,16 +33,15 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
         $_SESSION["logged_in_message"] = "Welcome, " . $account["accountUsername"] . ".";  // can also use firstName or lastName
         
         if ($account["accountType"] == "buyer") {
-            $_SESSION["account_type"] = "buyer";
+            $_SESSION["accountType"] = "buyer";
         } else {
-            $_SESSION["account_type"] = "seller";
+            $_SESSION["accountType"] = "seller";
         }
             
     } else {
         header("refresh:2;url=login.php");
         echo('<div class="text-center" style="margin-top:50px">Login error, please try again. You will be redirected shortly.</div>');
         exit();  
-        // account_type? 
     }
     header("refresh:2;url=index.php");
     echo('<div class="text-center" style="margin-top:50px">You are now logged in! You will be redirected shortly.</div>');
