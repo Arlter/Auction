@@ -1,5 +1,4 @@
 <?php
-session_start();
 include_once("header.php");
 unset($_SESSION['logged_in']);
 unset($_SESSION['accountType']);

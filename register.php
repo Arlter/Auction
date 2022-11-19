@@ -1,7 +1,6 @@
 <?php include_once("header.php")?>
 
 <?php
-session_start();
 
 // oops, i used an alternative method than $_GET['error'], is it ok
 if(isset($_SESSION["alert"])) {
