@@ -7,7 +7,7 @@
   // item_id is also the auction id.
   $item_id = $_GET['item_id'];
   $accountID = $_SESSION['accountID'];
-
+  $accountType = $_SESSION['accountType'];
   // Check if the auctionID exists.
   $res = mysqli_query($conn, "SELECT * FROM Auction WHERE auctionID = $item_id");
   if (mysqli_num_rows($res)>0) {
@@ -57,7 +57,7 @@
 <?php
   /* The following watchlist functionality uses JavaScript, but could
      just as easily use PHP as in other places in the code */
-  if (mysqli_num_rows($res)>0 and $now < $end_time):
+  if (mysqli_num_rows($res)>0 and $now < $end_time and $accountType=='buyer'):
 ?>
     <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?> >
       <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to watchlist</button>
@@ -89,9 +89,9 @@
 <?php if (mysqli_num_rows($res)>0 and $now > $end_time): ?>
      This auction ended <?php echo(date_format($end_time, 'j M H:i')) ?>
 <?php else: ?>
-    <?php if (mysqli_num_rows($res)>0 ): ?>
-      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
+   Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
       <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
+    <?php if (mysqli_num_rows($res)>0 and $accountType=='buyer'): ?>
 
       <!-- Bidding form -->
       <form method="POST" action="place_bid_result.php">
