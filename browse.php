@@ -1,5 +1,6 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
+<?php require_once("connection.php")?>
 
 <?php
 if(isset($_SESSION["logged_in_message"])) {
@@ -28,22 +29,6 @@ unset($_SESSION["logged_in_message"]);
     <div class="col-md-5 pr-0">
       <div class="form-group">
         <label for="keyword" class="sr-only">Search keyword:</label>
-        
-        <?php
-        // $search = ($conn, $_POST['keyword'])
-        // $query = "SELECT * FROM auction WHERE itemName LIKE '%$search%'";
-        // $result = mysqli_query($conn, $search);
-
-        // if(mysqli_num_rows($result)>0) { 
-        //   while($row = mysqli_fetch_assoc($result)){
-            
-        //   }
-          
-        // } else{
-        //   echo "There are no results that match your search";
-        // }
-        ?> 
-
 	    <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text bg-transparent pr-0 text-muted">
@@ -104,6 +89,7 @@ unset($_SESSION["logged_in_message"]);
 
   if (!isset($_GET['cat'])) {
     $category = $_GET['cat'];
+    
   }
   else {
   // TODO: Define behavior if a category has not been specified.
