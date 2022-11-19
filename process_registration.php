@@ -159,7 +159,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     unset($_SESSION["email"]); 
     $error = "Invalid email format, please try again.";
     function_alert_register($error);
-    exit();   
+    exit();
 }
 // Question: extra: email confirmation? lol
 

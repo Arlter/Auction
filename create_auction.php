@@ -1,13 +1,26 @@
-<?php include_once("header.php")?>
+<?php 
+session_start();  //require_once("login_result.php")
+include_once("header.php")
+?>
 
 <?php
-/* (Uncomment this block to redirect people without selling privileges away from this page)
-  // If user is not logged in or not a seller, they should not be able to
-  // use this page.
-  if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] != 'seller') {
-    header('Location: browse.php');
-  }
-*/
+// (Uncomment this block to redirect people without selling privileges away from this page)
+  // If user is not logged in or not a seller, they should not be able to use this page.
+  if ($_SESSION["logged_in"] == false || !isset($_SESSION["accountType"]) || $_SESSION["accountType"] != "seller") {
+    header("Location:browse.php");
+}
+?>
+
+
+<?php
+if($_GET["error"]) {
+  $error = $_GET["error"];
+  echo
+  "<div class='alert' style='background-color:pink; color:black'>
+  <button type='button' class='close' data-dismiss='alert'>&times;</button>
+  <h5><i class='icon fa fa-close'></i> Error</h5>$error
+  </div>";
+}
 ?>
 
 <div class="container">
