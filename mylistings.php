@@ -18,7 +18,7 @@ require_once("utilities.php");
   // the shared "utilities.php" where they can be shared by multiple files.
 
   // $accountID = 10000001;  // test
-  // $_SESSION["account_type"] = "seller";  // test
+  // $_SESSION["accountType"] = "seller";  // test
 
   $accountID = $_SESSION["accountID"];
   // account type session should have been set after successful login
@@ -29,7 +29,7 @@ require_once("utilities.php");
 
   // TODO: Loop through results and print them out as list items.
 
-  if ($_SESSION["logged_in"] == true && isset($_SESSION["account_type"]) && $_SESSION["account_type"] == "seller") {
+  if ($_SESSION["logged_in"] == true && isset($_SESSION["accountType"]) && $_SESSION["accountType"] == "seller") {
     $auctionquery = "SELECT * FROM Auction WHERE seller_accountID = $accountID";  // ORDER BY createdDate DESC, missing from local database for now
     $result = mysqli_query($conn, $auctionquery);
 

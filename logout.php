@@ -2,7 +2,7 @@
 session_start();
 include_once("header.php");
 unset($_SESSION['logged_in']);
-unset($_SESSION['account_type']);
+unset($_SESSION['accountType']);
 setcookie(session_name(), "", time() - 360);
 session_destroy();
 header("refresh:2;url=index.php");

@@ -61,7 +61,7 @@ if (isset($_POST["submit"])) {
 // temporarily saves data in form input field so users don't have to enter all over again
 // password and confirmation are never saved
 // see changes to code in form in register.php
-$_SESSION["account_type"] = $accountType;  // sorry for confusing naming styles, this is to match header.php
+$_SESSION["accountType"] = $accountType;  // sorry for confusing naming styles, this is to match header.php
 $_SESSION["username"] = $username;
 $_SESSION["firstName"] = $firstName;
 $_SESSION["lastName"] = $lastName;

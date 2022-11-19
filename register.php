@@ -34,11 +34,11 @@ unset($_SESSION["alert"]);  // alert disappears after refreshing
     <label for="accountType" class="col-sm-2 col-form-label text-right">Registering as a:</label>
 	<div class="col-sm-10">
 	  <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="accountType" id="accountBuyer" value="buyer" <?php if (!isset($_SESSION["account_type"]) || $_SESSION["account_type"] == "buyer") {echo"checked";}?> >
+        <input class="form-check-input" type="radio" name="accountType" id="accountBuyer" value="buyer" <?php if (!isset($_SESSION["accountType"]) || $_SESSION["accountType"] == "buyer") {echo"checked";}?> >
         <label class="form-check-label" for="accountBuyer">Buyer</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="accountType" id="accountSeller" value="seller" <?php if ($_SESSION["account_type"] == "seller") {echo"checked";}?> >
+        <input class="form-check-input" type="radio" name="accountType" id="accountSeller" value="seller" <?php if ($_SESSION["accountType"] == "seller") {echo"checked";}?> >
         <label class="form-check-label" for="accountSeller">Seller</label>
       </div>
       <small id="accountTypeHelp" class="form-text-inline text-muted"><span class="text-danger">* One account can only have one role.</span></small>
