@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 // display_time_remaining:
 // Helper function to help figure out what time to display
@@ -56,7 +55,7 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time)
   // Print HTML
   echo('
     <li class="list-group-item d-flex justify-content-between">
-    <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
+    <div class="p-2 mr-5"><h5><a href="listing.php?auctionID=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
     <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' . $num_bids . $bid . '<br/>' . $time_remaining . '</div>
   </li>'
   );
@@ -65,39 +64,41 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time)
 function print_listing_li_bids($item_id, $title, $desc, $price, $end_time,$created_date)
 {
   // Truncate long descriptions
-  if (strlen($desc) > 250) {
-    $desc_shortened = substr($desc, 0, 250) . '...';
-  }
-  else {
-    $desc_shortened = $desc;
-  }
-  
-  // Fix language of bid vs. bids
-  
-  // Calculate time to auction end
-  $now = new DateTime();
-  $end_time = new DateTime($end_time);
-  if ($now > $end_time) {
-    $time_remaining = 'This auction has ended';
-  }
-  else {
-    // Get interval:
-    $time_to_end = date_diff($now, $end_time);
-    $time_remaining = display_time_remaining($time_to_end) . ' remaining until the end';
-  }
-  
-  // Print HTML
-  echo('
-    <li class="list-group-item d-flex justify-content-between">
-    <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' .$item_id . '">' .' ' . $title. '</a></h5>' .'<h10>'. '   AuctionID: '.$item_id.'</h10>' .'<br>'. 'ItemDescription: '.$desc_shortened . '</div>
-    <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>'  . '<br/>' .$created_date.'<br/>'. $time_remaining . '</div>
-  </li>'
-  );
+    if (strlen($desc) > 250) {
+      $desc_shortened = substr($desc, 0, 250) . '...';
+    }
+    else {
+      $desc_shortened = $desc;
+    }
+
+    $now = new DateTime();
+    $end_time = new DateTime($end_time);
+    if ($now > $end_time) {
+      $time_remaining = 'This auction has ended';
+    }
+    else {
+      // Get interval:
+      $time_to_end = date_diff($now, $end_time);
+      $time_remaining = display_time_remaining($time_to_end) . ' remaining until the end';
+    }
+    
+    // Print HTML
+    echo('
+      <li class="list-group-item d-flex justify-content-between">
+      <div class="p-2 mr-5"><h5><a href="listing.php?auctionID=' .$item_id . '">' .' ' . $title. '</a></h5>' .'<h10>'. '   AuctionID: '.$item_id.'</h10>' .'<br>'. 'ItemDescription: '.$desc_shortened . '</div>
+      <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>'  . '<br/>' .$created_date.'<br/>'. $time_remaining . '</div>
+    </li>'
+    );
 }
 
 
-function print_listing_li_history($item_id, $title, $num_bids, $history)
-{
+function print_listing_li_history($item_id, $title, $num_bids, $history){
+  if (mysqli_num_rows($history)>0) {
+  echo('<br>
+  <li class="list-group-item">
+  <div class="p-2 mr-5"> '. '<center><h4>'.'Bid History&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" disabled>'.'Total Bids: '. $num_bids.'</button>'. '</h4></center>' .'</div>
+  </li>'
+  );
 
     // Fix language of bid vs. bids
   if ($num_bids == 1) {
@@ -112,11 +113,17 @@ function print_listing_li_history($item_id, $title, $num_bids, $history)
     $bid_price = $row[2];
     echo('
     <li class="list-group-item">
-    <div class="p-2 mr-5"> '. $bid_time . ' AccountID: '.$buyer_accountID. ''. '<span style="font-size: 1.2em"> Bid: £' . number_format($bid_price, 2) . '</span><br/>'.'</div>
+    <div class="p-2 mr-5"> '.'<i>'. $bid_time .'</i>&nbsp&nbsp' .' AccountID: ' .'<b>'.$buyer_accountID. '</b>'. '<span style="font-size: 1.0em"> &nbsp&nbspBid Price: £' . '<b>'. number_format($bid_price, 2) .  '</b>'.'</span><br/>'.'</div>
   </li>'
   );
-  }
-
+}
+}else{
+  echo('<br>
+    <li class="list-group-item">
+    <div class="p-2 mr-5"> '. '<center><h4>No bid History for this auction</h4></center>' .'</div>
+    </li>'
+    );
+}
 }
 
 // redirects to register page and shows a closeable red alert box with relevant error message
