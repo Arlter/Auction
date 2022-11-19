@@ -1,14 +1,12 @@
-<?php include_once("header.php");
-require_once("utilities.php");
-require_once("connection.php");
-session_start();?>
+<?php include_once("header.php")?>
+<?php require("utilities.php")?>
+<?php require_once("connection.php")?>
 
 <div class="container">
 
 <h2 class="my-3">Recommendations for you</h2>
 
 <?php
-
   // This page is for showing a buyer recommended items based on their bid 
   // history. It will be pretty similar to browse.php, except there is no 
   // search bar. This can be started after browse.php is working with a database.
@@ -17,7 +15,7 @@ session_start();?>
 
   // TODO: Check user's credentials (cookie/session).
   // connection
-  
+
   if(!$conn){
 		echo 'Connection error: ' . mysqli_connect_error();
 	}
