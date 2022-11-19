@@ -55,7 +55,7 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time)
   // Print HTML
   echo('
     <li class="list-group-item d-flex justify-content-between">
-    <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
+    <div class="p-2 mr-5"><h5><a href="listing.php?auctionID=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
     <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' . $num_bids . $bid . '<br/>' . $time_remaining . '</div>
   </li>'
   );
@@ -88,7 +88,7 @@ function print_listing_li_bids($item_id, $title, $desc, $price, $end_time,$creat
   // Print HTML
   echo('
     <li class="list-group-item d-flex justify-content-between">
-    <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' .$item_id . '">' .' ' . $title. '</a></h5>' .'<h10>'. '   AuctionID: '.$item_id.'</h10>' .'<br>'. 'ItemDescription: '.$desc_shortened . '</div>
+    <div class="p-2 mr-5"><h5><a href="listing.php?auctionID=' .$item_id . '">' .' ' . $title. '</a></h5>' .'<h10>'. '   AuctionID: '.$item_id.'</h10>' .'<br>'. 'ItemDescription: '.$desc_shortened . '</div>
     <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>'  . '<br/>' .$created_date.'<br/>'. $time_remaining . '</div>
   </li>'
   );
@@ -100,7 +100,7 @@ function print_listing_li_history($item_id, $title, $num_bids, $history)
   if (mysqli_num_rows($history)>0) {
     echo('<br>
     <li class="list-group-item">
-    <div class="p-2 mr-5"> '. '<center><h4>'.'Bid Hisotry&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" disabled>'.'Total Bids: '. $num_bids.'</button>'. '</h4></center>' .'</div>
+    <div class="p-2 mr-5"> '. '<center><h4>'.'Bid History&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="button" disabled>'.'Total Bids: '. $num_bids.'</button>'. '</h4></center>' .'</div>
     </li>'
     );
   

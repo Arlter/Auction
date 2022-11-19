@@ -5,21 +5,21 @@
 <?php
   // Get info from the URL: 
   // item_id is also the auction id.
-  $item_id = $_GET['item_id'];
+  $auctionID = $_GET['auctionID'];
   $accountID = $_SESSION['accountID'];
   $accountType = $_SESSION['accountType'];
   // Check if the auctionID exists.
-  $res = mysqli_query($conn, "SELECT * FROM Auction WHERE auctionID = $item_id");
+  $res = mysqli_query($conn, "SELECT * FROM Auction WHERE auctionID = $auctionID");
   if (mysqli_num_rows($res)>0) {
-      $created_date = (mysqli_query($conn, "SELECT createdDate  FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-      $current_bidder = (mysqli_query($conn, "SELECT currentBidder FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-      $auction_status = (mysqli_query($conn, "SELECT auctionStatus FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-      $title = (mysqli_query($conn, "SELECT itemName FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-      $description = (mysqli_query($conn, "SELECT itemDescription FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-      $current_price = (mysqli_query($conn, "SELECT currentPrice FROM Auction WHERE auctionID =$item_id ") -> fetch_array(MYSQLI_NUM))[0];
-      $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$item_id") -> fetch_array(MYSQLI_NUM))[0];
-      $end_time = (mysqli_query($conn, "SELECT endDate FROM Auction WHERE auctionID =$item_id") -> fetch_array(MYSQLI_NUM))[0];
-      $history = (mysqli_query($conn, "SELECT bidTime,buyer_accountID,bidPrice FROM Bid WHERE auction_auctionID =$item_id ORDER BY bidTime desc"));    
+      $created_date = (mysqli_query($conn, "SELECT createdDate  FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
+      $current_bidder = (mysqli_query($conn, "SELECT currentBidder FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
+      $auction_status = (mysqli_query($conn, "SELECT auctionStatus FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
+      $title = (mysqli_query($conn, "SELECT itemName FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
+      $description = (mysqli_query($conn, "SELECT itemDescription FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
+      $current_price = (mysqli_query($conn, "SELECT currentPrice FROM Auction WHERE auctionID =$auctionID ") -> fetch_array(MYSQLI_NUM))[0];
+      $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0];
+      $end_time = (mysqli_query($conn, "SELECT endDate FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
+      $history = (mysqli_query($conn, "SELECT bidTime,buyer_accountID,bidPrice FROM Bid WHERE auction_auctionID =$auctionID ORDER BY bidTime desc"));    
       // Calculate time to auction end:
       $now = new DateTime();
       $end_time = new DateTime($end_time);
@@ -30,7 +30,7 @@
       }   
       // $has_session = $_SESSION['logged_in'];
       $has_session = true;
-      $result = mysqli_query($conn,"SELECT *  FROM BuyerWatchAuction WHERE auction_auctionID =$item_id and buyer_accountID=$accountID");
+      $result = mysqli_query($conn,"SELECT *  FROM BuyerWatchAuction WHERE auction_auctionID =$auctionID and buyer_accountID=$accountID");
       if (mysqli_num_rows($result)>0) {
         $watching = true;
       }else{
@@ -78,7 +78,7 @@
     </div>
 
     <div class="history">
-    <?php if (mysqli_num_rows($res)>0) {print_listing_li_history($item_id, $title, $num_bids, $history);}?>
+    <?php if (mysqli_num_rows($res)>0) {print_listing_li_history($auctionID, $title, $num_bids, $history);}?>
     </div>
     
   </div>
@@ -99,7 +99,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text">AuctionId</span>
           </div>
-          <input type="number" class="form-control" id="auctionId" name ="auctionId" value= <?php echo $item_id ?> readonly>
+          <input type="number" class="form-control" id="auctionId" name ="auctionId" value= <?php echo $auctionID ?> readonly>
         </div>
       
         <div class="input-group">
@@ -132,7 +132,7 @@ function addToWatchlist(button) {
   // Sends item ID as an argument to that function.
   $.ajax('watchlist_funcs.php', {
     type: "POST",
-    data: {functionname: 'add_to_watchlist', arguments: <?php echo($item_id);?>},
+    data: {functionname: 'add_to_watchlist', arguments: <?php echo($auctionID);?>},
 
     success: 
       function (data, textstatus) {
@@ -162,7 +162,7 @@ function removeFromWatchlist(button) {
   // Sends item ID as an argument to that function.
   $.ajax('watchlist_funcs.php', {
     type: "POST",
-    data: {functionname: 'remove_from_watchlist', arguments: <?php echo($item_id);?>},
+    data: {functionname: 'remove_from_watchlist', arguments: <?php echo($auctionID);?>},
     success: 
       function (obj, textstatus) {
         // Callback function for when call is successful and returns obj
