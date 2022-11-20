@@ -44,7 +44,7 @@ if($_GET["error"]) {
             <?php 
             if(empty($_SESSION["auction_title"]) || ctype_space($_SESSION["auction_title"])) {
               echo
-              "<small id='titleHelp' class='form-text text-muted'><span class='text-danger'>* Required.</span> A short description of the item you're selling, which will display in listings.</small>";}
+              "<small id='titleHelp' class='form-text text-muted'><span class='text-danger'>* Required. 40 characters maximum.</span> A short description of the item you're selling, which will display in listings.</small>";}
               ?>
           </div>
         </div>
@@ -52,14 +52,14 @@ if($_GET["error"]) {
           <label for="auctionDetails" class="col-sm-2 col-form-label text-right">Details</label>
           <div class="col-sm-10">
             <textarea class="form-control" name="auctionDetails" id="auctionDetails" maxlength="2000" rows="4" placeholder="Enter details here..."><?php echo $_SESSION["auction_details"];?></textarea>
-            <small id="detailsHelp" class="form-text text-muted">Full details of the listing to help bidders decide if it's what they're looking for.</small>
+            <small id="detailsHelp" class="form-text text-muted">250 characters maximum. Full details of the listing to help bidders decide if it's what they're looking for.</small>
           </div>
         </div>
         <div class="form-group row">
           <label for="auctionCategory" class="col-sm-2 col-form-label text-right">Category</label>
           <div class="col-sm-10">
-            <select class="form-control" name="auctionCategory" id="auctionCategory">
-<!-- add more categories! -->
+            <select class="form-control" name="auctionCategory" id="auctionCategory" required>
+<!-- FIXME: add more categories! -->
               <option <?php if ($_SESSION["auction_category"] == "" || !isset($_SESSION["auction_category"])) {echo"selected";}?> disabled hidden>Choose...</option> <!--FIXME: this shouldn't fulfill "required" criterion-->
               <option <?php if ($_SESSION["auction_category"] == "electronic device") {echo"selected";}?> value="electronic device">Electronic device</option>
               <option <?php if ($_SESSION["auction_category"] == "beauty makeup") {echo"selected";}?> value="beauty makeup">Beauty makeup</option>
@@ -80,7 +80,7 @@ if($_GET["error"]) {
               <div class="input-group-prepend">
                 <span class="input-group-text">£</span>
               </div>
-              <input type="number" class="form-control" step="0.10" name="auctionStartPrice" id="auctionStartPrice" value="<?php echo $_SESSION["auction_start_price"];?>" min="0" required>  <!-- REVIEW: I set step=0.10 for now-->
+              <input type="number" class="form-control" step="0.10" name="auctionStartPrice" id="auctionStartPrice" value="<?php echo $_SESSION["auction_start_price"];?>" min="0" required>  <!-- FIXME?: I set step=0.10 for now-->
             </div>
             <?php 
             if(empty($_SESSION["auction_start_price"]) || ctype_space($_SESSION["auction_start_price"])) {
@@ -104,7 +104,7 @@ if($_GET["error"]) {
         <div class="form-group row">
           <label for="auctionEndDate" class="col-sm-2 col-form-label text-right">End date</label>
           <div class="col-sm-10">
-            <input type="datetime-local" class="form-control" name="auctionEndDate" id="auctionEndDate" value="<?php echo $_SESSION["auction_end_date"];?>" required>
+            <input type="datetime-local" class="form-control" name="auctionEndDate" id="auctionEndDate" value="<?php echo $_SESSION["auction_end_date"];?>" required>  <!-- FIXME: min time-->
             <?php 
             if(empty($_SESSION["auction_reserve_price"]) || ctype_space($_SESSION["auction_reserve_price"])) {
               echo
