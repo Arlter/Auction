@@ -47,22 +47,18 @@
       $sql7 = "ALTER TABLE similarity ADD cosine_similarity FLOAT(10);";
       mysqli_query($conn, $sql7);
 
-      // create procedure that calculates and inputs cosine similarities into the relevant table created
-      $sql8 = "DROP PROCEDURE IF EXISTS get_similarities;";
-      mysqli_query($conn, $sql8);
-
-      // call procedure
-      $sql9 = "CALL get_similarities(" . $accountID . ");";
-      mysqli_multi_query($conn, $sql9);
+      // call procedure that calculates and inputs cosine similarities into the relevant table created
+      $sql8 = "CALL get_similarities(" . $accountID . ");";
+      mysqli_multi_query($conn, $sql8);
 
       // drop entries with null in the cosine similarities column
-      $sql10 = "DELETE FROM similarity WHERE cosine_similarity IS NULL;";
-      mysqli_query($conn, $sql10);
+      $sql9 = "DELETE FROM similarity WHERE cosine_similarity IS NULL;";
+      mysqli_query($conn, $sql9);
 
       // call procedure
-      $sql11 = "CALL get_recommendations();";
+      $sql10 = "CALL get_recommendations();";
 
-      $result = mysqli_multi_query($conn, $sql11);
+      $result = mysqli_multi_query($conn, $sql10);
       if (mysqli_num_rows($result)>0){
         $array_of_auctions = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
