@@ -38,6 +38,7 @@
 
       if ($has_session){
         $accountID=$_SESSION['accountID'];
+        $accountType = $_SESSION["accountType"];
         $result = mysqli_query($conn,"SELECT *  FROM BuyerWatchAuction WHERE auction_auctionID =$auctionID and buyer_accountID=$accountID");
         if (mysqli_num_rows($result)>0) {
           $watching = true;
@@ -69,7 +70,7 @@
 <?php
   /* The following watchlist functionality uses JavaScript, but could
      just as easily use PHP as in other places in the code */
-  if (mysqli_num_rows($res)>0 &&  $now < $end_time && $has_session):
+  if (mysqli_num_rows($res)>0 &&  $now < $end_time && $has_session && $accountType!='seller'):
 ?>
     <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?> >
       <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to watchlist</button>
@@ -98,7 +99,7 @@
   <div class="col-sm-4"> <!-- Right col with bidding info -->
 
     <p>
-<?php if (mysqli_num_rows($res)>0 and $now > $end_time ): ?>
+<?php if (mysqli_num_rows($res)>0 and $now > $end_time  ): ?>
      This auction ended at  <b><?php echo(date_format($end_time, 'd/m/Y h:i:s A')) ?></b>
   </br>Final Price £:  <b><?php echo($current_price) ?></b>
 <?php else: ?>
@@ -111,7 +112,7 @@
         <p class="lead">Current bid: <b>£<?php echo(number_format($current_price, 2)) ?><b></p>
       <?php endif ?>
 
-      <?php if ($has_session): ?>
+      <?php if ($has_session and $accountType!='seller'): ?>
       <!-- Bidding form -->
       <form method="POST" action="place_bid_result.php">
       <div class="input-group">
@@ -205,4 +206,3 @@ function removeFromWatchlist(button) {
 
 } // End of addToWatchlist func
 </script>
-<?php include_once("footer.php")?>
