@@ -29,36 +29,27 @@
     if ($accountType == 'buyer') {
       // creates a table showing unique auction ID, buyer account ID pairs
       $sql1 = "DROP TEMPORARY TABLE IF EXISTS table_1;";
-      mysqli_query($conn, $sql1);
       $sql2 = "CREATE TEMPORARY TABLE table_1 SELECT DISTINCT auction_auctionID, buyer_accountID FROM bid;";
-      mysqli_query($conn, $sql2);
 
       // creates a table of all auction IDs that the user is involved in
       $sql3 = "DROP TEMPORARY TABLE IF EXISTS table_2;";
-      mysqli_query($conn, $sql3);
       $sql4 = "CREATE TEMPORARY TABLE table_2 SELECT auction_auctionID FROM table_1 WHERE buyer_accountID = " . $accountID . ";";
-      mysqli_query($conn, $sql4);
 
       // create table to store cosine similarities with other users
       $sql5 = "DROP TEMPORARY TABLE IF EXISTS similarity;";
-      mysqli_query($conn, $sql5);
       $sql6 = "CREATE TEMPORARY TABLE similarity SELECT DISTINCT buyer_accountID FROM bid WHERE buyer_accountID != " . $accountID . ";";
-      mysqli_query($conn, $sql6);
       $sql7 = "ALTER TABLE similarity ADD cosine_similarity FLOAT(10);";
-      mysqli_query($conn, $sql7);
 
       // call procedure that calculates and inputs cosine similarities into the relevant table created
       $sql8 = "CALL get_similarities(" . $accountID . ");";
-      mysqli_multi_query($conn, $sql8);
 
       // drop entries with null in the cosine similarities column
       $sql9 = "DELETE FROM similarity WHERE cosine_similarity IS NULL;";
-      mysqli_query($conn, $sql9);
 
       // call procedure
       $sql10 = "CALL get_recommendations();";
 
-      $result = mysqli_multi_query($conn, $sql10);
+      $result = mysqli_multi_query($conn, $sql1 . $sql2 . $sql3 . $sql4 . $sql5 . $sql6 . $sql7 . $sql8 . $sql9 . $sql10);
       if (mysqli_num_rows($result)>0){
         $array_of_auctions = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
