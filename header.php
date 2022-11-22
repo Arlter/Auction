@@ -34,6 +34,8 @@
     echo '<a class="nav-link" href="logout.php">Logout</a>';
   }
   else {
+    // Avoid the case when logged_in is not declared initially.
+    $_SESSION['logged_in'] = false;
     echo ('
      <li class="nav-item mx-1">
         <a class="nav-link" href="login.php">Login</a>
