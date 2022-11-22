@@ -21,7 +21,6 @@
 		die("Connection error: " . mysqli_connect_error());
 	}
   else {
-    session_start();
     $accountID = $_SESSION['accountID'];
     $accountType = $_SESSION['accountType'];
 
@@ -76,16 +75,14 @@
           $num_bids = (mysqli_query($conn, 'SELECT COUNT(*) FROM bid WHERE auction_auctionID=' . $row['auctionID']) -> fetch_array(MYSQLI_NUM))[0];
 
           print_listing_li($row['auctionID'], $row['itemName'], $row['itemDescription'], $row['currentPrice'], $num_bids, $row['endDate']);
-        };
-      }
-      else{
+        }
+      }else{
         echo 'No results';
-      };
-    else {
+      }
+    }    else {
       echo 'You must be a buyer to get recommendations';
-      };
-    };
-  };
+      }
+  }
 ?>
 </ul>
 
