@@ -186,3 +186,4 @@ function removeFromWatchlist(button) {
 
 } // End of addToWatchlist func
 </script>
+<?php include_once("footer.php")?>

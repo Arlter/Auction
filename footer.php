@@ -1,7 +1,8 @@
 <!-- If you like, you can put a page footer (something that should show up at
      the bottom of every page, such as helpful links, layout, etc.) here. -->
-
-
+     <br><br>
+     <hr> 
+     <small><i>The application is built by KH,TC,AL,EW.</i></small>
 
 <!-- Bootstrap core JavaScript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
