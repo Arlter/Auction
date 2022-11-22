@@ -40,10 +40,10 @@
         while (mysqli_stmt_fetch($stmt)){
           print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
         }
-        mysqli_stmt_close();
       }else{
         echo 'No results';
       }
+      mysqli_stmt_close($stmt);
     }    else {
       echo 'You must be a buyer to get recommendations';
       }
