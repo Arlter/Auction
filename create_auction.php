@@ -11,11 +11,11 @@ include_once("header.php")
 }
 ?>
 
-<script>  // sometimes it works sometimes doesn't, what?? 
+<!-- <script>  // sometimes it works sometimes doesn't, what?? 
 window.addEventListener("beforeunload", function(event) {
   event.returnValue = "Write something clever here..";
 });
-</script>
+</script> -->
 
 <?php
 if($_GET["error"]) {
