@@ -27,42 +27,20 @@
     // TODO: Perform a query to pull up auctions they might be interested in.
 
     if ($accountType == 'buyer') {
-      // creates a table showing unique auction ID, buyer account ID pairs
-      $sql1 = "DROP TEMPORARY TABLE IF EXISTS table_1;";
-      $sql2 = "CREATE TEMPORARY TABLE table_1 SELECT DISTINCT auction_auctionID, buyer_accountID FROM bid;";
-
-      // creates a table of all auction IDs that the user is involved in
-      $sql3 = "DROP TEMPORARY TABLE IF EXISTS table_2;";
-      $sql4 = "CREATE TEMPORARY TABLE table_2 SELECT auction_auctionID FROM table_1 WHERE buyer_accountID = " . $accountID . ";";
-
-      // create table to store cosine similarities with other users
-      $sql5 = "DROP TEMPORARY TABLE IF EXISTS similarity;";
-      $sql6 = "CREATE TEMPORARY TABLE similarity SELECT DISTINCT buyer_accountID FROM bid WHERE buyer_accountID != " . $accountID . ";";
-      $sql7 = "ALTER TABLE similarity ADD cosine_similarity FLOAT(10);";
-
-      // call procedure that calculates and inputs cosine similarities into the relevant table created
-      $sql8 = "CALL get_similarities(" . $accountID . ");";
-
-      // drop entries with null in the cosine similarities column
-      $sql9 = "DELETE FROM similarity WHERE cosine_similarity IS NULL;";
-
-      // call procedure
-      $sql10 = "CALL get_recommendations();";
-
-      $result = mysqli_multi_query($conn, $sql1 . $sql2 . $sql3 . $sql4 . $sql5 . $sql6 . $sql7 . $sql8 . $sql9 . $sql10);
-      if (mysqli_num_rows($result)>0){
-        $array_of_auctions = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-        mysqli_free_result($result);
-
-        // mysqli_close($conn);
+      $stmt = mysqli_prepare($conn, "CALL collaborative_filtering(?);");
+      mysqli_stmt_bind_param($stmt, "s", $accountID);
+      mysqli_stmt_execute($stmt);
+      mysqli_stmt_bind_result($stmt, $auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
+      
+      mysqli_stmt_fetch($stmt);
+      if (($stmt != NULL) and ($stmt != FALSE)){
+        print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
 
         // TODO: Loop through results and print them out as list items.
-        foreach($array_of_auctions as $row){
-          $num_bids = (mysqli_query($conn, 'SELECT COUNT(*) FROM bid WHERE auction_auctionID=' . $row['auctionID']) -> fetch_array(MYSQLI_NUM))[0];
-
-          print_listing_li($row['auctionID'], $row['itemName'], $row['itemDescription'], $row['currentPrice'], $num_bids, $row['endDate']);
+        while (mysqli_stmt_fetch($stmt)){
+          print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
         }
+        mysqli_stmt_close();
       }else{
         echo 'No results';
       }
