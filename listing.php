@@ -28,8 +28,7 @@
         $time_to_end = date_diff($now, $end_time);
         $time_remaining = ' (in ' . display_time_remaining($time_to_end) . ')';
       }   
-      // $has_session = $_SESSION['logged_in'];
-      $has_session = true;
+      $has_session = $_SESSION['logged_in'];
       $result = mysqli_query($conn,"SELECT *  FROM BuyerWatchAuction WHERE auction_auctionID =$auctionID and buyer_accountID=$accountID");
       if (mysqli_num_rows($result)>0) {
         $watching = true;
