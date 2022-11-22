@@ -2,6 +2,10 @@
 include_once("header.php")
 ?>
 
+<?php
+$now = new DateTime();
+$now = $now -> format("Y-m-d\TH:i");
+?>
 
 <?php
 // (Uncomment this block to redirect people without selling privileges away from this page)
@@ -10,12 +14,6 @@ include_once("header.php")
     header("Location:browse.php");
 }
 ?>
-
-<!-- <script>  // sometimes it works sometimes doesn't, what?? 
-window.addEventListener("beforeunload", function(event) {
-  event.returnValue = "Write something clever here..";
-});
-</script> -->
 
 <?php
 if($_GET["error"]) {
@@ -101,7 +99,7 @@ if($_GET["error"]) {
         <div class="form-group row">
           <label for="auctionEndDate" class="col-sm-2 col-form-label text-right">End date</label>
           <div class="col-sm-10">
-            <input type="datetime-local" class="form-control" name="auctionEndDate" id="auctionEndDate" required>  <!-- FIXME: min time-->
+            <input type="datetime-local" class="form-control" name="auctionEndDate" id="auctionEndDate" min=<?php echo $now ?> required>  <!-- FIXME: min time-->
               <small id="endDateHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Day for the auction to end.</small>
           </div>
         </div>
