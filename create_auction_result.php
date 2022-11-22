@@ -32,14 +32,6 @@ if (isset($_POST["submit"])) {
     $auctionEndDate = mysqli_real_escape_string ($conn, $_POST["auctionEndDate"]);
 }             
 
-// saves entered inputs so user doesn't have to enter again when invalid input is detected
-$_SESSION["auction_title"] = $auctionTitle;
-$_SESSION["auction_details"] = $auctionDetails;
-$_SESSION["auction_category"] = $auctionCategory;
-$_SESSION["auction_start_price"] = $auctionStartPrice;
-$_SESSION["auction_reserve_price"] = $auctionReservePrice;
-$_SESSION["auction_end_date"] = $auctionEndDate;
-
 // FIXME: Data validation
 // this time can try use $_GET["error"]?
 // when error:
@@ -61,7 +53,7 @@ if (mb_strlen($auctionDetails) > 2000) {
     exit();
 }
 
-if ($auctionCategory == "") {
+if (empty($auctionCategory)) {
     function_alert_create_auction("Please choose a category.");
     exit();
 } 
@@ -70,13 +62,11 @@ if (empty($auctionStartPrice) || ctype_space($auctionStartPrice)) {
     function_alert_create_auction("Starting price is required, please try again.");
     exit();
 } elseif ($auctionStartPrice < 0) {
-    unset($_SESSION["auction_start_price"]);
     function_alert_create_auction("Starting price cannot be negative, please try again.");
     exit();
 }
 
 if (!empty($auctionReservePrice) && $auctionReservePrice < 0) {
-    unset($_SESSION["auction_reserve_price"]);
     function_alert_create_auction("Reserve price cannot be negative, please try again.");
     exit();
 } elseif (empty($auctionReservePrice)) {
@@ -88,7 +78,6 @@ if (empty($auctionEndDate) || ctype_space($auctionEndDate)) {
     function_alert_create_auction("End date is required, please try again.");
     exit();
 } elseif ((New DateTime($auctionEndDate)) < $now) {
-    unset($_SESSION["auction_end_date"]);
     function_alert_create_auction("End date cannot be earlier than the current time, please try again.");
     exit();
 }
@@ -105,16 +94,9 @@ $res = mysqli_query($conn, $query);
 if (mysqli_affected_rows($conn) ==1 && !mysqli_error($conn)) {
 
     $auction_id = mysqli_insert_id($conn);  // get the primary key (auctionID) of the last insert
-    $_SESSION["auctionID"] = $auction_id;
 
     echo('<div class="text-center">Auction successfully created! <a href="mylistings.php">View all your listings</a> or <a href="listing.php?auctionID=' . $auction_id . '">view your new listing.</a></div>');
     // "view your listing" link directs user to the new item listing page, e.g. listing.php/?auctionID=100000000
-    unset($_SESSION["auction_title"]);
-    unset($_SESSION["auction_details"]);
-    unset($_SESSION["auction_category"]);
-    unset($_SESSION["auction_start_price"]);
-    unset($_SESSION["auction_reserve_price"]);
-    unset($_SESSION["auction_end_date"]);
     
 } else {
     // echo "Error: " . $query . "<br>" . mysqli_error($conn);
