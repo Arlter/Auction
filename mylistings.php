@@ -49,8 +49,8 @@ require_once("utilities.php");
     }
 
   } else {
-    header("refresh:3;url=browse.php");
-    echo('<div class="text-center"> Seller-only function, redirecting in 3 seconds</div>'); 
+    header("refresh:1;url=browse.php");
+    echo('<div class="text-center"> Seller-only function, you will be redirected shortly.</div>'); 
   }
   
 ?>
