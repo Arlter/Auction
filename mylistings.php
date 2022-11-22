@@ -35,14 +35,14 @@ require_once("utilities.php");
     if (mysqli_num_rows($result) > 0) {
       while ($row = mysqli_fetch_array($result)) {
         
-        $item_id = $row["auctionID"];
+        $auction_id = $row["auctionID"];
         $title = $row["itemName"];
         $desc = $row["itemDescription"];
         $price = $row["currentPrice"];
-        $num_bids = mysqli_fetch_array(mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$item_id"))[0];
-        $end_time = new DateTime($row["endDate"]);
+        $num_bids = mysqli_fetch_array(mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$auction_id"))[0];
+        $end_time = $row["endDate"];
 
-        print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time);
+        print_listing_li($auction_id, $title, $desc, $price, $num_bids, $end_time);
       }
     } else {
       echo('<div class="text-center"> No listings have been made yet.</div>');  // FIXME: fancy
