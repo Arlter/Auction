@@ -53,7 +53,7 @@
 
       // call procedure
       $sql9 = "CALL get_similarities(" . $accountID . ");";
-      mysqli_query($conn, $sql9);
+      mysqli_multi_query($conn, $sql9);
 
       // drop entries with null in the cosine similarities column
       $sql10 = "DELETE FROM similarity WHERE cosine_similarity IS NULL;";
@@ -62,7 +62,7 @@
       // call procedure
       $sql11 = "CALL get_recommendations();";
 
-      $result = mysqli_query($conn, $sql11);
+      $result = mysqli_multi_query($conn, $sql11);
       if (mysqli_num_rows($result)>0){
         $array_of_auctions = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
