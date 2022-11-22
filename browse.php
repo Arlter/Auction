@@ -89,7 +89,7 @@ unset($_SESSION["logged_in_message"]);
   }
 
   if (!isset($_GET['cat'])) {
-  // TODO: Define behavior if a category has not been specified.
+    $category = 'All categories';
   }
   else {
     $category = $_GET['cat'];
@@ -134,7 +134,12 @@ unset($_SESSION["logged_in_message"]);
   /* TODO: Use above values to construct a query. Use this query to 
      retrieve data from the database. (If there is no form data entered,
      decide on appropriate default value/default query to make. */
-  $search = "SELECT * FROM auction WHERE itemName LIKE '%$keyword%'";
+  $search = "SELECT * FROM auction WHERE itemName LIKE '%$keyword%' OR itemDescription LIKE '%$keyword%'";
+
+  if($category != "All categories"){
+    $query.= "AND category = '$category'";
+  }
+ 
   $res = mysqli_query($conn, $search);
   $count = mysqli_num_rows($res);
   if ($count > 0){
