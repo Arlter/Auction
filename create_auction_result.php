@@ -11,8 +11,6 @@ include_once("header.php")?>
 /* TODO #1: Connect to MySQL database (perhaps by requiring a file that
             already does this). */
 
-require_once("connection.php");
-
 /* TODO #2: Extract form data into variables. Because the form was a 'post'
             form, its data can be accessed via $POST['auctionTitle'], 
             $POST['auctionDetails'], etc. Perform checking on the data to
@@ -39,7 +37,7 @@ if (isset($_POST["submit"])) {
 // header("Location: create_auction.php?error=" . urlencode ($error)); 
 
 
-// client side check should stop the data inputs, but just in case?
+// client-side checks should stop invalid data inputs, but put in server-side checks just in case?
 if (mb_strlen($auctionTitle) > 40) {
     function_alert_create_auction("Title is too long, please try again.");
     exit();
@@ -48,7 +46,7 @@ if (mb_strlen($auctionTitle) > 40) {
     exit();
 }
 
-if (mb_strlen($auctionDetails) > 2000) {
+if (mb_strlen($auctionDetails) > 250) {
     function_alert_create_auction("Details are too long, please try again.");
     exit();
 }
