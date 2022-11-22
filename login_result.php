@@ -5,6 +5,14 @@ include_once("header.php");
 require_once("connection.php");
 ?>
 
+<?php
+  // Prevent direct access
+  if (!isset($_POST['username']) || !isset($_POST['password']) ) {
+    header('Location: browse.php');
+  }
+?>
+
+
 <div class="container">
 
 <?php

@@ -3,7 +3,15 @@
 <?php require_once("connection.php")?>
 
 <?php
-  // Get info from the URL: 
+  // Prevent direct access 
+  if (!isset($_GET['auctionID'])) {
+    header('Location: browse.php');
+  }
+?>
+
+
+<?php
+  // Get auctionID from the URL: 
   // item_id is also the auction id.
   $auctionID = $_GET['auctionID'];
   $has_session = $_SESSION['logged_in'];
