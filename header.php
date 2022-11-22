@@ -1,5 +1,4 @@
 <?php require_once "connection.php"?>
-
 <?php session_start();?>
 
 <!doctype html>

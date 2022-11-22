@@ -4,13 +4,6 @@
 <div class="container my-5">
 
 <?php
-  // Prevent direct access
-  if (!isset($_POST['auctionId']) || !isset($_POST['bidPrice']) ) {
-    header('Location: browse.php');
-  }
-?>
-
-<?php
 
 // This function takes the form data and adds the new auction to the database.
     

@@ -100,10 +100,10 @@ delimiter ;
 USE auction;
 
 INSERT INTO Account VALUES
-(null,'acc1','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','erte','wang','1419121502@qq.com','+44123456'),
-(null,'acc2','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','seller','kien','han','648906549@qq.com','+44123456'),
-(null,'acc3','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','angel','lam','wangertee@126.com','+44123456'),
-(null,'acc4','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','seller','tim','chen','abc@com','+44123456')
+(null,'acc1','111','buyer','erte','wang','1419121502@qq.com','+44123456'),
+(null,'acc2','111','seller','kien','han','648906549@qq.com','+44123456'),
+(null,'acc3','111','buyer','angel','lam','wangertee@126.com','+44123456'),
+(null,'acc4','111','seller','tim','chen','abc@com','+44123456')
 ;
 
 INSERT INTO Category VALUES
@@ -123,6 +123,7 @@ INSERT INTO Bid VALUES
 (DEFAULT,100000000,70.00,10000000,'2022-11-08 23:57:37'),
 (DEFAULT,100000000,80.00,10000000,'2022-11-09 00:02:01'),
 (DEFAULT,100000000,99.00,10000000,'2022-11-09 00:19:20'),
+(DEFAULT,100000001,900.00,10000000,'2022-11-09 00:30:20'),
 (DEFAULT,100000002,4.00,10000000,'2022-11-09 02:30:20'),
 (DEFAULT,100000000,101.00,10000000,'2022-11-09 02:30:20')
 ;

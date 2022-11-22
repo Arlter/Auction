@@ -81,25 +81,25 @@ unset($_SESSION["logged_in_message"]);
 <?php
   // Retrieve these from the URL
   if (!isset($_GET['keyword'])) {
-  // TODO: Define behavior if a keyword has not been specified.
-    $keyword = '';
+    $keyword = $_GET['keyword'];
   }
   else {
-    $keyword = $_GET['keyword'];
+  // TODO: Define behavior if a keyword has not been specified.
   }
 
   if (!isset($_GET['cat'])) {
-    $category = 'All categories';
+    $category = $_GET['cat'];
+    
   }
   else {
-    $category = $_GET['cat'];
+  // TODO: Define behavior if a category has not been specified.
   }
   
   if (!isset($_GET['order_by'])) {
-  // TODO: Define behavior if an order_by value has not been specified.
+    $ordering = $_GET['order_by'];
   }
   else {
-    $ordering = $_GET['order_by'];
+   // TODO: Define behavior if an order_by value has not been specified.
   }
   
   if (!isset($_GET['page'])) {
@@ -134,27 +134,22 @@ unset($_SESSION["logged_in_message"]);
   /* TODO: Use above values to construct a query. Use this query to 
      retrieve data from the database. (If there is no form data entered,
      decide on appropriate default value/default query to make. */
-  $search = "SELECT * FROM auction WHERE itemName LIKE '%$keyword%' OR itemDescription LIKE '%$keyword%'";
-
-  if($category != "All categories"){
-    $query.= "AND category = '$category'";
-  }
- 
+  $search = "SELECT * FROM auction WHERE itemName LIKE '%$keyword%'";
   $res = mysqli_query($conn, $search);
   $count = mysqli_num_rows($res);
   if ($count > 0){
     while($row=mysqli_fetch_assoc($res)){
-      $auctionID = $row['auctionID'];
+      $item_id = $row['auctionID'];
       $title = $row['itemName'];
       $description = $row['itemDescription'];
-      $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM bid where auction_auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
-      $current_price = $row['currentPrice'];
+      $num_bids = 1; 
+      $current_price = 0;
       $end_date = $row['endDate'];
-      print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
+      print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
     }
   } 
   else {
-    echo 'No item found';
+    echo 'auction item unavailable';
     }
 ?>
 </ul>

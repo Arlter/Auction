@@ -1,15 +1,4 @@
 <?php
-// Prevent direct access to this file
-if( count(get_included_files()) == ((version_compare(PHP_VERSION, '5.0.0', '>='))?1:0) )
-{
-  echo "Direct access not allowed and you will be redirected shortly.";
-  header("refresh:3;url=browse.php");
-}
-?>
-
-
-
-<?php
     $host_address='erte.mysql.database.azure.com';
     $username='kien';
     $password='kien!ucl1';
