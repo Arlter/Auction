@@ -33,18 +33,18 @@
       mysqli_stmt_bind_result($stmt, $auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
       
       mysqli_stmt_fetch($stmt);
-      if (($stmt != NULL) and ($stmt != FALSE)){
-        print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
 
-        // TODO: Loop through results and print them out as list items.
+      // TODO: Loop through results and print them out as list items.
+      if (($auctionID == NULL) or ($stmt == FALSE)){
+        echo 'No results. Try to bid on more auctions, wait for others to bid on auctions, or wait for new auctions to appear!';
+      } else{
+        print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
         while (mysqli_stmt_fetch($stmt)){
           print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
         }
-      }else{
-        echo 'No results';
       }
       mysqli_stmt_close($stmt);
-    }    else {
+    } else {
       echo 'You must be a buyer to get recommendations';
       }
   }
