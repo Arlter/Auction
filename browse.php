@@ -148,6 +148,7 @@ unset($_SESSION["logged_in_message"]);
       print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
     }
   } 
+  
   else {
     echo 'auction item unavailable';
     }
