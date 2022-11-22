@@ -6,11 +6,10 @@
   // Get info from the URL: 
   // item_id is also the auction id.
   $auctionID = $_GET['auctionID'];
-  $accountID = $_SESSION['accountID'];
-
-  // Check if the auctionID exists.
+  $has_session = $_SESSION['logged_in'];
   $res = mysqli_query($conn, "SELECT * FROM Auction WHERE auctionID = $auctionID");
-  if (mysqli_num_rows($res)>0) {
+  if (mysqli_num_rows($res)>0 ) {
+
       $created_date = (mysqli_query($conn, "SELECT createdDate  FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
       $current_bidder = (mysqli_query($conn, "SELECT currentBidder FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
       $auction_status = (mysqli_query($conn, "SELECT auctionStatus FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
@@ -28,20 +27,26 @@
         $time_to_end = date_diff($now, $end_time);
         $time_remaining = ' (in ' . display_time_remaining($time_to_end) . ')';
       }   
-      $has_session = $_SESSION['logged_in'];
-      $result = mysqli_query($conn,"SELECT *  FROM BuyerWatchAuction WHERE auction_auctionID =$auctionID and buyer_accountID=$accountID");
-      if (mysqli_num_rows($result)>0) {
-        $watching = true;
+
+      if ($has_session){
+        $accountID=$_SESSION['accountID'];
+        $result = mysqli_query($conn,"SELECT *  FROM BuyerWatchAuction WHERE auction_auctionID =$auctionID and buyer_accountID=$accountID");
+        if (mysqli_num_rows($result)>0) {
+          $watching = true;
+        }else{
+          $watching = false;
+        }
       }else{
         $watching = false;
       }
-
   }else {
-    echo "The auction does not exist, please check the auctionID";
-    $has_session = false;
     $watching = false;
-    header("refresh:3;url=browse.php");
+    if (mysqli_num_rows($res)==0){
+      echo "The auction does not exist, please check the auctionID";
+      header("refresh:3;url=browse.php");
+    }
   }
+
 
 ?>
 
@@ -56,7 +61,7 @@
 <?php
   /* The following watchlist functionality uses JavaScript, but could
      just as easily use PHP as in other places in the code */
-  if (mysqli_num_rows($res)>0 and $now < $end_time):
+  if (mysqli_num_rows($res)>0 &&  $now < $end_time && $has_session):
 ?>
     <div id="watch_nowatch" <?php if ($has_session && $watching) echo('style="display: none"');?> >
       <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addToWatchlist()">+ Add to watchlist</button>
@@ -65,7 +70,7 @@
       <button type="button" class="btn btn-success btn-sm" disabled>Watching</button>
       <button type="button" class="btn btn-danger btn-sm" onclick="removeFromWatchlist()">Remove watch</button>
     </div>
-<?php endif /* Print nothing otherwise */ ?>
+<?php endif ?>
   </div>
 </div>
 
@@ -85,13 +90,20 @@
   <div class="col-sm-4"> <!-- Right col with bidding info -->
 
     <p>
-<?php if (mysqli_num_rows($res)>0 and $now > $end_time): ?>
-     This auction ended <?php echo(date_format($end_time, 'j M H:i')) ?>
+<?php if (mysqli_num_rows($res)>0 and $now > $end_time ): ?>
+     This auction ended at  <b><?php echo(date_format($end_time, 'd/m/Y h:i:s A')) ?></b>
+  </br>Final Price £:  <b><?php echo($current_price) ?></b>
 <?php else: ?>
-    <?php if (mysqli_num_rows($res)>0 ): ?>
-      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
-      <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
+    <?php if (mysqli_num_rows($res)>0): ?>
+      The auction ends at <b><?php echo(date_format($end_time, 'd/m/Y h:i:s A') . $time_remaining) ?></b> </p>
+      
+      <?php if ($current_bidder == Null): ?>
+        <p class="lead">Starting Price: £<?php echo(number_format($current_price, 2)) ?></p>
+      <?php else: ?>
+        <p class="lead">Current bid: <b>£<?php echo(number_format($current_price, 2)) ?><b></p>
+      <?php endif ?>
 
+      <?php if ($has_session): ?>
       <!-- Bidding form -->
       <form method="POST" action="place_bid_result.php">
       <div class="input-group">
@@ -109,7 +121,7 @@
         </div>
         <button type="submit" class="btn btn-primary form-control">Place bid</button>
       </form>
-    <?php else: ?>
+      <?php endif ?>
     <?php endif ?>
 <?php endif ?>
 
