@@ -37,7 +37,7 @@ if (isset($_POST["submit"])) {
 // header("Location: create_auction.php?error=" . urlencode ($error)); 
 
 
-// client-side checks should stop invalid data inputs, but put in server-side checks just in case?
+// client-side checks should stop invalid data inputs, but do we have to put in server-side checks just in case?
 if (mb_strlen($auctionTitle) > 40) {
     function_alert_create_auction("Title is too long, please try again.");
     exit();
@@ -56,7 +56,7 @@ if (empty($auctionCategory)) {
     exit();
 } 
 
-if (empty($auctionStartPrice) || ctype_space($auctionStartPrice)) {
+if ($auctionStartPrice != 0 && empty($auctionStartPrice) || ctype_space($auctionStartPrice)) {
     function_alert_create_auction("Starting price is required, please try again.");
     exit();
 } elseif ($auctionStartPrice < 0) {

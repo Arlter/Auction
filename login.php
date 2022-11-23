@@ -4,8 +4,8 @@ include_once("header.php")?>
 
 <?php
 
-if(isset($_SESSION["reg_success"])) {
-  $success = $_SESSION["reg_success"];
+if($_GET["success"]) {
+  $success = $_GET["success"];
   echo
 
   "<div class='alert' style='background-color:lightgreen; color:black'>
@@ -13,7 +13,6 @@ if(isset($_SESSION["reg_success"])) {
   <h5><i class='icon fa fa-check'></i> $success</h5>
   </div>";
   
-unset($_SESSION["reg_success"]);
 }
 ?>
 
