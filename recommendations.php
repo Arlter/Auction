@@ -102,86 +102,28 @@
     -- drop entries with null in the cosine similarities column
     DELETE FROM similarity WHERE cosine_similarity IS NULL;
 
-    -- create procedure to get recommendations
-    DROP PROCEDURE IF EXISTS get_recommendations;
-
-    DELIMITER //
-    CREATE PROCEDURE get_recommendations()
-    BEGIN
-    IF (SELECT COUNT(*) FROM similarity) != 0 THEN
-      -- finds active auctions that the user is not currently participating in, that the other k most similar users are
-      DROP TEMPORARY TABLE IF EXISTS table_active_auctions;
-    
-      CREATE TEMPORARY TABLE table_active_auctions
-      SELECT auctionID
-      FROM auction
-      WHERE auctionStatus = 1;
+    if ($accountType == 'buyer') {
+      $stmt = mysqli_prepare($conn, "CALL collaborative_filtering(?);");
+      mysqli_stmt_bind_param($stmt, "s", $accountID);
+      mysqli_stmt_execute($stmt);
+      mysqli_stmt_bind_result($stmt, $auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
       
-      -- get k most similar users
-      DROP TEMPORARY TABLE IF EXISTS table_k_users;
-    
-      CREATE TEMPORARY TABLE table_k_users
-      SELECT buyer_accountID
-      FROM similarity ORDER BY similarity.cosine_similarity DESC LIMIT 5;
-    
-      -- get auctions that k most similar users have participated in
-      DROP TEMPORARY TABLE IF EXISTS table_k_users_auctions;
-    
-      CREATE TEMPORARY TABLE table_k_users_auctions
-      SELECT DISTINCT auction_auctionID
-      FROM bid
-      WHERE bid.buyer_accountID IN(SELECT * FROM table_k_users);
-    
-      -- get auctions that k most similar users have participated in, that our user has not participated in
-      DROP TEMPORARY TABLE IF EXISTS table_k_users_auctions_new;
-
-      CREATE TEMPORARY TABLE table_k_users_auctions_new
-      SELECT DISTINCT auction_auctionID
-      FROM table_k_users_auctions
-      WHERE auction_auctionID NOT IN(SELECT * FROM table_2);
-    
-      -- get auctions that k most similar users have participated in, that our user has not participated in, and that are active
-      DROP TEMPORARY TABLE IF EXISTS table_k_users_auctions_new_active;
-    
-      CREATE TEMPORARY TABLE table_k_users_auctions_new_active
-      SELECT auction_auctionID
-      FROM table_k_users_auctions_new
-      WHERE auction_auctionID IN(SELECT * FROM table_active_auctions);
-    
-      SELECT auctionID, itemName, itemDescription, currentPrice, endDate #missing num_bids
-      FROM auction
-      WHERE auctionID IN(SELECT * FROM table_k_users_auctions_new_active);
-    END IF;
-    END //
-    DELIMITER ;
-
-    -- call procedure and return results
-    CALL get_recommendations();";
-
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result)>0)
-    {
-      $array_of_auctions = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-      mysqli_free_result($result);
-
-      // mysqli_close($conn);
+      mysqli_stmt_fetch($stmt);
 
       // TODO: Loop through results and print them out as list items.
-      foreach($array_of_auctions as $row){
-        $num_bids = (mysqli_query($conn, 'SELECT COUNT(*) FROM bid WHERE auction_auctionID=' . $row['auctionID']) -> fetch_array(MYSQLI_NUM))[0];
-
-        print_listing_li($row['auctionID'], $row['itemName'], $row['itemDescription'], $row['currentPrice'], $num_bids, $row['endDate']);
-      };
-    }
-    else{
-      echo 'No results';
-    };
-  else {
-    echo 'You must be a buyer to get recommendations';
-  };
-  };
-};
+      if (($auctionID == NULL) or ($stmt == FALSE)){
+        echo 'No results. Try to bid on more auctions, wait for others to bid on auctions, or wait for new auctions to appear!';
+      } else{
+        print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
+        while (mysqli_stmt_fetch($stmt)){
+          print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
+        }
+      }
+      mysqli_stmt_close($stmt);
+    } else {
+      echo 'You must be a buyer to get recommendations';
+      }
+  }
 ?>
 </ul>
 
