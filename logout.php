@@ -1,7 +1,8 @@
 <?php
 include_once("header.php");
-unset($_SESSION['logged_in']);
 unset($_SESSION['accountType']);
+unset($_SESSION['accountID']);
+unset($_SESSION['emailAddress']);
 setcookie(session_name(), "", time() - 360);
 //session_destroy();
 $_SESSION['logged_in'] = 0;
