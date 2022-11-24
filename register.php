@@ -8,6 +8,7 @@
 ?>
 
 <?php 
+// shows connection error
 if($_GET["error"]) {
   $error = $_GET["error"];
   echo
@@ -23,14 +24,8 @@ if($_GET["error"]) {
 <!-- <h6 id="AccountRegHelp" class="form-text-inline text-muted" style="line-height:20px"><span class="text-danger">* All details are required.</span></h6> -->
 
 
-<!-- Note: this form is modified:
-- a lot of the inputs did not have a name 
-- user can keep form input field values before successful registration
-- separate alerts depending on input
--->
-
 <!-- Create auction form -->
-<form method="POST" action="process_registration.php">
+<form name="register" method="POST" action="process_registration.php">
   <div class="form-group row">
     <label for="accountType" class="col-sm-2 col-form-label text-right">Registering as a:</label>
 	<div class="col-sm-10">
@@ -42,7 +37,7 @@ if($_GET["error"]) {
         <input class="form-check-input" type="radio" style="height:15px; width:15px" name="accountType" id="accountSeller" value="seller">
         <label class="form-check-label" for="accountSeller">Seller</label>
       </div>
-      <small id="accountTypeHelp" class="form-text-inline text-muted"><span class="text-danger">* Required. One account can only have one role.</span></small>
+      <small id="accountTypeHelp" class="form-text-inline text-muted"><span class="text-danger">* Required.</span> One account can only have one role.</small>
 	</div>
   </div>
 
@@ -51,7 +46,7 @@ if($_GET["error"]) {
 	<div class="col-sm-10">
       <span id="check_username"></span>
       <input type="text" class="form-control" name="username" id="username" minlength="4" maxlength="20" placeholder="Username" oninput="check_username()" required>
-      <small id="usernameHelp" class="form-text text-muted"><span class="text-danger">* Required. Must be 4 to 20 characters long, contain only alphanumeric characters (A-Z, a-z, and 0-9), and contain no space.</span></small>
+      <small id="usernameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Must be 4 to 20 characters long, contain only alphanumeric characters (A-Z, a-z, and 0-9), and contain no space.</small>
   </div>
   </div>
 
@@ -59,18 +54,19 @@ if($_GET["error"]) {
     <label for="password" class="col-sm-2 col-form-label text-right">Password</label>
     <div class="col-sm-10">
       <span id="check_password"></span>
-      <input type="password" class="form-control" name="password" id="password" minlength="8" maxlength="20" placeholder="Password" oninput="check_password()" required>
+      <input type="password" class="form-control" name="password" id="password" minlength="8" maxlength="20" placeholder="Password" oninput="check_password(); confirm_password()" required>
+      <input type="checkbox" onclick="show_password()"> Show Password
       <small id="passwordHelp" class="form-text text-muted"><span class="text-danger">
-        * Required. Must be 8 to 20 characters long, contain at least 1 letter and 1 number, and contain no space. 
-        May contain any of these characters: !@#$%&</span></small>
+        * Required.</span> Must be 8 to 20 characters long, contain at least 1 letter and 1 number, and contain no space. 
+        May contain any of these characters: !@#$%&</small>
     </div>
   </div>
   <div class="form-group row">
     <label for="passwordConfirmation" class="col-sm-2 col-form-label text-right">Confirm password</label>
     <div class="col-sm-10">
       <span id="confirm_password"></span> <!-- FIXME: hide this input line if password is empty-->
-      <input type="password" class="form-control" name="passwordConfirmation" id="passwordConfirmation" placeholder="Enter password again" oninput="confirm_password()" required>
-      <small id="passwordConfirmationHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+      <input type="password" class="form-control" name="passwordConfirmation" id="passwordConfirmation" placeholder="Enter password again" oninput="confirm_password()" disabled required>
+      <small id="passwordConfirmationHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> You can only confirm your password if it is valid.</small>
     </div>
   </div>
 
@@ -102,8 +98,8 @@ if($_GET["error"]) {
     <label for="phoneNumber" class="col-sm-2 col-form-label text-right">International phone number</label>
     <div class="col-sm-10">
         <span id="check_phone"></span>
-        <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" maxlength="20" value="<?php echo $_SESSION["phoneNumber"];?>" placeholder="International phone number" oninput="check_phone()" required>
-        <small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Required. Please start with + sign (not 00) and country code.</span></small>
+        <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" maxlength="20" placeholder="International phone number" oninput="check_phone()" required>
+        <small id="phoneHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Please start with + sign (not 00) and country code.</small>
     </div>
   </div>
   <div style="text-align: center">
@@ -137,7 +133,7 @@ function check_username() {
 function check_password() {
   jQuery.ajax({
   url: "process_registration.php",
-  data: {user_password:$("#password").val()},
+  data: {password:$("#password").val()},
   type: "POST",
   success:function(data){
     $("#check_password").html(data);
@@ -151,9 +147,9 @@ function check_password() {
 function confirm_password() {
   jQuery.ajax({
   url: "process_registration.php",
-  data: {user_password_c:$("#password").val(), passwordConfirmation:$("#passwordConfirmation").val()},
+  data: {password_c:$("#password").val(), passwordConfirmation:$("#passwordConfirmation").val()},
   type: "POST",
-  success: function(data){
+  success:function(data){
     $("#confirm_password").html(data);
   },
   error: function (){}
@@ -173,4 +169,26 @@ function check_phone() {
   error: function (){}
   });
 }
+</script>
+
+<script>
+function show_password() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
+
+<!--reload page alert, except when form is being submitted-->
+<script>
+window.onbeforeunload = function() {
+  return "Data will be lost if you leave the page, are you sure?";
+};
+
+$(document).on("submit", "form", function(event){
+  window.onbeforeunload = null;
+});
 </script>

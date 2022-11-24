@@ -30,7 +30,8 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
         $_SESSION['emailAddress'] = $account['emailAddress'];
         $_SESSION["accountID"] = $account["accountID"];
         $_SESSION["logged_in_message"] = "Welcome, " . $account["accountUsername"] . ".";  // can also use firstName or lastName
-        
+        $_SESSION["accountUsername"] = $account["accountUsername"];
+
         if ($account["accountType"] == "buyer") {
             $_SESSION["accountType"] = "buyer";
         } else {

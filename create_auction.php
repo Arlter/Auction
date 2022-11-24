@@ -3,8 +3,8 @@ include_once("header.php")
 ?>
 
 <?php
-$now = new DateTime();
-$now = $now -> format("Y-m-d\TH:i");
+$now = new DateTime();  // for minimum auction end date
+$now = $now -> format("Y-m-d\TH:i");  // has to be in string format
 ?>
 
 <?php
@@ -15,7 +15,9 @@ $now = $now -> format("Y-m-d\TH:i");
 }
 ?>
 
+
 <?php
+// keeping this only for the connection error alert box?
 if($_GET["error"]) {
   $error = $_GET["error"];
   echo
@@ -24,7 +26,7 @@ if($_GET["error"]) {
   <h5><i class='icon fa fa-close'></i> Error</h5>$error
   </div>";
 }
-?>
+?>  
 
 <div class="container">
 
@@ -45,14 +47,22 @@ if($_GET["error"]) {
           <label for="auctionTitle" class="col-sm-2 col-form-label text-right">Title of auction</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" name="auctionTitle" id="auctionTitle" maxlength="40" placeholder="e.g. Black mountain bike" required>
-              <small id='titleHelp' class='form-text text-muted'><span class='text-danger'>* Required. 40 characters maximum.</span> A short description of the item you're selling, which will display in listings.</small>
+            <div id="title_char_count" align="right"> 
+              <span id="current_title_count" style="font-size:14px">0</span>
+              <span id="maximum_title_count" style="font-size:14px">/ 40</span>
+            </div>
+            <small id='titleHelp' class='form-text text-muted'><span class='text-danger'>* Required.</span> 40 characters maximum. A short description of the item you're selling, which will display in listings.</small>
           </div>
         </div>
         <div class="form-group row">
           <label for="auctionDetails" class="col-sm-2 col-form-label text-right">Details</label>
           <div class="col-sm-10">
-            <textarea class="form-control" name="auctionDetails" id="auctionDetails" maxlength="2000" rows="4" placeholder="Enter details here..."></textarea>
-            <small id="detailsHelp" class="form-text text-muted">250 characters maximum. Full details of the listing to help bidders decide if it's what they're looking for.</small>
+            <textarea class="form-control" name="auctionDetails" id="auctionDetails" maxlength="250" rows="4" placeholder="Enter details here..."></textarea>
+            <div id="desc_char_count" align="right"> 
+              <span id="current_desc_count" style="font-size:14px">0</span>
+              <span id="maximum_desc_count" style="font-size:14px">/ 250</span>
+            </div>
+            <small id="detailsHelp" class="form-text text-muted">Optional. 250 characters maximum. Full details of the listing to help bidders decide if it's what they're looking for.</small>
           </div>
         </div>
         <div class="form-group row">
@@ -113,3 +123,53 @@ if($_GET["error"]) {
 
 
 <?php include_once("footer.php")?>
+
+
+<!--reload page alert, except when form is being submitted-->
+<script>
+window.onbeforeunload = function() {
+  return "Data will be lost if you leave the page, are you sure?";
+};
+
+$(document).on("submit", "form", function(event){
+  window.onbeforeunload = null;
+});
+</script>
+
+<!--title character count-->
+<script>
+$("#auctionTitle").keyup(function() {
+    
+  var title_count = $(this).val().length,
+      current = $('#current_title_count'),
+      theCount = $('#title_char_count');
+    
+  current.text(title_count);
+
+  if (title_count == 40) {
+    theCount.css('color', 'red');
+  } else {
+    theCount.css('color', 'black');
+  }
+  });
+</script>
+
+<!--description character count-->
+<script>
+$('textarea').keyup(function() {
+    
+  var desc_count = $(this).val().length,
+      current = $('#current_desc_count'),
+      theCount = $('#desc_char_count');
+    
+  current.text(desc_count);
+
+  if (desc_count == 250) {
+    theCount.css('color', 'red');
+  } else {
+    theCount.css('color', 'black');
+  }
+  });
+</script>
+
+

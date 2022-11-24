@@ -72,30 +72,37 @@ if (!empty($_POST["username"])) {
 
 // ajax check_password
 // check: length longer than 8, no space, pattern match: at least one number and one letter, may contain !@#$%
-if (!empty($_POST["user_password"])) {
-    if (mb_strlen($_POST["user_password"]) < 8) {
+if (!empty($_POST["password"])) {
+    if (mb_strlen($_POST["password"]) < 8) {
         echo "<span style='color:red'>Password is too short, please try again.</span>";
         echo "<script>$('#submit').prop('disabled',true);</script>";
-    } elseif (!preg_match("/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%&]{8,20}$/", $_POST["user_password"])) {
+        echo '<script>document.getElementById("passwordConfirmation").disabled = true;</script>';
+    } elseif (!preg_match("/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%&]{8,20}$/", $_POST["password"])) {
         echo "<span style='color:red'>Invalid password format, please try again.</span>";
         echo "<script>$('#submit').prop('disabled',true);</script>";
+        echo '<script>document.getElementById("passwordConfirmation").disabled = true;</script>';
     } else {
         echo "<span style='color:green'>Valid password.</span>";
         echo "<script>$('#submit').prop('disabled',false);</script>";
+        echo '<script>document.getElementById("passwordConfirmation").disabled = false;</script>'; // can only confirm if password is valid
     }
 }
 
-// FIXME: bug: if password gets deleted validation stays up 
 // ajax confirm_password
-// check: password matches with password confirmation
-if (!empty($_POST["passwordConfirmation"]) && !empty($_POST["user_password_c"])) {
-    if ($_POST["user_password_c"] != $_POST["passwordConfirmation"]) {
-        echo "<span style='color:red'>The password confirmation does not match, please try again.</span>";
+//' check: password matches with password confirmation
+if (!empty($_POST["password_c"]) && !empty($_POST["passwordConfirmation"])) {
+    if ($_POST["password_c"] != $_POST["passwordConfirmation"]) {
+        echo "<span style='color:red'>Password confirmation does not match, please try again.</span>";
         echo "<script>$('#submit').prop('disabled',true);</script>";
-    } else {
+    } elseif ($_POST["password_c"] == $_POST["passwordConfirmation"]) {
         echo "<span style='color:green'>Password confirmed.</span>";
         echo "<script>$('#submit').prop('disabled',false);</script>";
+        echo '<script>document.getElementById("passwordConfirmation").disabled = true;</script>';
     }
+}
+
+if (empty($_POST["password_c"]) && !empty($_POST["passwordConfirmation"])) {
+    echo '<script>document.getElementById("passwordConfirmation").disabled = true;</script>'; 
 }
 
 // ajax phone validation
@@ -139,7 +146,6 @@ if (isset($_POST["submit"])) {
         function_alert_register($error);
     }
 } 
-
 
 
 // // check for empty input
