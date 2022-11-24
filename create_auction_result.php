@@ -2,6 +2,13 @@
 include_once("header.php")?>
 <?php require_once("utilities.php")?>
 
+<?php
+  // Prevent direct access
+  if (!isset($_POST["submit"]) ) {
+    header('Location: browse.php');
+  }
+?>
+
 <div class="container my-5">
 
 <?php
