@@ -36,9 +36,6 @@ unset($_SESSION["logged_in_message"]);
             </span>
           </div>
           <input name=keyword type="text" class="form-control border-left-0" id="keyword" placeholder="Search for anything">
-
-
-
         </div>
       </div>
     </div>
@@ -61,7 +58,7 @@ unset($_SESSION["logged_in_message"]);
     <div class="col-md-3 pr-0">
       <div class="form-inline">
         <label class="mx-2" for="order_by">Sort by:</label>
-        <select class="form-control" id="order_by">
+        <select class="form-control" id="order_by" name="order_by">
           <option selected value="pricelow">Price (low to high)</option>
           <option value="pricehigh">Price (high to low)</option>
           <option value="date">Soonest expiry</option>
@@ -81,27 +78,26 @@ unset($_SESSION["logged_in_message"]);
 <?php
   // Retrieve these from the URL
   if (!isset($_GET['keyword'])) {
-  // TODO: Define behavior if a keyword has not been specified.
-    $keyword = '';
+    $keyword = null;
   }
   else {
     $keyword = $_GET['keyword'];
   }
 
   if (!isset($_GET['cat'])) {
-    $category = 'All categories';
+    $category = null;
   }
   else {
     $category = $_GET['cat'];
   }
   
   if (!isset($_GET['order_by'])) {
-  // TODO: Define behavior if an order_by value has not been specified.
+    $ordering = null;
   }
   else {
     $ordering = $_GET['order_by'];
+
   }
-  
   if (!isset($_GET['page'])) {
     $curr_page = 1;
   }
@@ -134,14 +130,25 @@ unset($_SESSION["logged_in_message"]);
   /* TODO: Use above values to construct a query. Use this query to 
      retrieve data from the database. (If there is no form data entered,
      decide on appropriate default value/default query to make. */
-  $search = "SELECT * FROM auction WHERE itemName LIKE '%$keyword%' OR itemDescription LIKE '%$keyword%'";
+  
+  $query = "SELECT * FROM auction WHERE (itemName LIKE '%$keyword%' OR itemDescription LIKE '%$keyword%')";
 
-  if($category != "All categories"){
-    $query.= "AND category = '$category'";
+  if($category!='All'){
+    $query.=" AND (categoryName LIKE '%$category%')";
   }
- 
-  $res = mysqli_query($conn, $search);
+  if($ordering=='pricelow'){
+    $query.=" ORDER BY currentPrice ASC";
+  }
+  else if($ordering=='pricehigh'){
+    $query.=" ORDER BY currentPrice DESC";
+  }
+  else if($ordering=='date'){
+    $query.=" ORDER BY endDate ASC";
+  }
+
+  $res = mysqli_query($conn, $query);
   $count = mysqli_num_rows($res);
+
   if ($count > 0){
     while($row=mysqli_fetch_assoc($res)){
       $auctionID = $row['auctionID'];
@@ -150,6 +157,7 @@ unset($_SESSION["logged_in_message"]);
       $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM bid where auction_auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
       $current_price = $row['currentPrice'];
       $end_date = $row['endDate'];
+      
       print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
     }
   } 
