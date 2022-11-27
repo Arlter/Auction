@@ -87,8 +87,14 @@
   <div class="col-sm-8"> <!-- Left col with item info -->
 
     <div class="itemDescription">
+    <style>
+      div {
+        word-wrap: break-word;
+      }
+    </style>
     <?php if (mysqli_num_rows($res)>0) echo($description);?>
     </div>
+
 
     <div class="history">
     <?php if (mysqli_num_rows($res)>0) {print_listing_li_history($auctionID, $title, $num_bids, $history);}?>

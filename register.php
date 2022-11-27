@@ -9,7 +9,7 @@
 
 <?php 
 // shows connection error
-if($_GET["error"]) {
+if(isset($_GET["error"])) {
   $error = $_GET["error"];
   echo
   "<div class='alert' style='background-color:pink; color:black'>
@@ -18,6 +18,7 @@ if($_GET["error"]) {
   </div>";
 }
 ?>
+
 
 <div class="container">
 <h2 class="my-3">Register new account</h2>
