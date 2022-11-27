@@ -1,6 +1,5 @@
-<?php require_once "connection.php"?>
-
 <?php ob_start();session_start();?>
+<?php require_once "connection.php"?>
 
 <!doctype html>
 <html lang="en">
@@ -23,7 +22,7 @@
 
 <!-- Navbars -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light mx-2">
-  <a class="navbar-brand" href="browse.php">ɔ:kʃn <! --CHANGEME!--></a>
+  <a class="navbar-brand" href="browse.php">ɔ:kʃn </a>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
     
@@ -75,6 +74,8 @@
       <a class="nav-link btn border-light" href="create_auction.php">+ Create auction</a>
     </li>');
   }
+
+  ob_flush();
 ?>
 </ul>
 </nav>
