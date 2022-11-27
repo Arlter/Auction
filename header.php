@@ -1,6 +1,5 @@
 <?php ob_start();session_start();?>
 <?php require_once "connection.php"?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,16 +15,12 @@
 
   <title>Auction </title>
 </head>
-
-
 <body>
-
 <!-- Navbars -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light mx-2">
   <a class="navbar-brand" href="browse.php">ɔ:kʃn </a>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-    
 <?php
   // Displays either login or logout on the right, depending on user's
   // current status (session).
@@ -46,15 +41,14 @@
       </li>');
     }
 ?>
-
-    </li>
+</li>
   </ul>
 </nav>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <ul class="navbar-nav align-middle">
 	<li class="nav-item mx-1">
       <a class="nav-link" href="browse.php">Browse</a>
-    </li>
+</li>
 <?php
   if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true && isset($_SESSION['accountType']) && $_SESSION['accountType'] == 'buyer') {
   echo('
@@ -74,7 +68,6 @@
       <a class="nav-link btn border-light" href="create_auction.php">+ Create auction</a>
     </li>');
   }
-
   ob_flush();
 ?>
 </ul>
