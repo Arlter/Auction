@@ -3,7 +3,7 @@
 if( count(get_included_files()) == ((version_compare(PHP_VERSION, '5.0.0', '>='))?1:0) )
 {
   echo "Direct access not allowed and you will be redirected shortly.";
-  header("refresh:3;url=browse.php");
+  header("refresh:3;url=https://auction-php.azurewebsites.net/browse.php");
 }
 ?>
 
@@ -13,7 +13,7 @@ if( count(get_included_files()) == ((version_compare(PHP_VERSION, '5.0.0', '>=')
     $host_address='erte.mysql.database.azure.com';
     $username='kien';
     $password='kien!ucl1';
-    $dbname='auction';
+    $dbname='auction_online';
 
     $conn = mysqli_init();
     mysqli_ssl_set($conn,NULL,NULL, "DigiCertGlobalRootCA.crt.pem", NULL, NULL);
