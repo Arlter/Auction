@@ -51,14 +51,15 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
         echo('<div class="text-center" style="margin-top:50px">Login error, please try again. You will be redirected shortly.</div>');
         exit();  
     }
+    header("refresh:2;url=https://www.google.com/");
+    echo  $_SESSION['emailAddress'];
+    echo $_SESSION["accountID"];
     echo('<div class="text-center" style="margin-top:50px">You are now logged in! You will be redirected shortly.</div>');
-    echo "<script>
-    window.location = 'https://auction-php.azurewebsites.net/browse.php';
-    </script>";
     exit();  
 } else {
     header("refresh:2;url=login.php");
     echo('<div class="text-center" style="margin-top:50px">Invalid username or password. You will be redirected shortly.</div>');
     exit();  
 }
+
 ?>
