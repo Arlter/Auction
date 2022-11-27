@@ -4,7 +4,7 @@ include_once("header.php")?>
 
 <?php
 
-if($_GET["success"]) {
+if(isset($_GET["success"])) {
   $success = $_GET["success"];
   echo
 
