@@ -75,6 +75,6 @@
     </li>');
   }
 ?>
-  </ul>
+</ul>
 </nav>
 </div> <!-- End modal -->

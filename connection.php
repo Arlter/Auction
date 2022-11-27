@@ -6,9 +6,6 @@ if( count(get_included_files()) == ((version_compare(PHP_VERSION, '5.0.0', '>=')
   header("refresh:3;url=https://auction-php.azurewebsites.net/browse.php");
 }
 ?>
-
-
-
 <?php
     $host_address='erte.mysql.database.azure.com';
     $username='kien';
