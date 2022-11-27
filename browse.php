@@ -143,7 +143,7 @@ unset($_SESSION["logged_in_message"]);
     $query.=" ORDER BY currentPrice DESC";
   }
   else if($ordering=='date'){
-    $query.=" ORDER BY endDate ASC";
+    $query.=" AND (now() < endDate) ORDER BY endDate ASC";
   }
   $results_per_page = 5;
 
