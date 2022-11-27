@@ -113,7 +113,7 @@ if($_GET["error"]) {
 
 <?php include_once("footer.php")?>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  <!-- FIXME: test 3.6.1 later-->
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
 <script>
 function check_username() {
