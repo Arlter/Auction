@@ -51,7 +51,7 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
         echo('<div class="text-center" style="margin-top:50px">Login error, please try again. You will be redirected shortly.</div>');
         exit();  
     }
-    header("refresh:2;url=index.php");
+    header("Location: browse.php");
     echo('<div class="text-center" style="margin-top:50px">You are now logged in! You will be redirected shortly.</div>');
 } else {
     header("refresh:2;url=login.php");
