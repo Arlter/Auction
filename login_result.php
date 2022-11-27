@@ -50,7 +50,7 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
         echo('<div class="text-center" style="margin-top:50px">Login error, please try again. You will be redirected shortly.</div>');
         exit();  
     }
-    header("Location: https://auction-php.azurewebsites.net/browse.php");
+    header("Location: https://178auction.azurewebsites.net/browse.php");
     echo('<div class="text-center" style="margin-top:50px">You are now logged in! You will be redirected shortly.</div>');
     exit();  
 } else {
