@@ -54,7 +54,7 @@ if (password_verify($pass, $hash)) {  // returns true if the password and hash m
     // echo "<script>
     // window.location.href = 'https://auction-php.azurewebsites.net/browse.php';
     // </script>";
-    header("Location:https://auction-php.azurewebsites.net/browse.php");
+    header("location:https://auction-php.azurewebsites.net/browse.php");
     echo('<div class="text-center" style="margin-top:50px">You are now logged in! You will be redirected shortly.</div>');
     exit();  
 } else {
