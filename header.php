@@ -1,6 +1,5 @@
 <?php require_once "connection.php"?>
-
-<?php session_start();?>
+<?php session_start()?>
 
 <!doctype html>
 <html lang="en">
@@ -23,7 +22,7 @@
 
 <!-- Navbars -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light mx-2">
-  <a class="navbar-brand" href="#">ɔ:kʃn <! --CHANGEME!--></a>
+  <a class="navbar-brand" href="browse.php">ɔ:kʃn <! --CHANGEME!--></a>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
     
@@ -31,8 +30,11 @@
   // Displays either login or logout on the right, depending on user's
   // current status (session).
   if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
-    echo "<link rel='stylesheet' type='text/css' href='.//css/custom.css' />";
-    echo '<a class="button" style="vertical-align:middle" href="logout.php"><span>logout</span></a>';
+    echo "<link rel='stylesheet' type='text/css' href='.//css/custom.css'/>";
+    echo '<span style="display:inline-block; margin-right:16px; font-size:14px">Username: ' . $_SESSION["accountUsername"] . '</span>';
+    echo '<span style="display:inline-block; margin-right:16px; font-size:14px">Account ID: ' . $_SESSION["accountID"] . '</span>';
+    echo '<span style="display:inline-block; margin-right:16px; font-size:14px">Account type: ' . $_SESSION["accountType"] . '</span>';
+    echo '<a class="button" style="vertical-align:middle" href="logout.php"><span>Logout</span></a>';
   }
   else {
     // Avoid the case when logged_in is not declared initially.
