@@ -3,7 +3,7 @@
 if( count(get_included_files()) == ((version_compare(PHP_VERSION, '5.0.0', '>='))?1:0) )
 {
   echo "Direct access not allowed and you will be redirected shortly.";
-  header("refresh:3;url=https://auction-php.azurewebsites.net/browse.php");
+  header("refresh:3;url=https://178auction.azurewebsites.net/browse.php");
 }
 ?>
 <?php
