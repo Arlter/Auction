@@ -145,22 +145,42 @@ unset($_SESSION["logged_in_message"]);
   else if($ordering=='date'){
     $query.=" ORDER BY endDate ASC";
   }
+  $results_per_page = 5;
 
   $res = mysqli_query($conn, $query);
   $count = mysqli_num_rows($res);
-
-  if ($count > 0){
-    while($row=mysqli_fetch_assoc($res)){
-      $auctionID = $row['auctionID'];
-      $title = $row['itemName'];
-      $description = $row['itemDescription'];
-      $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM bid where auction_auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
-      $current_price = $row['currentPrice'];
-      $end_date = $row['endDate'];
+  $num_results = (mysqli_num_rows($res)); 
+  $max_page = ceil($num_results / $results_per_page);
+  $rows = $res->fetch_all(MYSQLI_NUM);
+  if ($num_results > 0){
+    if ($curr_page<$max_page){
+      for ($x = ($curr_page-1)*$results_per_page; $x<$curr_page*$results_per_page; $x++){
+        $row = $rows[$x];
+        $auctionID = $row[0];
+        $title = (mysqli_query($conn, "SELECT itemName FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $description = (mysqli_query($conn, "SELECT itemDescription FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM bid where auction_auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $current_price = (mysqli_query($conn, "SELECT currentPrice FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $end_date = (mysqli_query($conn, "SELECT endDate FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        
+        print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
+      }
+    } else{
+    for ($x = ($curr_page-1)*$results_per_page;$x<$num_results;$x++){
+      $row = $rows[$x];
+        $auctionID = $row[0];
+        $title = (mysqli_query($conn, "SELECT itemName FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $description = (mysqli_query($conn, "SELECT itemDescription FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM bid where auction_auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $current_price = (mysqli_query($conn, "SELECT currentPrice FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $end_date = (mysqli_query($conn, "SELECT endDate FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        
+        print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
       
       print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
+      }
     }
-  } 
+    }
   else {
     echo 'No item found';
     }
