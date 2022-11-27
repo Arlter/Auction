@@ -68,7 +68,6 @@
       <a class="nav-link btn border-light" href="create_auction.php">+ Create auction</a>
     </li>');
   }
-  ob_flush();
 ?>
 </ul>
 </nav>

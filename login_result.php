@@ -1,6 +1,5 @@
 <?php
 //Go on to header.php. Under Login should send request to login_result.php
-
 include_once("header.php");
 require_once("connection.php");
 ?>
