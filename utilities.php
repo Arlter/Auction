@@ -26,8 +26,8 @@ function display_time_remaining($interval) {
 function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time)
 {
   // Truncate long descriptions
-  if (strlen($desc) > 120) {
-    $desc_shortened = substr($desc, 0, 120) . '...';
+  if (strlen($desc) > 110) {
+    $desc_shortened = substr($desc, 0, 110) . '...';
   }
   else {
     $desc_shortened = $desc;
@@ -45,12 +45,12 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time)
   $now = new DateTime();
   $end_time = new DateTime($end_time);
   if ($now > $end_time) {
-    $time_remaining = 'This auction has ended';
+    $time_remaining = '&nbsp&nbspThis auction has ended&nbsp&nbsp&nbsp';
   }
   else {
     // Get interval:
     $time_to_end = date_diff($now, $end_time);
-    $time_remaining = display_time_remaining($time_to_end) . ' remaining';
+    $time_remaining = display_time_remaining($time_to_end) . ' left until the end';
   }
   
   // Print HTML
@@ -66,8 +66,8 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time)
 function print_listing_li_bids($item_id, $title, $desc, $price, $end_time,$created_date)
 {
   // Truncate long descriptions
-    if (strlen($desc) > 250) {
-      $desc_shortened = substr($desc, 0, 250) . '...';
+    if (strlen($desc) > 110) {
+      $desc_shortened = substr($desc, 0, 110) . '...';
     }
     else {
       $desc_shortened = $desc;
@@ -76,12 +76,12 @@ function print_listing_li_bids($item_id, $title, $desc, $price, $end_time,$creat
     $now = new DateTime();
     $end_time = new DateTime($end_time);
     if ($now > $end_time) {
-      $time_remaining = 'This auction has ended';
+      $time_remaining = '&nbsp&nbsp&nbsp&nbspThis auction has ended&nbsp&nbsp&nbsp';
     }
     else {
       // Get interval:
       $time_to_end = date_diff($now, $end_time);
-      $time_remaining = display_time_remaining($time_to_end) . ' remaining until the end';
+      $time_remaining = display_time_remaining($time_to_end) . ' left until the end';
     }
     
     // Print HTML
