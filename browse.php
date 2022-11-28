@@ -44,15 +44,18 @@ unset($_SESSION["logged_in_message"]);
         <label for="cat" class="sr-only">Search within:</label>
         <?php
         // Select category from database
+        $category = $_GET['cat'];
         $query = "SELECT * FROM category";
         $result = mysqli_query($conn, $query);
-        echo '<select name ="cat" class="form-control" id="cat">';
-        echo '<option value="All">All categories</option>';
-        while ($row=mysqli_fetch_array($result)){
-          echo '<option value="' . $row['categoryName'] . '">' . $row['categoryName'] . '</option>';
-        }
-        echo '</select>';
-        ?> 
+        ?>
+        <select name ="cat" class="form-control" id="cat">
+        <option value="All">All categories</option>
+        <?php while ($row=mysqli_fetch_array($result)){ ?>
+          <option <?php if ($row['categoryName']==$category) { ?>selected ="selected"<?php } ?>>
+            <?php echo ($row['categoryName']); ?>
+          </option>
+       <?php } ?>  
+      </select>
       </div>
     </div>
     <div class="col-md-3 pr-0">
