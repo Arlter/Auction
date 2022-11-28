@@ -176,8 +176,6 @@ unset($_SESSION["logged_in_message"]);
         $end_date = (mysqli_query($conn, "SELECT endDate FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
         
         print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
-      
-      print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
       }
     }
     }
