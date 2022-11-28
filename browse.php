@@ -44,7 +44,12 @@ unset($_SESSION["logged_in_message"]);
         <label for="cat" class="sr-only">Search within:</label>
         <?php
         // Select category from database
-        $category = $_GET['cat'];
+        if (isset($_GET['cat'])){
+          $category = $_GET['cat'];
+        }else{
+          $category = "All categories";
+        }
+
         $query = "SELECT * FROM category";
         $result = mysqli_query($conn, $query);
         ?>
