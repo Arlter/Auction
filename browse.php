@@ -44,15 +44,23 @@ unset($_SESSION["logged_in_message"]);
         <label for="cat" class="sr-only">Search within:</label>
         <?php
         // Select category from database
+        if (isset($_GET['cat'])){
+          $category = $_GET['cat'];
+        }else{
+          $category = "All categories";
+        }
+
         $query = "SELECT * FROM category";
         $result = mysqli_query($conn, $query);
-        echo '<select name ="cat" class="form-control" id="cat">';
-        echo '<option value="All">All categories</option>';
-        while ($row=mysqli_fetch_array($result)){
-          echo '<option value="' . $row['categoryName'] . '">' . $row['categoryName'] . '</option>';
-        }
-        echo '</select>';
-        ?> 
+        ?>
+        <select name ="cat" class="form-control" id="cat">
+        <option value="All">All categories</option>
+        <?php while ($row=mysqli_fetch_array($result)){ ?>
+          <option <?php if ($row['categoryName']==$category) { ?>selected ="selected"<?php } ?>>
+            <?php echo ($row['categoryName']); ?>
+          </option>
+       <?php } ?>  
+      </select>
       </div>
     </div>
     <div class="col-md-3 pr-0">
@@ -176,8 +184,6 @@ unset($_SESSION["logged_in_message"]);
         $end_date = (mysqli_query($conn, "SELECT endDate FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
         
         print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
-      
-      print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
       }
     }
     }
