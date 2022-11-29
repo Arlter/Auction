@@ -65,7 +65,7 @@ delimiter $$
 CREATE TRIGGER  Auction_bid_audit Before INSERT ON Bid 
 	FOR EACH ROW
 	BEGIN
-		IF EXISTS (SELECT * FROM Auction WHERE auctionID=new.auction_auctionID and currentPrice<new.bidPrice) OR EXISTS (SELECT * FROM Auction WHERE auctionID=new.auction_auctionID and (new.bidPrice-currentPrice)<0.001 and startingPrice=currentPrice )  THEN
+		IF EXISTS (SELECT * FROM Auction WHERE auctionID=new.auction_auctionID and currentPrice<new.bidPrice) OR EXISTS (SELECT * FROM Auction WHERE auctionID=new.auction_auctionID and new.bidPrice=currentPrice and startingPrice=currentPrice )  THEN
 			UPDATE Auction SET currentPrice = new.bidPrice, currentBidder= new.buyer_accountID WHERE auctionID= new.auction_auctionID;
 		ELSE
 			SIGNAL SQLSTATE '45OO0' SET MESSAGE_TEXT = 'The submitted bid price is lower than the current bid price. Please try another';

@@ -44,8 +44,7 @@ if(mysqli_num_rows($hashresult) == 1) {
             echo('<div class="text-center" style="margin-top:50px">Login error, please try again. You will be redirected shortly.</div>');
             exit();  
         }
-        header("refresh:2;url=index.php");
-        echo('<div class="text-center" style="margin-top:50px">You are now logged in! You will be redirected shortly.</div>');
+        header("Location: browse.php");
     } else {
         header("refresh:2;url=login.php");
         echo('<div class="text-center" style="margin-top:50px">Invalid username or password. You will be redirected shortly.</div>');
