@@ -108,7 +108,7 @@
 <?php if (mysqli_num_rows($res)>0 and $now > $end_time  ): ?>
      This auction ended at  <b><?php echo(date_format($end_time, 'd/m/Y h:i:s A')) ?></b>
      <?php if ($current_bidder != Null): ?>
-  <br>Successful auction with the final bid £:  <b><?php echo($current_price) ?></b>
+  <br>Successful auction with the final bid: £  <b><?php echo($current_price) ?></b>
     <?php else: ?>
   <br>Abortive auction with no bids
     <?php endif ?>
