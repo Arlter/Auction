@@ -203,6 +203,7 @@ unset($_SESSION["logged_in_message"]);
     }
   else {
     echo 'No item found';
+    $flag = 1;
     }
 ?>
 </ul>
@@ -226,7 +227,7 @@ unset($_SESSION["logged_in_message"]);
   $low_page = max(1, $curr_page - 2 - $low_page_boost);
   $high_page = min($max_page, $curr_page + 2 + $high_page_boost);
   
-  if ($curr_page != 1) {
+  if ($curr_page != 1 && !isset($flag) ) {
     echo('
     <li class="page-item">
       <a class="page-link" href="browse.php?' . $querystring . 'page=' . ($curr_page - 1) . '" aria-label="Previous">
@@ -254,7 +255,7 @@ unset($_SESSION["logged_in_message"]);
     </li>');
   }
   
-  if ($curr_page != $max_page) {
+  if ($curr_page != $max_page && !isset($flag)) {
     echo('
     <li class="page-item">
       <a class="page-link" href="browse.php?' . $querystring . 'page=' . ($curr_page + 1) . '" aria-label="Next">
