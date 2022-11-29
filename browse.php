@@ -35,7 +35,15 @@ unset($_SESSION["logged_in_message"]);
               <i class="fa fa-search"></i>
             </span>
           </div>
-          <input name=keyword type="text" class="form-control border-left-0" id="keyword" placeholder="Search for anything">
+          <?php
+          if (!isset($_GET['keyword'])) {
+            $keyword = null;
+          }
+          else {
+            $keyword = $_GET['keyword'];
+          }
+          ?>
+          <input name=keyword type="text" class="form-control border-left-0" id="keyword" placeholder="Search for anything" value="<?php echo $keyword;?>">
         </div>
       </div>
     </div>
