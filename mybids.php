@@ -1,7 +1,12 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
 <?php include_once("connection.php")?>
-
+<?php
+  // Prevent user from direct entering
+  if ($_SESSION['logged_in'] == false || (isset($_SESSION['accountType']) and $_SESSION['accountType']=='seller') ) {
+    header('Location: browse.php');
+  }
+?>
 
 <div class="container">
 <h2 class="my-3">My Bids</h2>
