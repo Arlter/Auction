@@ -47,7 +47,7 @@ unset($_SESSION["logged_in_message"]);
         if (isset($_GET['cat'])){
           $category = $_GET['cat'];
         }else{
-          $category = "All categories";
+          $category = 'All';
         }
 
         $query = "SELECT * FROM category";
@@ -66,10 +66,17 @@ unset($_SESSION["logged_in_message"]);
     <div class="col-md-3 pr-0">
       <div class="form-inline">
         <label class="mx-2" for="order_by">Sort by:</label>
-        <select class="form-control" id="order_by" name="order_by">
-          <option selected value="pricelow">Price (low to high)</option>
-          <option value="pricehigh">Price (high to low)</option>
-          <option value="date">Soonest expiry</option>
+        <?php
+        if (!isset($_GET['order_by'])) {
+          $ordering = 'pricelow';
+        }else {
+          $ordering = $_GET['order_by'];
+        }
+        ?>
+        <select name="order_by" class="form-control" id="order_by" >
+          <option value ="pricelow" <?php if ($ordering=='pricelow') { ?>selected = "selected"<?php } ?>> Price (low to high) </option>
+          <option value ="pricehigh" <?php if ($ordering=='pricehigh') { ?>selected = "selected"<?php } ?>> Price (high to low) </option>
+          <option value ="date" <?php if ($ordering=='date') { ?>selected = "selected"<?php } ?>> Soonest expiry </option>
         </select>
       </div>
     </div>
@@ -93,14 +100,14 @@ unset($_SESSION["logged_in_message"]);
   }
 
   if (!isset($_GET['cat'])) {
-    $category = null;
+    $category = 'All';
   }
   else {
     $category = $_GET['cat'];
   }
   
   if (!isset($_GET['order_by'])) {
-    $ordering = null;
+    $ordering = 'pricelow';
   }
   else {
     $ordering = $_GET['order_by'];
