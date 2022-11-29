@@ -156,7 +156,6 @@ unset($_SESSION["logged_in_message"]);
   $results_per_page = 5;
 
   $res = mysqli_query($conn, $query);
-  $count = mysqli_num_rows($res);
   $num_results = (mysqli_num_rows($res)); 
   $max_page = ceil($num_results / $results_per_page);
   $rows = $res->fetch_all(MYSQLI_NUM);
