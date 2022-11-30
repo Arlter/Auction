@@ -168,11 +168,12 @@ if (isset($_POST["submit"])) {
     VALUES ('$accountUsername', '$hash', '$accountType', '$firstName', '$lastName', '$email', '$phoneNumber')";
     if (mysqli_query($conn, $query)) {
         mysqli_close($conn);  // put this here?
-        $success_message = "Account created successfully!";
         unset($_SESSION['check_array']);
+        $success_message = "Account created successfully!";
         function_success_register($success_message);
     } else {
     // echo "Error: " . $query . "<br>" . mysqli_error($conn);
+        unset($_SESSION['check_array']);
         $error = "Connection error, please try again later.";
         function_alert_register($error);
     }
