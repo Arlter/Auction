@@ -1,13 +1,15 @@
+
 <?php
 
 // TODO: Extract $_POST variables, check they're OK, and attempt to create
 // an account. Notify user of success/failure and redirect/give navigation 
 // options.
 
-// session_start();
+session_start();
 
 require_once "connection.php";  // using local db for testing for now
 require_once "utilities.php";
+
 
 /////////////////////////////////////////////////////
 
@@ -43,7 +45,6 @@ if (!$conn) {
     exit();
 }
 
-
 // Input validiation
 // what is the best structure/hierarchy?
 // current hierarchy is according to order below
@@ -56,17 +57,25 @@ if (!empty($_POST["username"])) {
     $result_username = mysqli_query($conn, $query_username);
     $row = mysqli_num_rows($result_username);
     if (mb_strlen($_POST["username"]) < 4) {
+        $_SESSION['check_array']["username_check"]=false;
         echo "<span style='color:red'>Username is too short, please try again.</span>";
+        echo "<script>document.writeln(p1);</script>";
         echo "<script>$('#submit').prop('disabled',true);</script>";
     } elseif (strpos($_POST["username"], ' ') != false || !ctype_alnum($_POST["username"])) {
+        $_SESSION['check_array']["username_check"]=false;
         echo "<span style='color:red'>Invalid username format, please try again.</span>";
         echo "<script>$('#submit').prop('disabled',true);</script>";
     } elseif ($row > 0) {
+        $_SESSION['check_array']["username_check"]=false;
         echo "<span style='color:red'>Username already exists, please try a different username.</span>";
         echo "<script>$('#submit').prop('disabled',true);</script>";
     } else {
+        $_SESSION['check_array']["username_check"]=true;
         echo "<span style='color:green'>Username is available.</span>";
-        echo "<script>$('#submit').prop('disabled',false);</script>";
+        if(in_array(false, $_SESSION['check_array'], true) === false){
+            echo "<script>$('#submit').prop('disabled',false);</script>";
+        }
+
     }
 }
 
@@ -74,17 +83,20 @@ if (!empty($_POST["username"])) {
 // check: length longer than 8, no space, pattern match: at least one number and one letter, may contain !@#$%
 if (!empty($_POST["password"])) {
     if (mb_strlen($_POST["password"]) < 8) {
+        $_SESSION['check_array']["password_check"]=false;
         echo "<span style='color:red'>Password is too short, please try again.</span>";
         echo "<script>$('#submit').prop('disabled',true);</script>";
-        echo '<script>document.getElementById("passwordConfirmation").disabled = true;</script>';
     } elseif (!preg_match("/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%&]{8,20}$/", $_POST["password"])) {
+        $_SESSION['check_array']["password_check"]=false;
         echo "<span style='color:red'>Invalid password format, please try again.</span>";
         echo "<script>$('#submit').prop('disabled',true);</script>";
-        echo '<script>document.getElementById("passwordConfirmation").disabled = true;</script>';
     } else {
+        $_SESSION['check_array']["password_check"]=true;
         echo "<span style='color:green'>Valid password.</span>";
-        echo "<script>$('#submit').prop('disabled',false);</script>";
-        echo '<script>document.getElementById("passwordConfirmation").disabled = false;</script>'; // can only confirm if password is valid
+        if(in_array(false, $_SESSION['check_array'], true) === false){
+            echo "<script>$('#submit').prop('disabled',false);</script>";
+        }
+       
     }
 }
 
@@ -92,28 +104,45 @@ if (!empty($_POST["password"])) {
 //' check: password matches with password confirmation
 if (!empty($_POST["password_c"]) && !empty($_POST["passwordConfirmation"])) {
     if ($_POST["password_c"] != $_POST["passwordConfirmation"]) {
+        $_SESSION['check_array']["confirmpassword_check"]=false;
         echo "<span style='color:red'>Password confirmation does not match, please try again.</span>";
         echo "<script>$('#submit').prop('disabled',true);</script>";
     } elseif ($_POST["password_c"] == $_POST["passwordConfirmation"]) {
+        $_SESSION['check_array']["confirmpassword_check"]=true;
         echo "<span style='color:green'>Password confirmed.</span>";
-        echo "<script>$('#submit').prop('disabled',false);</script>";
-        echo '<script>document.getElementById("passwordConfirmation").disabled = true;</script>';
+        if(in_array(false, $_SESSION['check_array'], true) === false){
+            echo "<script>$('#submit').prop('disabled',false);</script>";
+        }
     }
 }
 
-if (empty($_POST["password_c"]) && !empty($_POST["passwordConfirmation"])) {
-    echo '<script>document.getElementById("passwordConfirmation").disabled = true;</script>'; 
+if (!empty($_POST["email"])) {
+    if (!strpos($_POST["email"], '@') || !strpos($_POST["email"], '.') ) {
+        $_SESSION['check_array']["email_check"]=false;
+        echo "<span style='color:red'>Invalid email, please try again.</span>";
+        echo "<script>$('#submit').prop('disabled',true);</script>";
+    } else {
+        $_SESSION['check_array']["email_check"]=true;
+        echo "<span style='color:green'>Valid email format.</span>";
+        if(in_array(false, $_SESSION['check_array'], true) === false){
+            echo "<script>$('#submit').prop('disabled',false);</script>";
+        }
+    }
 }
+
 
 // ajax phone validation
 // check: pattern match, starts with +,
 if (!empty($_POST["phone"])) {
     if (!preg_match("/^[+][(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/", $_POST["phone"])) {
+        $_SESSION['check_array']["phone_check"]=false;
         echo "<span style='color:red'>Invalid phone number format, please try again.</span>";
-        echo "<script>$('#submit').prop('disabled',true);</script>";
     } else {
+        $_SESSION['check_array']["phone_check"]=true;
         echo "<span style='color:green'>Valid phone number format.</span>";
-        echo "<script>$('#submit').prop('disabled',false);</script>";
+        if(in_array(false, $_SESSION['check_array'], true) === false){
+            echo "<script>$('#submit').prop('disabled',false);</script>";
+        }
     }
 }
 
@@ -139,6 +168,7 @@ if (isset($_POST["submit"])) {
     if (mysqli_query($conn, $query)) {
         mysqli_close($conn);  // put this here?
         $success_message = "Account created successfully!";
+        unset($_SESSION['check_array']);
         function_success_register($success_message);
     } else {
     // echo "Error: " . $query . "<br>" . mysqli_error($conn);
@@ -146,107 +176,4 @@ if (isset($_POST["submit"])) {
         function_alert_register($error);
     }
 } 
-
-
-// // check for empty input
-// if (empty($accountUsername) || empty($accountPassword) || empty($passwordConfirmation) || empty($firstName) ||
-// empty($lastName) || empty($email) || empty($phoneNumber) || ctype_space($firstName) || ctype_space($lastName)) {
-//     $error = "Please fill in all the required details.";
-//     function_alert_register($error);
-//     exit();
-// }
-// // Question: separate checks for each input, or group them into one statement?
-
-
-// // Username validation - 4 to 20 characters long, no whitespace, does not exist in database
-// // Question: other extra validation? legal characters?
-
-// $result = mysqli_query($conn, "SELECT accountUsername FROM Account WHERE accountUsername = '$username'");
-
-// if (mb_strlen($accountUsername) > 20 || mb_strlen($accountUsername) < 4 || 
-// strpos($accountUsername, ' ') != false || !ctype_alnum($accountUsername) || ctype_space($accountUsername)) {
-//     unset($_SESSION["username"]); 
-//     $error = "Invalid username format, please try again.";
-
-//     // error message ver1: javascript alert pop up --> redirect to register.php
-//     // echo "<script type='text/javascript'>alert('$error');</script>";  // popup box
-//     // how to change "localhost says"?
-
-//     // error message ver2: HTML alert message box and sessions
-//     // see code in register.php
-//     header("Location: create_auction.php?error=" . urlencode ($error)); 
-//     exit();
-// } elseif (mysqli_num_rows($result) > 0) {  // query finds same username in database
-//     unset($_SESSION["username"]); 
-//     $error = "Username already exists, please try again.";
-//     header("Location: register.php?error=" . urlencode ($error));
-//     exit(); 
-// } 
-// // no need to exit if input is valid 
-
-
-// // Password validation - must be 8 to 20 characters long, no space
-// // Question: other extra validation? legal characters?
-// if (mb_strlen($accountPassword) > 20 || mb_strlen($accountPassword) < 8 || 
-// strpos($accountPassword, ' ') != false || !preg_match("/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{8,20}$/", $accountPassword)) {
-//     function_alert_register("Invalid password format, please try again.");
-//     exit();
-// }
-
-// // Password confirmation - password == retyped-password
-// if ($accountPassword != $passwordConfirmation) {
-//     function_alert_register("The password confirmation does not match, please try again.");
-//     exit();  
-// }
-
-// // Hash password to protect it, save hash to database instead of the actual password
-// // See tutorial 4
-// // Verify using password_verify ($accountPassword, $hash) function
-// $hash = password_hash($accountPassword, PASSWORD_DEFAULT);  // requires VARCHAR(60) in database
-
-
-// // Question: First name and last name validations necessary? Requirements?
-
-// // FIXME: add length validation for firstname, lastname, email, phone
-
-// // Email validation -- can only validate format for now
-// $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-// if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-//     unset($_SESSION["email"]); 
-//     function_alert_register("Invalid email format, please try again.");
-//     exit();   
-// }
-// // Question: extra: email confirmation? lol
-
-// // Phone format validation - start with + sign
-// if (!preg_match("/^[+][(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/", $phoneNumber)) {
-//     unset($_SESSION["phoneNumber"]); 
-//     function_alert_register("Invalid phone format, please try again.");
-//     exit(); 
-// }
-
-// test connection by inserting data directly
-// $query = "INSERT INTO Account (accountUsername,accountPassword,accountType,firstName,lastName,emailAddress,phoneNumber)
-// VALUES ('acc5','12345678','seller','John','Doe','123@abc.com','+3333333333')";
-// if (mysqli_query($conn, $query)) {
-//     echo "New record created successfully";
-// } else {
-//     echo "Error: " . $query . "<br>" . mysqli_error($conn);
-// }
-
-
-// // Create an account!
-
-// $query = "INSERT INTO Account (accountUsername, accountPassword, accountType, firstName,lastName, emailAddress, phoneNumber)
-// VALUES ('$accountUsername', '$hash', '$accountType', '$firstName', '$lastName', '$email', '$phoneNumber')";
-// if (mysqli_query($conn, $query)) {
-//     mysqli_close($conn);  // put this here?
-//     $success_message = "Account created successfully!";
-//     function_success_register($success_message);
-// } else {
-//    // echo "Error: " . $query . "<br>" . mysqli_error($conn);
-//     $error = "Connection error, please try again later.";
-//     function_alert_register($error);
-// }
-
 ?>
