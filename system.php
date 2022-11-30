@@ -3,13 +3,13 @@
 <?php 
 
 
-$data_arr = mysqli_query($conn, "SELECT endDate,auctionID FROM AUCTION WHERE auctionStatus=TRUE and  endDate<=NOW() ORDER BY endDate ASC;");
+$data_arr = mysqli_query($conn, "SELECT endDate,auctionID FROM AUCTION WHERE outcomeNotificationStatus=TRUE and  endDate<=NOW() ORDER BY endDate ASC;");
 if (isset($data_arr)){
     while( $row = $data_arr -> fetch_array(MYSQLI_NUM)){
         $end_time = $row[0];
         $auction_id = $row[1];
         $auction_url =  "<a href ='https://178auction.azurewebsites.net/listing.php?auctionID=".$auction_id."'</a> See More Details";
-        mysqli_query($conn, "UPDATE AUCTION SET auctionStatus=FALSE WHERE auctionID=$auction_id");
+        mysqli_query($conn, "UPDATE AUCTION SET outcomeNotificationStatus=FALSE WHERE auctionID=$auction_id");
         $result = mysqli_query($conn,"SELECT * FROM AUCTION WHERE auctionID=$auction_id and currentBidder IS NOT NULL and currentPrice >= reservePrice")-> fetch_array(MYSQLI_NUM);
         if (isset($result)){
             $final_price = (mysqli_query($conn, "SELECT currentPrice FROM Auction WHERE auctionID =$auction_id") -> fetch_array(MYSQLI_NUM))[0];

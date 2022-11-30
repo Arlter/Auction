@@ -20,7 +20,6 @@
 
       $created_date = (mysqli_query($conn, "SELECT createdDate  FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
       $current_bidder = (mysqli_query($conn, "SELECT currentBidder FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
-      $auction_status = (mysqli_query($conn, "SELECT auctionStatus FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
       $title = (mysqli_query($conn, "SELECT itemName FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
       $description = (mysqli_query($conn, "SELECT itemDescription FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
       $current_price = (mysqli_query($conn, "SELECT currentPrice FROM Auction WHERE auctionID =$auctionID ") -> fetch_array(MYSQLI_NUM))[0];
