@@ -137,6 +137,7 @@ if (!empty($_POST["phone"])) {
     if (!preg_match("/^[+][(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/", $_POST["phone"])) {
         $_SESSION['check_array']["phone_check"]=false;
         echo "<span style='color:red'>Invalid phone number format, please try again.</span>";
+        echo "<script>$('#submit').prop('disabled',true);</script>";
     } else {
         $_SESSION['check_array']["phone_check"]=true;
         echo "<span style='color:green'>Valid phone number format.</span>";
