@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS Auction (
 	endDate TIMESTAMP NOT NULL,
 	currentPrice DECIMAL(10,2) DEFAULT 0 NOT NULL,
 	currentBidder INT, 
-	auctionStatus BOOLEAN NOT NULL DEFAULT TRUE,	
+	outcomeNotificationStatus BOOLEAN NOT NULL DEFAULT TRUE,	
 	PRIMARY KEY(auctionID),
 	FOREIGN KEY(seller_accountID) REFERENCES Account(accountID) ON UPDATE CASCADE,
 	FOREIGN KEY(categoryName) REFERENCES Category(categoryName) ON UPDATE CASCADE
@@ -184,7 +184,7 @@ IF (SELECT COUNT(*) FROM similarity) != 0 THEN
 	CREATE TEMPORARY TABLE table_active_auctions
 	SELECT auctionID
 	FROM auction
-	WHERE auctionStatus = 1;
+	WHERE outcomeNotificationStatus = 1;
     
 	-- get k most similar users
 	DROP TEMPORARY TABLE IF EXISTS table_k_users;
