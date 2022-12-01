@@ -127,6 +127,9 @@ INSERT INTO Bid VALUES
 (DEFAULT,100000000,101.00,10000000,'2022-11-09 02:30:20')
 ;
 
+
+
+
 -- create procedure that calculates and inputs cosine similarities into the relevant table created
 DROP PROCEDURE IF EXISTS get_similarities;
 
@@ -138,38 +141,41 @@ DECLARE done INT DEFAULT FALSE;
 DECLARE my_cursor CURSOR FOR SELECT buyer_accountID FROM similarity WHERE buyer_accountID != recommendations_accountID;
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 OPEN my_cursor;
-IF (SELECT COUNT(buyer_accountID) FROM similarity) != 0 THEN
-	FETCH NEXT FROM my_cursor INTO buyer_h;
-    
-    WHILE (NOT done) DO
-    IF ((SELECT COUNT(*) FROM table_2) != 0) AND (SELECT COUNT(table_1.auction_auctionID) FROM table_1 WHERE buyer_accountID = buyer_h) != 0
-	THEN
-	BEGIN
-		DROP TEMPORARY TABLE IF EXISTS buyer_h_auctions;
-        
-        CREATE TEMPORARY TABLE buyer_h_auctions
-        SELECT DISTINCT auction_auctionID AS buyer_h_auctionID
-        FROM table_1
-        WHERE buyer_accountID = buyer_h;
-        
-		DROP TEMPORARY TABLE IF EXISTS intersect_auctions;
-        
-        CREATE TEMPORARY TABLE intersect_auctions
-        SELECT buyer_h_auctionID FROM buyer_h_auctions
-        WHERE buyer_h_auctionID IN(SELECT * FROM table_2);
-        
-		INSERT INTO similarity VALUES(buyer_h,
-        (SELECT COUNT(*) FROM intersect_auctions) /(((SELECT SQRT(COUNT(*)) FROM table_2))*(SELECT SQRT(COUNT(*)) FROM buyer_h_auctions)) );
-	END;
-	FETCH NEXT FROM my_cursor INTO buyer_h;
-    END IF;
-    END WHILE;
+	get_similarity: LOOP
+		FETCH NEXT FROM my_cursor INTO buyer_h;
+        IF done = TRUE THEN
+			LEAVE get_similarity;
+		END IF;
+		
+		IF ((SELECT COUNT(*) FROM table_2) != 0) AND ((SELECT COUNT(table_1.auction_auctionID) FROM table_1 WHERE buyer_accountID = buyer_h) != 0)
+		THEN
+			BEGIN
+				DROP TEMPORARY TABLE IF EXISTS buyer_h_auctions;
+				
+				CREATE TEMPORARY TABLE buyer_h_auctions
+				SELECT DISTINCT auction_auctionID AS buyer_h_auctionID
+				FROM table_1
+				WHERE buyer_accountID = buyer_h;
+				
+				DROP TEMPORARY TABLE IF EXISTS intersect_auctions;
+				
+				CREATE TEMPORARY TABLE intersect_auctions
+				SELECT buyer_h_auctionID FROM buyer_h_auctions
+				WHERE buyer_h_auctionID IN(SELECT * FROM table_2);
+				
+				INSERT INTO similarity VALUES(buyer_h,
+				(SELECT COUNT(*) FROM intersect_auctions) /(((SELECT SQRT(COUNT(*)) FROM table_2))*(SELECT SQRT(COUNT(*)) FROM buyer_h_auctions)) );
+			END;
+		END IF;
+        SET done = FALSE;
+	END LOOP;
 	
 CLOSE my_cursor;
-#deallocate my_cursor;
-END IF;
 END $$
 DELIMITER ;
+
+
+
 
 -- create procedure to get recommendations
 DROP PROCEDURE IF EXISTS get_recommendations;
@@ -177,30 +183,29 @@ DROP PROCEDURE IF EXISTS get_recommendations;
 DELIMITER //
 CREATE PROCEDURE get_recommendations()
 BEGIN
-IF (SELECT COUNT(*) FROM similarity) != 0 THEN
-	-- finds active auctions that the user is not currently participating in, that the other k most similar users are
+	-- get active auctions
 	DROP TEMPORARY TABLE IF EXISTS table_active_auctions;
-	
+
 	CREATE TEMPORARY TABLE table_active_auctions
 	SELECT auctionID
 	FROM auction
-	WHERE outcomeNotificationStatus = 1;
-    
+	WHERE outcomeNotificationStatus = TRUE;
+	
 	-- get k most similar users
 	DROP TEMPORARY TABLE IF EXISTS table_k_users;
-	
+
 	CREATE TEMPORARY TABLE table_k_users
 	SELECT buyer_accountID
 	FROM similarity ORDER BY similarity.cosine_similarity DESC LIMIT 5;
-	
+
 	-- get auctions that k most similar users have participated in
 	DROP TEMPORARY TABLE IF EXISTS table_k_users_auctions;
-	
+
 	CREATE TEMPORARY TABLE table_k_users_auctions
 	SELECT DISTINCT auction_auctionID
 	FROM bid
 	WHERE bid.buyer_accountID IN(SELECT * FROM table_k_users);
-	
+
 	-- get auctions that k most similar users have participated in, that our user has not participated in
 	DROP TEMPORARY TABLE IF EXISTS table_k_users_auctions_new;
 
@@ -208,73 +213,93 @@ IF (SELECT COUNT(*) FROM similarity) != 0 THEN
 	SELECT DISTINCT auction_auctionID
 	FROM table_k_users_auctions
 	WHERE auction_auctionID NOT IN(SELECT * FROM table_2);
-	
+
 	-- get auctions that k most similar users have participated in, that our user has not participated in, and that are active
 	DROP TEMPORARY TABLE IF EXISTS table_k_users_auctions_new_active;
-	
+
 	CREATE TEMPORARY TABLE table_k_users_auctions_new_active
 	SELECT auction_auctionID
 	FROM table_k_users_auctions_new
 	WHERE auction_auctionID IN(SELECT * FROM table_active_auctions);
-    
-END IF;
+
 END //
 DELIMITER ;
+
+
+
 
 -- create procedure to get recommendations
 DROP PROCEDURE IF EXISTS collaborative_filtering;
 DELIMITER //
 CREATE PROCEDURE collaborative_filtering(recommendations_accountID_1 INT)
 BEGIN
--- creates a table showing unique auction ID, buyer account ID pairs
-DROP TEMPORARY TABLE IF EXISTS table_1;
+	-- creates a table showing unique auction ID, buyer account ID pairs
+	DROP TEMPORARY TABLE IF EXISTS table_1;
 
-CREATE TEMPORARY TABLE table_1
-SELECT DISTINCT auction_auctionID, buyer_accountID
-FROM bid;
+	CREATE TEMPORARY TABLE table_1
+	SELECT DISTINCT auction_auctionID, buyer_accountID
+	FROM bid;
 
--- creates a table of all auction IDs that the user is involved in
-DROP TEMPORARY TABLE IF EXISTS table_2;
+	-- creates a table of all auction IDs that the user is involved in
+	DROP TEMPORARY TABLE IF EXISTS table_2;
 
-CREATE TEMPORARY TABLE table_2
-SELECT auction_auctionID
-FROM table_1
-WHERE buyer_accountID = recommendations_accountID_1;
+	CREATE TEMPORARY TABLE table_2
+	SELECT auction_auctionID
+	FROM table_1
+	WHERE buyer_accountID = recommendations_accountID_1;
 
--- create table to store cosine similarities with other users
-DROP TEMPORARY TABLE IF EXISTS similarity;
+	-- create table to store cosine similarities with other users
+	DROP TEMPORARY TABLE IF EXISTS similarity;
 
-CREATE TEMPORARY TABLE similarity
-SELECT DISTINCT buyer_accountID
-FROM bid
-WHERE buyer_accountID != recommendations_accountID_1;
+	CREATE TEMPORARY TABLE similarity
+	SELECT DISTINCT buyer_accountID
+	FROM bid
+	WHERE buyer_accountID != recommendations_accountID_1;
 
-ALTER TABLE similarity ADD cosine_similarity FLOAT(10);
+	ALTER TABLE similarity ADD cosine_similarity FLOAT(10);
 
--- call procedure REQUIRES THE BUYER'S ACCOUNT ID AS INPUT
-CALL get_similarities(recommendations_accountID_1);
+	-- call procedure REQUIRES THE BUYER'S ACCOUNT ID AS INPUT
+	CALL get_similarities(recommendations_accountID_1);
 
--- drop entries with null in the cosine similarities column
-DELETE FROM similarity WHERE cosine_similarity IS NULL;
+	-- drop entries with null in the cosine similarities column
+	DELETE FROM similarity WHERE cosine_similarity IS NULL;
 
--- call procedure and return results
-CALL get_recommendations();
+	IF (SELECT COUNT(*) FROM similarity) != 0
+	THEN
+	-- call procedure and return results
+		CALL get_recommendations();
+		
+		DROP TEMPORARY TABLE IF EXISTS num_bid_auctions;
+		CREATE TEMPORARY TABLE num_bids_auctions
+		SELECT auction_auctionID, COUNT(*) AS num_bids
+		FROM bid
+		GROUP BY auction_auctionID;
+				
+		DROP TEMPORARY TABLE IF EXISTS res;
+		CREATE TEMPORARY TABLE res
+		SELECT auctionID, itemName, itemDescription, currentPrice, endDate 
+		FROM auction WHERE auctionID IN(SELECT auction_auctionID FROM table_k_users_auctions_new_active);
 
-CREATE TEMPORARY TABLE num_bids_auctions
-SELECT auction_auctionID, COUNT(*) AS num_bids
-FROM bid
-GROUP BY auction_auctionID;
+		ALTER TABLE res ADD num_bids INT AFTER currentPrice;
 
-CREATE TEMPORARY TABLE res
-SELECT auctionID, itemName, itemDescription, currentPrice, endDate 
-FROM auction WHERE auctionID IN(SELECT auction_auctionID FROM table_k_users_auctions_new_active);
-
-ALTER TABLE res ADD num_bids INT AFTER currentPrice;
-
-SELECT res.auctionID, res.itemName, res.itemDescription, res.currentPrice, num_bids_auctions.num_bids, res.endDate
-FROM res
-INNER JOIN num_bids_auctions
-ON res.auctionID = num_bids_auctions.auction_auctionID;
+		SELECT res.auctionID, res.itemName, res.itemDescription, res.currentPrice, num_bids_auctions.num_bids, res.endDate
+		FROM res
+		INNER JOIN num_bids_auctions
+		ON res.auctionID = num_bids_auctions.auction_auctionID;
+	ELSE
+		-- (included just to be safe) return empty table with same number of cols to return expected number of arguments for php
+		DROP TEMPORARY TABLE IF EXISTS res;
+		CREATE TEMPORARY TABLE IF NOT EXISTS res (
+			auctionID INT, 
+			itemName VARCHAR(40),
+			itemDescription VARCHAR(2000),
+			currentPrice DECIMAL(10,2),
+			num_bids INT,
+			endDate TIMESTAMP, 
+			PRIMARY KEY(auctionID)
+		);
+		SELECT * FROM res;
+	END IF;
 
 END //
 DELIMITER ;
