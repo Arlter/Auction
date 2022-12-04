@@ -18,13 +18,13 @@
   $res = mysqli_query($conn, "SELECT * FROM Auction WHERE auctionID = $auctionID");
   if (mysqli_num_rows($res)>0 ) {
 
-      $created_date = (mysqli_query($conn, "SELECT createdDate  FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
-      $current_bidder = (mysqli_query($conn, "SELECT currentBidder FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
-      $title = (mysqli_query($conn, "SELECT itemName FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
-      $description = (mysqli_query($conn, "SELECT itemDescription FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
-      $current_price = (mysqli_query($conn, "SELECT currentPrice FROM Auction WHERE auctionID =$auctionID ") -> fetch_array(MYSQLI_NUM))[0];
+      $row_res = ($res-> fetch_array(MYSQLI_NUM));
+      $current_bidder = $row_res[10];
+      $title =  $row_res[1];
+      $description = $row_res[2];
+      $current_price = $row_res[9];
       $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0];
-      $end_time = (mysqli_query($conn, "SELECT endDate FROM Auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM))[0];
+      $end_time = $row_res[8];
       $history = (mysqli_query($conn, "SELECT bidTime,buyer_accountID,bidPrice FROM Bid WHERE auction_auctionID =$auctionID ORDER BY bidTime desc"));    
       // Calculate time to auction end:
       $now = new DateTime();
