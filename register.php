@@ -5,6 +5,15 @@
   if ($_SESSION['logged_in'] == true) {
     header('Location: browse.php');
   }
+
+  $_SESSION['check_array'] = array(
+    "username_check" => false,
+    "password_check" => false,
+    "confirmpassword_check" => false,
+    "email_check" => false,
+    "phone_check" => false
+  );
+
 ?>
 
 <?php 
@@ -66,7 +75,7 @@ if(isset($_GET["error"])) {
     <label for="passwordConfirmation" class="col-sm-2 col-form-label text-right">Confirm password</label>
     <div class="col-sm-10">
       <span id="confirm_password"></span> <!-- FIXME: hide this input line if password is empty-->
-      <input type="password" class="form-control" name="passwordConfirmation" id="passwordConfirmation" placeholder="Enter password again" oninput="confirm_password()" disabled required>
+      <input type="password" class="form-control" name="passwordConfirmation" id="passwordConfirmation" placeholder="Enter password again" oninput="confirm_password()"  >
       <small id="passwordConfirmationHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> You can only confirm your password if it is valid.</small>
     </div>
   </div>
@@ -74,23 +83,22 @@ if(isset($_GET["error"])) {
   <div class="form-group row">
     <label for="fisrtName" class="col-sm-2 col-form-label text-right">First name</label>
 	  <div class="col-sm-10">
-      <input type="text" class="form-control" name="firstName" id="firstName" maxlength="20" placeholder="First name" required>
-      <small id="firstnameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+      <input type="text" class="form-control" name="firstName" id="firstName" maxlength="20" placeholder="First name" >
     </div>
   </div>
 
   <div class="form-group row">
     <label for="lastName" class="col-sm-2 col-form-label text-right">Last name</label>
 	  <div class="col-sm-10">
-      <input type="text" class="form-control" name="lastName" id="lastName" maxlength="20" placeholder="Last name" required>
-      <small id="lastnameHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
+      <input type="text" class="form-control" name="lastName" id="lastName" maxlength="20" placeholder="Last name" >
     </div>
   </div>
 
   <div class="form-group row">
     <label for="email" class="col-sm-2 col-form-label text-right">Email</label>
 	<div class="col-sm-10">
-      <input type="email" class="form-control" name="email" id="email" maxlength="50" placeholder="Email" required>
+      <span id="check_email"></span>
+      <input type="email" class="form-control" name="email" id="email" maxlength="50" placeholder="Email" oninput="check_email()" required>
       <small id="emailHelp" class="form-text text-muted"><span class="text-danger">* Required.</span></small>
 	</div>
   </div>
@@ -104,7 +112,7 @@ if(isset($_GET["error"])) {
     </div>
   </div>
   <div style="text-align: center">
-    <button type="submit" name="submit" id="submit" class="btn btn-primary form-control" style="margin-bottom: 20px; width:200px">Register</button>
+    <button type="submit" name="submit" id="submit" class="btn btn-primary form-control" style="margin-bottom: 20px; width:200px" disabled>Register</button>
   </div>
 </form>
 
@@ -117,6 +125,7 @@ if(isset($_GET["error"])) {
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
 <script>
+
 function check_username() {
   jQuery.ajax({
   url: "process_registration.php",
@@ -128,9 +137,7 @@ function check_username() {
   error:function (){}
   });
 }
-</script>
 
-<script>
 function check_password() {
   jQuery.ajax({
   url: "process_registration.php",
@@ -142,9 +149,21 @@ function check_password() {
   error: function (){}
   });
 }
-</script>
 
-<script>
+
+function check_password() {
+  jQuery.ajax({
+  url: "process_registration.php",
+  data: {password:$("#password").val()},
+  type: "POST",
+  success:function(data){
+    $("#check_password").html(data);
+  },
+  error: function (){}
+  });
+}
+
+
 function confirm_password() {
   jQuery.ajax({
   url: "process_registration.php",
@@ -156,9 +175,19 @@ function confirm_password() {
   error: function (){}
   });
 }
-</script>
 
-<script>
+function check_email() {
+  jQuery.ajax({
+  url: "process_registration.php",
+  data: {email:$("#email").val()},
+  type: "POST",
+  success:function(data){
+    $("#check_email").html(data);
+  },
+  error: function (){}
+  });
+}
+
 function check_phone() {
   jQuery.ajax({
   url: "process_registration.php",
@@ -170,9 +199,7 @@ function check_phone() {
   error: function (){}
   });
 }
-</script>
 
-<script>
 function show_password() {
   var x = document.getElementById("password");
   if (x.type === "password") {
