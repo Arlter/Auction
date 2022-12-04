@@ -123,3 +123,79 @@ INSERT INTO Bid VALUES
 (DEFAULT,100000002,4.00,10000000,'2022-11-09 02:30:20'),
 (DEFAULT,100000000,101.00,10000000,'2022-11-09 02:30:20')
 ;
+
+-- create procedure to get recommendations
+DROP PROCEDURE IF EXISTS collaborative_filtering;
+DELIMITER //
+CREATE PROCEDURE collaborative_filtering(recommendations_accountID_1 INT)
+BEGIN
+	-- creates a table showing unique auction ID, buyer account ID pairs
+	DROP TEMPORARY TABLE IF EXISTS table_1;
+
+	CREATE TEMPORARY TABLE table_1
+	SELECT DISTINCT auction_auctionID, buyer_accountID
+	FROM bid;
+
+	-- creates a table of all auction IDs that the user is involved in
+	DROP TEMPORARY TABLE IF EXISTS table_2;
+
+	CREATE TEMPORARY TABLE table_2
+	SELECT auction_auctionID
+	FROM table_1
+	WHERE buyer_accountID = recommendations_accountID_1;
+
+	-- create table to store cosine similarities with other users
+	DROP TEMPORARY TABLE IF EXISTS similarity;
+
+	CREATE TEMPORARY TABLE similarity
+	SELECT DISTINCT buyer_accountID
+	FROM bid
+	WHERE buyer_accountID != recommendations_accountID_1;
+
+	ALTER TABLE similarity ADD cosine_similarity FLOAT(10);
+
+	-- call procedure REQUIRES THE BUYER'S ACCOUNT ID AS INPUT
+	CALL get_similarities(recommendations_accountID_1);
+
+	-- drop entries with null in the cosine similarities column
+	DELETE FROM similarity WHERE cosine_similarity IS NULL;
+
+	IF (SELECT COUNT(*) FROM similarity) != 0
+	THEN
+	-- call procedure and return results
+		CALL get_recommendations();
+		
+		DROP TEMPORARY TABLE IF EXISTS num_bid_auctions;
+		CREATE TEMPORARY TABLE num_bids_auctions
+		SELECT auction_auctionID, COUNT(*) AS num_bids
+		FROM bid
+		GROUP BY auction_auctionID;
+				
+		DROP TEMPORARY TABLE IF EXISTS res;
+		CREATE TEMPORARY TABLE res
+		SELECT auctionID, itemName, itemDescription, currentPrice, endDate 
+		FROM auction WHERE auctionID IN(SELECT auction_auctionID FROM table_k_users_auctions_new_active);
+
+		ALTER TABLE res ADD num_bids INT AFTER currentPrice;
+
+		SELECT res.auctionID, res.itemName, res.itemDescription, res.currentPrice, num_bids_auctions.num_bids, res.endDate
+		FROM res
+		INNER JOIN num_bids_auctions
+		ON res.auctionID = num_bids_auctions.auction_auctionID;
+	ELSE
+		-- (included just to be safe) return empty table with same number of cols to return expected number of arguments for php
+		DROP TEMPORARY TABLE IF EXISTS res;
+		CREATE TEMPORARY TABLE IF NOT EXISTS res (
+			auctionID INT, 
+			itemName VARCHAR(40),
+			itemDescription VARCHAR(2000),
+			currentPrice DECIMAL(10,2),
+			num_bids INT,
+			endDate TIMESTAMP, 
+			PRIMARY KEY(auctionID)
+		);
+		SELECT * FROM res;
+	END IF;
+
+END //
+DELIMITER ;
