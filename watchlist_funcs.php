@@ -8,7 +8,7 @@ $item_id = $_POST['arguments'];
 $accountID = $_SESSION['accountID'];
 
 if ($_POST['functionname'] == "add_to_watchlist") {
-  // TODO: Update database and return success/failure.
+
   $result = mysqli_query($conn, "SELECT * FROM BuyerWatchAuction WHERE auction_auctionID = $item_id and buyer_accountID=$accountID")-> fetch_array(MYSQLI_NUM);
   if (isset($result))
     {
@@ -20,7 +20,7 @@ if ($_POST['functionname'] == "add_to_watchlist") {
       $res= "success";
   }
 }else if ($_POST['functionname'] == "remove_from_watchlist") {
-  // TODO: Update database and return success/failure.
+
   $result = mysqli_query($conn, "SELECT * FROM BuyerWatchAuction WHERE auction_auctionID = $item_id and buyer_accountID=$accountID")-> fetch_array(MYSQLI_NUM);
   if (!isset($result))
     {

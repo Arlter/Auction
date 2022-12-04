@@ -17,36 +17,50 @@
   // TODO: Check user's credentials (cookie/session).
   // connection
   
-  if(!$conn){
-		die("Connection error: " . mysqli_connect_error());
-	}
-  else {
-    $accountID = $_SESSION['accountID'];
-    $accountType = $_SESSION['accountType'];
+  $accountType = $_SESSION['accountType'];
+  if ($accountType != 'buyer') {
+    header('Location: browse.php');
+  } else {
+    $result = mysqli_query($conn, "SELECT COUNT(auctionID) FROM auction WHERE outcomeNotificationStatus = 1");
+    $count_active_auctions = mysqli_fetch_row($result)[0];
+    
+    if ($count_active_auctions == 0){
+      echo 'No active auctions at the moment. Please wait for new auctions to be created.';
+    } else {
+    
+      $accountID = $_SESSION['accountID'];
 
-    // TODO: Perform a query to pull up auctions they might be interested in.
-
-    if ($accountType == 'buyer') {
-      $stmt = mysqli_prepare($conn, "CALL collaborative_filtering(?);");
+      $stmt = mysqli_prepare($conn, "SELECT COUNT(*) FROM bid WHERE buyer_accountID = ?;");
       mysqli_stmt_bind_param($stmt, "s", $accountID);
       mysqli_stmt_execute($stmt);
-      mysqli_stmt_bind_result($stmt, $auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
-      
+      mysqli_stmt_bind_result($stmt, $count_bids);
+
       mysqli_stmt_fetch($stmt);
 
-      // TODO: Loop through results and print them out as list items.
-      if (($auctionID == NULL) or ($stmt == FALSE)){
-        echo 'No results. Try to bid on more auctions, wait for others to bid on auctions, or wait for new auctions to appear!';
-      } else{
-        print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
-        while (mysqli_stmt_fetch($stmt)){
+      if ($count_bids == 0){
+        echo 'No results. You have made no bids and so we cannot provide you recommendations based on your bidding history. Bid on some auctions first!';
+      } else {
+        mysqli_stmt_close($stmt);
+        $stmt = mysqli_prepare($conn, "CALL collaborative_filtering(?);");
+        mysqli_stmt_bind_param($stmt, "s", $accountID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
+    
+        mysqli_stmt_fetch($stmt);
+
+        // TODO: Loop through results and print them out as list items.
+        // TODO: Perform a query to pull up auctions they might be interested in.
+        if (($auctionID == NULL) or ($stmt == FALSE)){
+          echo 'No results. Please wait for the other users who are sufficiently similar to you to bid on auctions!';
+        } else{
           print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
+          while (mysqli_stmt_fetch($stmt)){
+            print_listing_li($auctionID, $itemName, $itemDescription, $currentPrice, $num_bids, $endDate);
+          }
         }
+        mysqli_stmt_close($stmt);
       }
-      mysqli_stmt_close($stmt);
-    } else {
-      echo 'You must be a buyer to get recommendations';
-      }
+    }
   }
 ?>
 </ul>

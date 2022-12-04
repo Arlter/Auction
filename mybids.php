@@ -1,6 +1,7 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
 <?php include_once("connection.php")?>
+
 <?php
   // Prevent user from direct entering
   if ($_SESSION['logged_in'] == false || (isset($_SESSION['accountType']) and $_SESSION['accountType']=='seller') ) {
@@ -32,26 +33,30 @@
       if ($curr_page<$max_page){
         for ($x = ($curr_page-1)*$results_per_page; $x<$curr_page*$results_per_page; $x++){
           $row = $rows[$x];
-          $bid_id= $row[0]; // Inside while loop
-          $auc_id= (mysqli_query($conn, "SELECT auction_auctionID FROM Bid WHERE bidID =$bid_id") -> fetch_array(MYSQLI_NUM))[0];
-          $title = (mysqli_query($conn, "SELECT itemName FROM Auction WHERE auctionID =$auc_id") -> fetch_array(MYSQLI_NUM))[0];
-          $description = (mysqli_query($conn, "SELECT itemDescription FROM Auction WHERE auctionID =$auc_id") -> fetch_array(MYSQLI_NUM))[0];
-          $bid_price = (mysqli_query($conn, "SELECT bidPrice FROM Bid WHERE bidID= $bid_id ") -> fetch_array(MYSQLI_NUM))[0];
-          $end_date = (mysqli_query($conn, "SELECT endDate FROM Auction WHERE auctionID =$auc_id") -> fetch_array(MYSQLI_NUM))[0];
-          $created_date = (mysqli_query($conn, "SELECT bidTime FROM Bid WHERE bidID= $bid_id ") -> fetch_array(MYSQLI_NUM))[0];
+          $bid_id= $row[0]; 
+          $bid_result_row = mysqli_query($conn, "SELECT * FROM Bid WHERE bidID =$bid_id") -> fetch_array(MYSQLI_NUM);
+          $auc_id = $bid_result_row[1];
+          $bid_price = $bid_result_row[2];
+          $created_date = $bid_result_row[4];
+          $auction_result_row = mysqli_query($conn, "SELECT itemName,itemDescription,endDate FROM Auction WHERE auctionID =$auc_id") -> fetch_array(MYSQLI_NUM);
+          $title = $auction_result_row[0];
+          $description = $auction_result_row[1];
+          $end_date = $auction_result_row[2] ;
           print_listing_li_bids($auc_id, $title, $description, $bid_price,$end_date,$created_date);
         }
       }
       else{
         for ($x = ($curr_page-1)*$results_per_page;$x<$num_results;$x++){
           $row = $rows[$x];
-          $bid_id= $row[0]; // Inside while loop
-          $auc_id= (mysqli_query($conn, "SELECT auction_auctionID FROM Bid WHERE bidID =$bid_id") -> fetch_array(MYSQLI_NUM))[0];
-          $title = (mysqli_query($conn, "SELECT itemName FROM Auction WHERE auctionID =$auc_id") -> fetch_array(MYSQLI_NUM))[0];
-          $description = (mysqli_query($conn, "SELECT itemDescription FROM Auction WHERE auctionID =$auc_id") -> fetch_array(MYSQLI_NUM))[0];
-          $bid_price = (mysqli_query($conn, "SELECT bidPrice FROM Bid WHERE bidID= $bid_id ") -> fetch_array(MYSQLI_NUM))[0];
-          $end_date = (mysqli_query($conn, "SELECT endDate FROM Auction WHERE auctionID =$auc_id") -> fetch_array(MYSQLI_NUM))[0];
-          $created_date = (mysqli_query($conn, "SELECT bidTime FROM Bid WHERE bidID= $bid_id ") -> fetch_array(MYSQLI_NUM))[0];
+          $bid_id= $row[0]; 
+          $bid_result_row = mysqli_query($conn, "SELECT * FROM Bid WHERE bidID =$bid_id") -> fetch_array(MYSQLI_NUM);
+          $auc_id = $bid_result_row[1];
+          $bid_price = $bid_result_row[2];
+          $created_date = $bid_result_row[4];
+          $auction_result_row = mysqli_query($conn, "SELECT itemName,itemDescription,endDate FROM Auction WHERE auctionID =$auc_id") -> fetch_array(MYSQLI_NUM);
+          $title = $auction_result_row[0];
+          $description = $auction_result_row[1];
+          $end_date = $auction_result_row[2] ;
           print_listing_li_bids($auc_id, $title, $description, $bid_price,$end_date,$created_date);
         }
       }
