@@ -16,6 +16,11 @@
     
     $auctionId=$_POST['auctionId'];
     $bidPrice=$_POST['bidPrice'];
+    if (!isset($bidPrice)){
+        $url = 'https://178auction.azurewebsites.net/listing.php?auctionID='.$auctionId;
+        echo('<div class="text-center">Invalid bid! Try it again.</div>');
+        header("refresh:3;url=$url");
+    }
     $accountId= $_SESSION['accountID'];
     $email_address=$_SESSION['emailAddress'];
 
