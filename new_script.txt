@@ -230,7 +230,7 @@ BEGIN
 	CREATE TEMPORARY TABLE table_active_auctions
 	SELECT auctionID
 	FROM auction
-	WHERE endDate < @currentDateTime;
+	WHERE endDate > @currentDateTime;
 	
 	-- get k most similar users
 	DROP TEMPORARY TABLE IF EXISTS table_k_users;
