@@ -223,12 +223,13 @@ DELIMITER //
 CREATE PROCEDURE get_recommendations()
 BEGIN
 	-- get active auctions
+    SET @currentDateTime = NOW();
 	DROP TEMPORARY TABLE IF EXISTS table_active_auctions;
 
 	CREATE TEMPORARY TABLE table_active_auctions
 	SELECT auctionID
 	FROM auction
-	WHERE outcomeNotificationStatus = TRUE;
+	WHERE endDate > @currentDateTime;
 	
 	-- get k most similar users
 	DROP TEMPORARY TABLE IF EXISTS table_k_users;

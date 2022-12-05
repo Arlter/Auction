@@ -21,7 +21,7 @@
   if ($accountType != 'buyer') {
     header('Location: browse.php');
   } else {
-    $result = mysqli_query($conn, "SELECT COUNT(auctionID) FROM auction WHERE outcomeNotificationStatus = 1");
+    $result = mysqli_query($conn, "SELECT COUNT(auctionID) FROM auction WHERE endDate > NOW();");
     $count_active_auctions = mysqli_fetch_row($result)[0];
     
     if ($count_active_auctions == 0){
