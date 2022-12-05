@@ -23,6 +23,7 @@
       $title =  $row_res[1];
       $description = $row_res[2];
       $current_price = $row_res[9];
+      $reserve_price = $row_res[6];
       $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM Bid where auction_auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0];
       $end_time = $row_res[8];
       $history = (mysqli_query($conn, "SELECT bidTime,buyer_accountID,bidPrice FROM Bid WHERE auction_auctionID =$auctionID ORDER BY bidTime desc"));    
@@ -106,10 +107,14 @@
     <p>
 <?php if (mysqli_num_rows($res)>0 and $now > $end_time  ): ?>
      This auction ended at  <b><?php echo(date_format($end_time, 'd/m/Y h:i:s A')) ?></b>
-     <?php if ($current_bidder != Null): ?>
+     <?php if ($current_bidder != Null and $reserve_price<=$current_price): ?>
   <br>Successful auction with the final bid £:  <b><?php echo($current_price) ?></b>
     <?php else: ?>
-  <br>Abortive auction with no bids
+      <?php if ($current_bidder == Null): ?>
+    <br>Abortive auction with no bids
+    <?php else: ?>
+      <br>Abortive auction that failed to exceed the reserve price
+      <?php endif ?>
     <?php endif ?>
 <?php else: ?>
     <?php if (mysqli_num_rows($res)>0): ?>
@@ -135,7 +140,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text">£</span>
           </div>
-        <input type="number" step="0.01" class="form-control" id="bidPrice" name ="bidPrice">
+        <input type="number" step="0.01" class="form-control" id="bidPrice" name ="bidPrice" value=<?php echo(number_format($current_price+1, 2)) ?>>
         </div>
         <button type="submit" class="btn btn-primary form-control">Place bid</button>
       </form>
