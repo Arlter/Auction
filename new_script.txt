@@ -98,37 +98,77 @@ CREATE TRIGGER  Auto_Watchlist After INSERT ON Bid
 delimiter ;
 
 USE auction;
-
 INSERT INTO Account VALUES
 (null,'acc1','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','erte','wang','1419121502@qq.com','+44123456'),
 (null,'acc2','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','seller','kien','han','648906549@qq.com','+44123456'),
 (null,'acc3','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','angel','lam','wangertee@126.com','+44123456'),
-(null,'acc4','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','seller','tim','chen','abc@com','+44123456')
+(null,'acc4','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','seller','tim','chen','abc@com','+44123456'),
+(null,'acc5','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','sam','jones','testbuyer@.g.com','+4423914124'),
+(null,'acc6','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','billy','watkins','testbuyer2@.g.com','+442312412'),
+(null,'acc7','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','harry','mcguire','testbuyer3@.g.com','+44232424412')
 ;
 
 INSERT INTO Category VALUES
-("electronic device"),
-("beauty makeup"),
-("food"),
-("toy")
+("Electronics"),
+("Sports"),
+("Toys and Games"),
+("Clothes"),
+("Accessories"),
+("Health & Beauty"),
+("Other")
 ;
 
 INSERT INTO Auction VALUES
-(DEFAULT,'water gun','purchased two months ago and used twice. Very new','toy',10000001,52,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-20", "11:54:00"),DEFAULT,null,TRUE),
-(DEFAULT,'iphone','purchased two months ago and used twice. Very new','electronic device',10000001,700,701,CURRENT_TIME(),TIMESTAMP("2022-12-30", "14:00:00"),DEFAULT,null,TRUE),
-(DEFAULT,'milk','purchased one day ago. Very new','food',10000001,3,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-9", "9:00:00"),DEFAULT,null,TRUE)
+(DEFAULT,'Fitbit Versa 2 Health and Fitness Smartwatch','A factory-refurbished smartwatch with advanced fitness tracking, sleep monitoring, and heart rate monitoring features','Electronics',10000001,99,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-20", "11:54:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Fujifilm X-T3 Mirrorless Digital Camera','A lightly-used mirrorless digital camera with a high-resolution image sensor and advanced autofocus technology','Electronics',10000001,620,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-23", "14:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Bose QuietComfort 35 II Wireless Headphones','Like-new wireless headphones with noise-canceling technology for clear sound','Electronics',10000001,100,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-30", "14:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Levi jeans','A pair of well-worn Levi jeans with a comfortable, broken-in feel','Clothes',10000001,15,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-9", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Rayban Sunglasses','A pair of sleek, aviator-style Ray-Ban sunglasses in good condition with polarized lenses and a durable, metal frame. Few scratches on the lenses','Accessories',10000001,15,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-9", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Nike sneakers','A pair of brand-new Nike sneakers in their original box','Clothes',10000001,45,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-13", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Snowboard','A versatile snowboard with a medium flex and responsive edge control','Sports',10000001,72,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-15", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Golf club','A complete set of golf clubs with a bag and head covers','Sports',10000001,60,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-21", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Kylie Jener Makeup palette','A professional-grade makeup palette with a wide range of colors and finishes. New and unopened.','Health & Beauty',10000001,20,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-14", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Chanel Fragrance set','A set of three fragrances in different scents, including a perfume, body mist, and rollerball','Health & Beauty',10000001,32,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-25", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Tiffany necklace','A delicate, sterling silver Tiffany necklace in mint condition with a dainty charm and a sparkling diamond','Accessories',10000001,150,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-17", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Monopoly board game','A popular, family-friendly Monopoly board game in well-used condition with all original pieces and a well-worn box','Toys and Games',10000001,20,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-30", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Ravensburger puzzle','A challenging, 1000-piece Ravensburger jigsaw puzzle in excellent condition with a beautiful, scenic image and a sturdy, interlocking design','Toys and Games',10000001,10,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-11", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'LEGO set','A large, fun LEGO set with a variety of colorful, interlocking bricks and a detailed, imaginative building project. New and unopened','Toys and Games',10000001,45,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-01", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Yankee Candle','A fragrant, soy-wax Yankee Candle in good condition with a delicate, floral scent and a long-lasting burn time','Other',10000001,11,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-15", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Ikea lamp','A modern, minimalist Ikea lamp in excellent condition with a sleek, brushed-metal base and a soft, warm glow','Other',10000001,25,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-11-29", "9:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Howard Miller clock','A vintage, antique-style Howard Miller clock in good condition with a beautifully-detailed, brass face and a loud, chiming mechanism','Other',10000001,227,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-15", "9:00:00"),DEFAULT,null,TRUE), 
+(DEFAULT,'Lenovo ThinkPad X1 Carbon','Nearly new Lenovo laptop with a 14-inch touchscreen display and 10th-generation Intel Core i7 processor.','Electronics',10000001,600,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-24", "14:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Apple AirPods Pro','Brand new, sealed Apple earbuds with active noise cancellation and transparent mode','Electronics',10000001,150,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-16", "14:00:00"),DEFAULT,null,TRUE),
+(DEFAULT,'Canon EOS R5','Gently used Canon full-frame mirrorless camera with 45-megapixel resolution and 8K video capabilities.','Electronics',10000001,800,DEFAULT,CURRENT_TIME(),TIMESTAMP("2022-12-20", "14:00:00"),DEFAULT,null,TRUE)
 ;
 
 INSERT INTO Bid VALUES
-(DEFAULT,100000000,70.00,10000000,'2022-11-08 23:57:37'),
-(DEFAULT,100000000,80.00,10000000,'2022-11-09 00:02:01'),
-(DEFAULT,100000000,99.00,10000000,'2022-11-09 00:19:20'),
-(DEFAULT,100000002,4.00,10000000,'2022-11-09 02:30:20'),
-(DEFAULT,100000000,101.00,10000000,'2022-11-09 02:30:20')
+(DEFAULT,100000000,101.00,10000000,'2022-11-08 23:57:37'),
+(DEFAULT,100000000,105.00,10000006,'2022-11-09 00:02:01'),
+(DEFAULT,100000002,105.00,10000000,'2022-11-09 00:05:01'),
+(DEFAULT,100000002,109.00,10000006,'2022-11-09 00:07:01'),
+(DEFAULT,100000003,20.00,10000004,'2022-11-09 00:12:01'),
+(DEFAULT,100000003,27.00,10000006,'2022-11-09 00:15:01'),
+(DEFAULT,100000003,35.00,10000004,'2022-11-09 00:20:01'),
+(DEFAULT,100000004,20.00,10000006,'2022-11-09 00:20:01'),
+(DEFAULT,100000004,30.00,10000006,'2022-11-09 00:25:01'),
+(DEFAULT,100000004,55.00,10000004,'2022-11-09 00:30:01'),
+(DEFAULT,100000005,55.00,10000004,'2022-11-09 00:30:01'),
+(DEFAULT,100000006,80.00,10000004,'2022-11-09 00:30:01'),
+(DEFAULT,100000007,61.00,10000004,'2022-11-09 00:30:01'),
+(DEFAULT,100000007,80.00,10000006,'2022-11-09 00:35:01'),
+(DEFAULT,100000007,101.00,10000004,'2022-11-09 00:40:01'),
+(DEFAULT,100000008,21.00,10000005,'2022-11-09 00:40:01'),
+(DEFAULT,100000009,35.00,10000005,'2022-11-09 00:40:01'),
+(DEFAULT,100000009,40.00,10000004,'2022-11-09 00:45:01'),
+(DEFAULT,100000010,151.00,10000005,'2022-11-09 00:45:01'),
+(DEFAULT,100000010,160.00,10000004,'2022-11-09 00:45:01'),
+(DEFAULT,100000011,21.00,10000006,'2022-11-09 00:45:01'),
+(DEFAULT,100000013,50.00,10000006,'2022-11-09 00:45:01'),
+(DEFAULT,100000015,45.00,10000006,'2022-11-09 00:45:01'),
+(DEFAULT,100000015,47.00,10000004,'2022-11-09 00:50:01'),
+(DEFAULT,100000016,240.00,10000006,'2022-11-09 00:50:01'),
+(DEFAULT,100000019,801.00,10000000,'2022-11-09 00:50:01')
 ;
-
-
-
 
 -- create procedure that calculates and inputs cosine similarities into the relevant table created
 DROP PROCEDURE IF EXISTS get_similarities;
