@@ -49,7 +49,7 @@
     else
     {
         echo '<div class="text-center">'. mysqli_error($conn);
-        echo('<div class="text-center"> Unsucessful Bid.       <a href="browse.php">Try bidding on another auction.</a></div>');
+        echo('<div class="text-center"> Unsucessful Bid.       <a href="https://178auction.azurewebsites.net/listing.php?auctionID='.$auction_id.'">Try bidding the auction again.</a></div>');
         header("refresh:5;url=browse.php");    
     }
 
