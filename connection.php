@@ -7,10 +7,10 @@ if( count(get_included_files()) == ((version_compare(PHP_VERSION, '5.0.0', '>=')
 }
 ?>
 <?php
-    $host_address='erte.mysql.database.azure.com';
-    $username='kien';
-    $password='kien!ucl1';
-    $dbname='auction_online';
+    $host_address='178auction.mysql.database.azure.com';
+    $username='auction178';
+    $password='Ab990912';
+    $dbname='auction';
 
     $conn = mysqli_init();
     mysqli_ssl_set($conn,NULL,NULL, "DigiCertGlobalRootCA.crt.pem", NULL, NULL);
