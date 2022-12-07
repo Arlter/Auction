@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Category (
 
 CREATE TABLE IF NOT EXISTS Auction (
 	auctionID INT NOT NULL AUTO_INCREMENT,
-	itemName VARCHAR(40) NOT NULL,
+	itemName VARCHAR(50) NOT NULL,
 	itemDescription VARCHAR(2000) NOT NULL,
 	categoryName VARCHAR(40) NOT NULL,
 	seller_accountID INT NOT NULL,
@@ -97,7 +97,6 @@ CREATE TRIGGER  Auto_Watchlist After INSERT ON Bid
 	END $$
 delimiter ;
 
-USE auction;
 INSERT INTO Account VALUES
 (null,'acc1','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','erte','wang','1419121502@qq.com','+44123456'),
 (null,'acc2','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','seller','kien','han','648906549@qq.com','+44123456'),
