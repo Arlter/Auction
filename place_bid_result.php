@@ -34,7 +34,7 @@
         $email_subject = "[Buyer Notification] Successful bid on the auction : ".$auctionId;
         $email_content = " Congratulation! You have placed a bid of ".chr(163). $bidPrice." on the auction ".$auctionId.$auction_url;
         send_email($email_address,$email_subject,$email_content);
-        $watcher_email_subject = "[Watcher Notification] A higher bid ".chr(163).$bidPrice." on the auction ".$auctionId." has been made.";
+        $watcher_email_subject = "[Watcher Notification] A new bid ".chr(163).$bidPrice." on the auction ".$auctionId." has been made.";
         $watcher_email_content = "A new bid of price ".$bidPrice." has been made to the auction ".$auctionId.$auction_url;
         $watcher_email_address = mysqli_query($conn, "SELECT emailAddress FROM Account, BuyerWatchAuction WHERE accountID=buyer_accountID and auction_auctionID=$auctionId");  
         if (mysqli_num_rows($watcher_email_address)>0) {
