@@ -48,7 +48,7 @@
         $watcher_email_content = "A new bid of price ".$bidPrice." has been made to the auction ".$auctionId.$auction_url;
         $watcher_email_address = mysqli_query($conn, "SELECT emailAddress FROM Account, BuyerWatchAuction WHERE accountID=buyer_accountID and auction_auctionID=$auctionId");  
         if (mysqli_num_rows($watcher_email_address)>0) {
-            if (isset($outbidder_email)){
+            if (isset($outbidder_email) && $outbidder_email!=$email_address){
                 // Outbid notification
                 $outbidder_email_subject = "[Outbid Notification] A higher bid ".chr(163).$bidPrice." on the auction ".$auctionId." has been made.";
                 $outbidder_email_content = "We are sorry to inform you that a higher bid of price ".$bidPrice." has been made to the auction ".$auctionId.$auction_url;
