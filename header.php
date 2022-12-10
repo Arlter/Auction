@@ -18,7 +18,7 @@
 <body>
 <!-- Navbars -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light mx-2">
-  <a class="navbar-brand" href="browse.php">ɔ:kʃn </a>
+  <a class="navbar-brand" href="browse.php">StudentBids</a>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
 <?php
