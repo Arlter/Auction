@@ -6,11 +6,17 @@ if( count(get_included_files()) == ((version_compare(PHP_VERSION, '5.0.0', '>=')
   header("refresh:3;url=https://178auction.azurewebsites.net/browse.php");
 }
 ?>
+
 <?php
-    $host_address='erte.mysql.database.azure.com';
-    $username='kien';
-    $password='kien!ucl1';
-    $dbname='auction_online';
+    $data = file_get_contents('credentials.txt');
+    // separate it into a list
+    if (isset($data)){
+        $list = explode(',', $data);
+        $host_address=$list[0];
+        $username=$list[1];
+        $password=$list[2];
+        $dbname=$list[3];
+    }
 
     $conn = mysqli_init();
     mysqli_ssl_set($conn,NULL,NULL, "DigiCertGlobalRootCA.crt.pem", NULL, NULL);
