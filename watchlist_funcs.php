@@ -4,6 +4,7 @@
 }
 session_start();
 // Extract arguments from the POST variables:
+
 $item_id = $_POST['arguments'];
 $accountID = $_SESSION['accountID'];
 
@@ -33,10 +34,6 @@ if ($_POST['functionname'] == "add_to_watchlist") {
   }
 }
 
-// Note: Echoing from this PHP function will return the value as a string.
-// If multiple echo's in this file exist, they will concatenate together,
-// so be careful. You can also return JSON objects (in string form) using
-// echo json_encode($res). 
 echo $res;
 
 ?>

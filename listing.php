@@ -9,7 +9,6 @@
   }
 ?>
 
-
 <?php
   // Get auctionID from the URL: 
   // item_id is also the auction id.
@@ -55,8 +54,6 @@
       header("refresh:3;url=browse.php");
     }
   }
-
-
 ?>
 
 
@@ -147,7 +144,6 @@
       <?php endif ?>
     <?php endif ?>
 <?php endif ?>
-
   
   </div> <!-- End of right col with bidding info -->
 

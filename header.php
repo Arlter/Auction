@@ -13,12 +13,12 @@
   <!-- Custom CSS file -->
   <link rel="stylesheet" href="css/custom.css">
 
-  <title>Auction </title>
+  <title>Student Bids</title>
 </head>
 <body>
 <!-- Navbars -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light mx-2">
-  <a class="navbar-brand" href="browse.php">StudentBids</a>
+  <a class="navbar-brand" href="browse.php">Student Bids</a>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
 <?php
