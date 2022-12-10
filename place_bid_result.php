@@ -37,7 +37,7 @@
     if (mysqli_affected_rows($conn) ==1 && !mysqli_error($conn))
     {
         // Insertion succeeded 
-        echo('<div class="text-center">Your bid is successful! <a href="mybids.php">View your new bids.</a></div>');
+        echo('<div class="text-center">Your bid is successful! <a href="mybids.php">View your bids.</a></div>');
         // Buyer notification 
         $auction_url =  "<a href ='https://178auction.azurewebsites.net/listing.php?auctionID=".$auctionId."'</a>  see more details";
         $email_subject = "[Buyer Notification] Successful bid on the auction : ".$auctionId;
