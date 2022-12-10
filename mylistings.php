@@ -29,7 +29,7 @@ require_once("utilities.php");
   // TODO: Loop through results and print them out as list items.
 
   if ($_SESSION["logged_in"] == true && isset($_SESSION["accountType"]) && $_SESSION["accountType"] == "seller") {
-    $auctionquery = "SELECT * FROM Auction WHERE seller_accountID = $accountID";  // ORDER BY createdDate DESC, missing from local database for now
+    $auctionquery = "SELECT * FROM Auction WHERE seller_accountID = $accountID order BY createdDate DESC";  // ORDER BY createdDate DESC, missing from local database for now
     $result = mysqli_query($conn, $auctionquery);
 
     if (mysqli_num_rows($result) > 0) {
