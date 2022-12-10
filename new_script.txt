@@ -98,8 +98,8 @@ delimiter ;
 
 INSERT INTO Account VALUES
 (null,'acc1','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','erte','wang','178auction@gmail.com','+44123456'),
-(null,'acc2','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','seller','kien','han','648906549@qq.com','+44123456'),
-(null,'acc3','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','angel','lam','wangertee@126.com','+44123456'),
+(null,'acc2','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','seller','kien','han','178auction2@gmail.com','+44123456'),
+(null,'acc3','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','angel','lam','178auction3@gmail.com','+44123456'),
 (null,'acc4','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','seller','tim','chen','abc@com','+44123456'),
 (null,'acc5','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','sam','jones','testbuyer@g.com','+4423914124'),
 (null,'acc6','$2y$10$/K9uiV.po8OJBjU3WZvGAeGbZYr7Ny2bHFbQjdDLXlpB3cGjo3FTa','buyer','billy','watkins','testbuyer2@g.com','+442312412'),
