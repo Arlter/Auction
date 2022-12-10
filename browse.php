@@ -3,27 +3,21 @@
 <?php require_once("connection.php")?>
 
 <?php
+// If SESSION is set, display logged in message
 if(isset($_SESSION["logged_in_message"])) {
   $logged_in_message = $_SESSION["logged_in_message"];
   echo
-
   "<div class='alert' style='background-color:lightgreen; color:black'>
   <button type='button' class='close' data-dismiss='alert'>&times;</button>
   <h5>$logged_in_message</h5>
   </div>";
-  
 unset($_SESSION["logged_in_message"]);
 }
 ?>
 
 <div class="container">
-
 <h2 class="my-3">Browse listings</h2>
-
 <div id="searchSpecs">
-<!-- When this form is submitted, this PHP page is what processes it.
-     Search/sort specs are passed to this page through parameters in the URL
-     (GET method of passing data to a page). -->
 <form method="get" action="browse.php">
   <div class="row">
     <div class="col-md-5 pr-0">
@@ -36,6 +30,7 @@ unset($_SESSION["logged_in_message"]);
             </span>
           </div>
           <?php
+          // If text within keyword search field is not set, set keyword to null. Else, GET 'keyword' from URL
           if (!isset($_GET['keyword'])) {
             $keyword = null;
           }
@@ -51,13 +46,13 @@ unset($_SESSION["logged_in_message"]);
       <div class="form-group">
         <label for="cat" class="sr-only">Search within:</label>
         <?php
-        // Select category from database
+        // Select category name from database, else set category to "All" 
         if (isset($_GET['cat'])){
           $category = $_GET['cat'];
         }else{
           $category = 'All';
         }
-
+        // Query to select all from category table from database
         $query = "SELECT * FROM category";
         $result = mysqli_query($conn, $query);
         ?>
@@ -75,6 +70,7 @@ unset($_SESSION["logged_in_message"]);
       <div class="form-inline">
         <label class="mx-2" for="order_by">Sort by:</label>
         <?php
+        // If order_by is not set, set default ordering to be sorted by price low to high. Else, GET 'order_by' from URL
         if (!isset($_GET['order_by'])) {
           $ordering = 'pricelow';
         }else {
@@ -99,21 +95,21 @@ unset($_SESSION["logged_in_message"]);
 </div>
 
 <?php
-  // Retrieve these from the URL
+  // If text within keyword search field is not set, set keyword to null. Else, GET 'keyword' from URL
   if (!isset($_GET['keyword'])) {
     $keyword = null;
   }
   else {
     $keyword = $_GET['keyword'];
   }
-
+  // If category is not set, set category to "All". Else, GET 'category' from URL
   if (!isset($_GET['cat'])) {
     $category = 'All';
   }
   else {
     $category = $_GET['cat'];
   }
-  
+  // If order_by is not set, set default ordering to be sorted by price low to high. Else, GET 'order_by' from URL
   if (!isset($_GET['order_by'])) {
     $ordering = 'pricelow';
   }
@@ -121,39 +117,20 @@ unset($_SESSION["logged_in_message"]);
     $ordering = $_GET['order_by'];
 
   }
+  // If page is not set, set current page to 1. Else, GET 'page' from URL
   if (!isset($_GET['page'])) {
     $curr_page = 1;
   }
   else {
     $curr_page = $_GET['page'];
   }
-
-  /* TODO: Use above values to construct a query. Use this query to 
-     retrieve data from the database. (If there is no form data entered,
-     decide on appropriate default value/default query to make. */
-  
-  /* For the purposes of pagination, it would also be helpful to know the
-     total number of results that satisfy the above query */
-  $num_results = 96; // TODO: Calculate me for real
-  $results_per_page = 10;
-  $max_page = ceil($num_results / $results_per_page);
 ?>
 
 <div class="container mt-5">
-
-<!-- TODO: If result set is empty, print an informative message. Otherwise... -->
-
 <ul class="list-group">
 
-<!-- TODO: Use a while loop to print a list item for each auction listing
-     retrieved from the query -->
-
 <?php
-//Search Query 
-  /* TODO: Use above values to construct a query. Use this query to 
-     retrieve data from the database. (If there is no form data entered,
-     decide on appropriate default value/default query to make. */
-  
+  // Construct search query from keywords, category and order by. Using these query, retrieve data from the database 
   $query = "SELECT * FROM auction WHERE (itemName LIKE '%$keyword%' OR itemDescription LIKE '%$keyword%')";
 
   if($category!='All'){
@@ -168,12 +145,16 @@ unset($_SESSION["logged_in_message"]);
   else if($ordering=='date'){
     $query.=" AND (now() < endDate) ORDER BY endDate ASC";
   }
+
+  // Maximum results per page = 5 
   $results_per_page = 5;
 
+  // Retrieve the total number of results from the query 
   $res = mysqli_query($conn, $query);
   $num_results = (mysqli_num_rows($res)); 
   $max_page = ceil($num_results / $results_per_page);
   $rows = $res->fetch_all(MYSQLI_NUM);
+  // Use for loop to print a list item for each auction listing retrieved from the query on first page
   if ($num_results > 0){
     if ($curr_page<$max_page){
       for ($x = ($curr_page-1)*$results_per_page; $x<$curr_page*$results_per_page; $x++){
@@ -188,6 +169,7 @@ unset($_SESSION["logged_in_message"]);
         print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
       }
     } else{
+    // Use for loop to print a list item for each auction listing retrieved from the query on the last page
     for ($x = ($curr_page-1)*$results_per_page;$x<$num_results;$x++){
       $row = $rows[$x];
         $auctionID = $row[0];
@@ -202,6 +184,7 @@ unset($_SESSION["logged_in_message"]);
     }
     }
   else {
+  // If result set is empty, print 'No item found'
     echo 'No item found';
     $flag = 1;
     }
@@ -213,7 +196,6 @@ unset($_SESSION["logged_in_message"]);
   <ul class="pagination justify-content-center">
   
 <?php
-
   // Copy any currently-set GET variables to the URL.
   $querystring = "";
   foreach ($_GET as $key => $value) {
