@@ -30,9 +30,9 @@
         // Insertion succeeded 
         echo('<div class="text-center">Your bid is successful! <a href="mybids.php">View your new bids.</a></div>');
         // Buyer notification 
-        $auction_url =  "<a href ='https://178auction.azurewebsites.net/listing.php?auctionID=".$auction_id."'</a> see more details";
+        $auction_url =  "<a href ='https://178auction.azurewebsites.net/listing.php?auctionID=".$auction_id."'</a>  see more details";
         $email_subject = "[Buyer Notification] Successful bid on the auction : ".$auctionId;
-        $email_content = " Congratulation! You have placed a bid of ".chr(163). $bidPrice." on the auction ".$auctionId;
+        $email_content = " Congratulation! You have placed a bid of ".chr(163). $bidPrice." on the auction ".$auctionId.$auction_url;
         send_email($email_address,$email_subject,$email_content);
         $watcher_email_subject = "[Watcher Notification] A higher bid ".chr(163).$bidPrice." on the auction ".$auctionId." has been made.";
         $watcher_email_content = "A new bid of price ".$bidPrice." has been made to the auction ".$auctionId.$auction_url;
