@@ -29,6 +29,7 @@
     echo '<span style="display:inline-block; margin-right:16px; font-size:14px">Username: ' . $_SESSION["accountUsername"] . '</span>';
     echo '<span style="display:inline-block; margin-right:16px; font-size:14px">Account ID: ' . $_SESSION["accountID"] . '</span>';
     echo '<span style="display:inline-block; margin-right:16px; font-size:14px">Account type: ' . $_SESSION["accountType"] . '</span>';
+    echo '<span style="display:inline-block; margin-right:16px; font-size:14px">Email Address: ' . $_SESSION["emailAddress"] . '</span>';
     echo '<a class="button" style="vertical-align:middle" href="logout.php"><span>Logout</span></a>';
   }
   else {

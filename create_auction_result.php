@@ -15,14 +15,6 @@ include_once("header.php")?>
 
 // This function takes the form data and adds the new auction to the database.
 
-/* TODO #1: Connect to MySQL database (perhaps by requiring a file that
-            already does this). */
-
-/* TODO #2: Extract form data into variables. Because the form was a 'post'
-            form, its data can be accessed via $POST['auctionTitle'], 
-            $POST['auctionDetails'], etc. Perform checking on the data to
-            make sure it can be inserted into the database. If there is an
-            issue, give some semi-helpful feedback to user. */
 
 $accountID = $_SESSION["accountID"];
 
@@ -35,55 +27,6 @@ if (isset($_POST["submit"])) {
     $auctionEndDate = mysqli_real_escape_string ($conn, $_POST["auctionEndDate"]);
 }             
 
-// FIXME: Data validation
-// this time can try use $_GET["error"]?
-// when error:
-// $error = "error_message";
-// header("Location: create_auction.php?error=" . urlencode ($error)); 
-
-
-// client-side checks should stop invalid data inputs, but do we have to put in server-side checks just in case?
-// if (mb_strlen($auctionTitle) > 40) {
-//     function_alert_create_auction("Title is too long, please try again.");
-//     exit();
-// } elseif (empty($auctionTitle) || ctype_space($auctionTitle)) {
-//     function_alert_create_auction("Title of auction is required, please try again.");
-//     exit();
-// }
-
-// if (mb_strlen($auctionDetails) > 250) {
-//     function_alert_create_auction("Details are too long, please try again.");
-//     exit();
-// }
-
-// if (empty($auctionCategory)) {
-//     function_alert_create_auction("Please choose a category.");
-//     exit();
-// } 
-
-// if ($auctionStartPrice != 0 && empty($auctionStartPrice) || ctype_space($auctionStartPrice)) {
-//     function_alert_create_auction("Starting price is required, please try again.");
-//     exit();
-// } elseif ($auctionStartPrice < 0) {
-//     function_alert_create_auction("Starting price cannot be negative, please try again.");
-//     exit();
-// }
-
-// if (!empty($auctionReservePrice) && $auctionReservePrice < 0) {
-//     function_alert_create_auction("Reserve price cannot be negative, please try again.");
-//     exit();
-// } elseif (empty($auctionReservePrice)) {
-//     $auctionReservePrice = 0;
-// }
-
-// $now = New DateTime();
-// if (empty($auctionEndDate) || ctype_space($auctionEndDate)) {
-//     function_alert_create_auction("End date is required, please try again.");
-//     exit();
-// } elseif ((New DateTime($auctionEndDate)) < $now) {
-//     function_alert_create_auction("End date cannot be earlier than the current time, please try again.");
-//     exit();
-// }
 
 // if reserve price is not entered, set to 0 by default
 if (empty($auctionReservePrice)) {
@@ -94,8 +37,7 @@ if (empty($auctionReservePrice)) {
 $now = New DateTime();
 $auctionCreatedDate = $now -> format("Y-m-d\TH:i:s");
 
-/* TODO #3: If everything looks good, make the appropriate call to insert
-            data into the database. */
+//If everything looks good, make the appropriate call to insert data into the database.
 
 $query = "INSERT INTO Auction (itemName, itemDescription, categoryName, seller_accountID, startingPrice, reservePrice, createdDate, endDate)
 VALUES ('$auctionTitle', '$auctionDetails', '$auctionCategory', '$accountID', '$auctionStartPrice', '$auctionReservePrice', '$auctionCreatedDate', '$auctionEndDate')";
