@@ -13,9 +13,6 @@ include_once("header.php")?>
 
 <?php
 
-// This function takes the form data and adds the new auction to the database.
-
-
 $accountID = $_SESSION["accountID"];
 
 if (isset($_POST["submit"])) {
@@ -26,7 +23,6 @@ if (isset($_POST["submit"])) {
     $auctionReservePrice = mysqli_real_escape_string ($conn, $_POST["auctionReservePrice"]);
     $auctionEndDate = mysqli_real_escape_string ($conn, $_POST["auctionEndDate"]);
 }             
-
 
 // if reserve price is not entered, set to 0 by default
 if (empty($auctionReservePrice)) {
@@ -51,7 +47,6 @@ if (mysqli_affected_rows($conn) ==1 && !mysqli_error($conn)) {
     // "view your new listing" link directs user to the newest item listing page, e.g. listing.php/?auctionID=100000000
     
 } else {
-    // echo "Error: " . $query . "<br>" . mysqli_error($conn);
     $error = "Connection error, please try again later.";
     function_alert_create_auction($error);
 }

@@ -31,7 +31,6 @@ if(isset($_GET["error"])) {
 
 <div class="container">
 <h2 class="my-3">Register new account</h2>
-<!-- <h6 id="AccountRegHelp" class="form-text-inline text-muted" style="line-height:20px"><span class="text-danger">* All details are required.</span></h6> -->
 
 
 <!-- Create auction form -->

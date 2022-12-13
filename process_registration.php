@@ -11,43 +11,12 @@ require_once "connection.php";  // using local db for testing for now
 require_once "utilities.php";
 
 
-/////////////////////////////////////////////////////
-
-// // Utility functions (already in utilities.php, DELETE LATER)
-
-// // redirects to register page and shows a closeable red alert box with relevant error message
-// // see code in register.php
-// function function_alert_register($error) {
-//     $_SESSION["alert"] = $error;
-//     header("Location: register.php?error =" . urlencode ($error));  // redirection to register.php
-// }
-
-// // redirects to login page after successful registration with green alert box indicating success
-// // see code in browse.php (put there for now)
-// function function_success_register($success_message) {
-//     $_SESSION["reg_success"] = $success_message;
-// // to prevent inputs appearing again when going to register.php again
-//     unset($_SESSION["username"]);  // what if I wanna save username for login? hmmmm...
-//     unset($_SESSION["firstName"]); 
-//     unset($_SESSION["lastName"]); 
-//     unset($_SESSION["email"]); 
-//     unset($_SESSION["phoneNumber"]); 
-//     header("Location: login.php?success =" . urlencode ($success_message));  // redirection to login.php
-// }
-
-/////////////////////////////////////////////////////
-
-
 // Test connection
 if (!$conn) {
     $error = "Connection error, please try again later.";
     function_alert_register($error);
     exit();
 }
-
-// Input validiation
-// what is the best structure/hierarchy?
-// current hierarchy is according to order below
 
 
 // ajax check_username
@@ -80,7 +49,7 @@ if (!empty($_POST["username"])) {
 }
 
 // ajax check_password
-// check: length longer than 8, no space, pattern match: at least one number and one letter, may contain !@#$%
+// check: length longer than 8, no space, pattern match: at least one number and one letter, may contain !@#$%&
 if (!empty($_POST["password"])) {
     if (mb_strlen($_POST["password"]) < 8) {
         $_SESSION['check_array']["password_check"]=false;
@@ -116,6 +85,8 @@ if (!empty($_POST["password_c"]) && !empty($_POST["passwordConfirmation"])) {
     }
 }
 
+// ajax email validation
+// check: valid format for email
 if (!empty($_POST["email"])) {
     if (!strpos($_POST["email"], '@') || !strpos($_POST["email"], '.') ) {
         $_SESSION['check_array']["email_check"]=false;
@@ -129,7 +100,6 @@ if (!empty($_POST["email"])) {
         }
     }
 }
-
 
 // ajax phone validation
 // check: pattern match, starts with +,
@@ -147,7 +117,6 @@ if (!empty($_POST["phone"])) {
     }
 }
 
-
 // Variable extraction
 if (isset($_POST["submit"])) {
     $accountType = $_POST["accountType"];
@@ -159,7 +128,7 @@ if (isset($_POST["submit"])) {
     $email = mysqli_real_escape_string ($conn, $_POST["email"]);
     $phoneNumber = mysqli_real_escape_string ($conn, $_POST["phoneNumber"]);
 
-    $hash = password_hash($accountPassword, PASSWORD_DEFAULT);  // requires VARCHAR(60) in database
+    $hash = password_hash($accountPassword, PASSWORD_DEFAULT);
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
     $phoneNumber = str_replace(["(", ")","-", " ", ".", "/"], "", $phoneNumber);
 
@@ -167,12 +136,11 @@ if (isset($_POST["submit"])) {
     $query = "INSERT INTO Account (accountUsername, accountPassword, accountType, firstName,lastName, emailAddress, phoneNumber)
     VALUES ('$accountUsername', '$hash', '$accountType', '$firstName', '$lastName', '$email', '$phoneNumber')";
     if (mysqli_query($conn, $query)) {
-        mysqli_close($conn);  // put this here?
+        mysqli_close($conn);
         unset($_SESSION['check_array']);
         $success_message = "Account created successfully!";
         function_success_register($success_message);
     } else {
-    // echo "Error: " . $query . "<br>" . mysqli_error($conn);
         unset($_SESSION['check_array']);
         $error = "Connection error, please try again later.";
         function_alert_register($error);

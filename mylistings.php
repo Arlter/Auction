@@ -16,20 +16,10 @@ require_once("utilities.php");
   // Feel free to extract out useful functions from browse.php and put them in
   // the shared "utilities.php" where they can be shared by multiple files.
 
-  // $accountID = 10000001;  // test
-  // $_SESSION["accountType"] = "seller";  // test
-
   $accountID = $_SESSION["accountID"];
-  // account type session should have been set after successful login
-
-  // TODO: Check user's credentials (cookie/session).
-
-  // TODO: Perform a query to pull up their auctions.
-
-  // TODO: Loop through results and print them out as list items.
 
   if ($_SESSION["logged_in"] == true && isset($_SESSION["accountType"]) && $_SESSION["accountType"] == "seller") {
-    $auctionquery = "SELECT * FROM Auction WHERE seller_accountID = $accountID order BY createdDate DESC";  // ORDER BY createdDate DESC, missing from local database for now
+    $auctionquery = "SELECT * FROM Auction WHERE seller_accountID = $accountID order BY createdDate DESC";
     $result = mysqli_query($conn, $auctionquery);
 
     if (mysqli_num_rows($result) > 0) {
