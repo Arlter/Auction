@@ -160,25 +160,26 @@ unset($_SESSION["logged_in_message"]);
       for ($x = ($curr_page-1)*$results_per_page; $x<$curr_page*$results_per_page; $x++){
         $row = $rows[$x];
         $auctionID = $row[0];
-        $title = (mysqli_query($conn, "SELECT itemName FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
-        $description = (mysqli_query($conn, "SELECT itemDescription FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $auction_result_row = mysqli_query($conn, "SELECT * FROM auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM)
+        $title = $auction_result_row[1] 
+        $description = $auction_result_row[12] 
         $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM bid where auction_auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
-        $current_price = (mysqli_query($conn, "SELECT currentPrice FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
-        $end_date = (mysqli_query($conn, "SELECT endDate FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $current_price = $auction_result_row[9] 
+        $end_date = $auction_result_row[8] 
         
         print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
       }
     } else{
     // Use for loop to print a list item for each auction listing retrieved from the query on the last page
     for ($x = ($curr_page-1)*$results_per_page;$x<$num_results;$x++){
-      $row = $rows[$x];
+        $row = $rows[$x];
         $auctionID = $row[0];
-        $title = (mysqli_query($conn, "SELECT itemName FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
-        $description = (mysqli_query($conn, "SELECT itemDescription FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
+        $auction_result_row = mysqli_query($conn, "SELECT * FROM auction WHERE auctionID =$auctionID") -> fetch_array(MYSQLI_NUM)
+        $title = $auction_result_row[1] 
+        $description = $auction_result_row[12] 
         $num_bids = (mysqli_query($conn, "SELECT COUNT(*) FROM bid where auction_auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
-        $current_price = (mysqli_query($conn, "SELECT currentPrice FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
-        $end_date = (mysqli_query($conn, "SELECT endDate FROM auction where auctionID=$auctionID") -> fetch_array(MYSQLI_NUM))[0]; 
-        
+        $current_price = $auction_result_row[9] 
+        $end_date = $auction_result_row[8] 
         print_listing_li($auctionID, $title, $description, $current_price, $num_bids, $end_date);
       }
     }
