@@ -73,7 +73,7 @@ if(isset($_GET["error"])) {
   <div class="form-group row">
     <label for="passwordConfirmation" class="col-sm-2 col-form-label text-right">Confirm password</label>
     <div class="col-sm-10">
-      <span id="confirm_password"></span> <!-- FIXME: hide this input line if password is empty-->
+      <span id="confirm_password"></span>
       <input type="password" class="form-control" name="passwordConfirmation" id="passwordConfirmation" placeholder="Enter password again" oninput="confirm_password()"  >
       <small id="passwordConfirmationHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> You can only confirm your password if it is valid.</small>
     </div>

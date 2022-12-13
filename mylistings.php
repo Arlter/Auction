@@ -11,10 +11,6 @@ require_once("utilities.php");
 
 <?php
   // This page is for showing a user the auction listings they've made.
-  // It will be pretty similar to browse.php, except there is no search bar.
-  // This can be started after browse.php is working with a database.
-  // Feel free to extract out useful functions from browse.php and put them in
-  // the shared "utilities.php" where they can be shared by multiple files.
 
   $accountID = $_SESSION["accountID"];
 
@@ -35,7 +31,7 @@ require_once("utilities.php");
         print_listing_li($auction_id, $title, $desc, $price, $num_bids, $end_time);
       }
     } else {
-      echo('<div class="text-center"> No listings have been made yet.</div>');  // FIXME: fancy
+      echo('<div class="text-center"> No listings have been made yet.</div>');
     }
 
   } else {
